@@ -1,0 +1,61 @@
+body{
+    background-color: rgba(0, 0, 0, 0.92);
+}
+
+.task-container{
+    position: relative;
+    color: white;
+    background-color: #262626;
+    border: 1px solid #262626;
+    border-radius: 20px;
+    padding: 10px 20px;
+    display: inline-block;
+    text-align: center;
+    margin: 10px 10px;
+    width: 212px;
+    height: 90px;
+    text-decoration: none;
+    transition: opacity 0.5s, padding 0.5s;
+}
+.task-num{
+    font-size: 18px!important;
+    transition: color 0.5s;
+}
+.task-container:hover{
+    opacity: 0.8;
+    cursor: pointer;
+    padding: 15px 25px;
+}
+
+.task-container:active{
+    opacity: 0.6;
+}
+
+.task-container>span{
+    font-size: 14px;
+    font-family: 'Helvetica', sans-serif;
+}
+.part{
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: #f5f5f5bf;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 26px;
+    margin-left: 30px;
+}
+.part+hr{
+    border-color: #f5f5f5bf;
+}
+
+.counter{
+    position: absolute;
+    color: #f5f5f5bf;
+    top: 80%;
+    left: 80%;
+}
+.part:nth-of-type(1){
+    margin-top: 50px;
+}
+.first-part{
+    margin-top: 80px;
+}

@@ -1,0 +1,17 @@
+body{
+    background-color: rgba(0, 0, 0, 0.92);
+}
+
+.canvas-header {
+
+}
+.canvas-panel{
+    margin-top: 70px;
+}
+
+canvas{
+    background-color: white;
+    border-radius: 40px;
+    margin-top: 10px;
+    cursor: pointer;
+}
