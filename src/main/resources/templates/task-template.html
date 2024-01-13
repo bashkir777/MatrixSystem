@@ -12,9 +12,17 @@
     <div th:insert="~{header :: header}"></div>
     <div class="canvas-panel">
         <div class="canvas-header">
-            <button id="clear">Очистить</button>
-            <button id="rubber">Стиралка</button>
-            <button id="pan">Ручка</button>
+            <div id="clear">
+                Очистить
+            </div>
+            <div id="rubber">Стиралка</div>
+            <div id="pan" class="selected-border">
+                Ручка
+            </div>
+            <div id="line">
+                <div class="description">Нажмите по области два раза, точки соединятся линией</div>
+                Линия
+            </div>
         </div>
         <canvas id="whiteboard" width="700" height="600">
 

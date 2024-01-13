@@ -15,9 +15,10 @@ public class MainController {
         return "all-tasks";
     }
 
-    @GetMapping("/all-tasks/module/{num}")
-    public String hello(@PathVariable Integer num, Model model) {
-        model.addAttribute("module", num);
-        return "module-template";
+    @GetMapping("/all-tasks/module/{moduleNum}/task/{taskNum}")
+    public String hello(@PathVariable Integer moduleNum,@PathVariable Integer taskNum, Model model) {
+        model.addAttribute("module", moduleNum);
+        model.addAttribute("task", taskNum);
+        return "task-template";
     }
 }
