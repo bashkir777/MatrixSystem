@@ -25,7 +25,9 @@ public class MainController {
     }
 
     @GetMapping("/all-tasks")
-    public String hello(){
+    public String allTasks(Model model){
+        model.addAttribute("map", manager.getModuleTaskCounterMap());
+
         return "all-tasks";
     }
 

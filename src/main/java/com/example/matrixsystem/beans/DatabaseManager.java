@@ -19,13 +19,23 @@ public class DatabaseManager {
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository) {
         //moduleTaskMap initialization
+        for (int i = 0; i < moduleRepository.findAll().size(); i++){
+            moduleTaskMap.put(i, new ArrayList<>());
+        }
         for (Task task : taskRepository.findAll()) {
             int moduleId = task.getModuleId();
-            ArrayList<Task> list = moduleTaskMap.computeIfAbsent(moduleId, k -> new ArrayList<>());
-            list.add(task);
+            moduleTaskMap.get(moduleId-1).add(task);
         }
     }
     public ArrayList<Task> getAllModuleTasks(int moduleId){
         return moduleTaskMap.get(moduleId);
+    }
+
+    public HashMap<Integer, Integer> getModuleTaskCounterMap(){
+        HashMap<Integer, Integer> toReturn = new HashMap<>();
+        for (int i = 0; i < moduleTaskMap.size(); i++){
+            toReturn.put(i, moduleTaskMap.get(i).size());
+        }
+        return toReturn;
     }
 }
