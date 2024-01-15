@@ -6,10 +6,18 @@
     <link rel="stylesheet" href="/css/header-styles.css">
     <link rel="stylesheet" href="/css/module-styles.css">
     <script src="/javascript/whiteboard.js"></script>
-    <title th:text="'eazy-ege: Задание ' + ${module} + ' ЕГЭ'"></title>
+    <title th:text="'eazy-ege: Задание ' + ${taskNum} + ' ЕГЭ'"></title>
 </head>
 <body>
     <div th:insert="~{header :: header}"></div>
+    <div class = "task-container">
+        <div class="task">
+            <span th:text="${task.getTask()}"></span>
+        </div>
+        <div class="answer">
+            <span th:text="${task.getAnswer()}"></span>
+        </div>
+    </div>
     <div class="canvas-panel">
         <div class="canvas-header">
             <div id="clear">
