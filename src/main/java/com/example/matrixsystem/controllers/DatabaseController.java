@@ -4,6 +4,7 @@ import com.example.matrixsystem.beans.DatabaseManager;
 import com.example.matrixsystem.spring_data.entities.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +21,8 @@ public class DatabaseController {
     }
 
 
-    @GetMapping("/tasks")
-    public ArrayList<Task> allTasks(){
-        return manager.getAllTasks();
+    @GetMapping("/module/{num}")
+    public ArrayList<Task> allTasks(@PathVariable Integer num){
+        return manager.getAllModuleTasks(num);
     }
 }

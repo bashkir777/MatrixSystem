@@ -6,4 +6,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface ModuleRepository extends JpaRepository<Module, Integer> {
+
 }

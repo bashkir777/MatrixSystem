@@ -18,6 +18,9 @@ public class Task {
     @Column(name = "answer")
     private String answer;
 
+    @Column(name = "module_id")
+    private Integer moduleId;
+
     public String getTask() {
         return task;
     }
@@ -32,5 +35,13 @@ public class Task {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public Integer getModuleId() {
+        return moduleId;
+    }
+
+    public void setModuleId(Integer moduleId) {
+        this.moduleId = moduleId;
     }
 }
