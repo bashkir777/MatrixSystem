@@ -9,7 +9,6 @@ body{
     padding: 10px 0;
 }
 .canvas-panel{
-    margin-top: 70px;
     display: inline-block;
 }
 
@@ -60,4 +59,21 @@ canvas{
 
 #line:hover .description {
     display: block;
+}
+
+.task-container{
+    display: inline-block;
+    padding: 40px 60px;
+    border: 2px solid #f5f5f5bf;
+    border-radius: 40px;
+    margin-right: 50px;
+    max-height: 40vh;
+    width: 550px;
+}
+.task, .answer{
+    color: #f5f5f5bf;
+}
+.app{
+    display: flex;
+    margin-top: 80px;
 }

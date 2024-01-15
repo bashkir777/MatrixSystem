@@ -37,25 +37,25 @@ document.addEventListener("DOMContentLoaded", function () {
         context.strokeStyle = "#000";
         if (firstClickWithSelectedLine){
             xLineStart = event.clientX - canvas.offsetLeft;
-            yLineStart = event.clientY - canvas.offsetTop;
+            yLineStart = event.clientY - canvas.offsetTop + window.scrollY;
             line(context, xLineStart, yLineStart, xLineStart+1, yLineStart+1);
             firstClickWithSelectedLine = false;
         }else{
             firstClickWithSelectedLine = true;
-            line(context, xLineStart, yLineStart, event.clientX - canvas.offsetLeft, yLineStart = event.clientY - canvas.offsetTop);
+            line(context, xLineStart, yLineStart, event.clientX - canvas.offsetLeft, yLineStart = event.clientY- canvas.offsetTop + window.scrollY);
         }
     }
 
     function startDrawing(e) {
         isDrawing = true;
-        [lastX, lastY] = [e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop];
+        [lastX, lastY] = [e.clientX - canvas.offsetLeft, e.clientY- canvas.offsetTop + window.scrollY];
     }
 
     function drawLine(e) {
         if (!isDrawing) return;
 
         let currentX = e.clientX - canvas.offsetLeft;
-        let currentY = e.clientY - canvas.offsetTop;
+        let currentY = e.clientY - canvas.offsetTop + window.scrollY;
 
         context.beginPath();
         context.moveTo(lastX, lastY);

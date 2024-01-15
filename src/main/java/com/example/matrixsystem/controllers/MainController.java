@@ -33,7 +33,7 @@ public class MainController {
 
     @GetMapping("/all-tasks/module/{moduleNum}/task/{taskNum}")
     public ModelAndView hello(@PathVariable int moduleNum, @PathVariable int taskNum, Model model) {
-        ArrayList<Task> list = manager.getAllModuleTasks(moduleNum);
+        ArrayList<Task> list = manager.getAllModuleTasks(moduleNum-1);
         try{
             Task task = list.get(taskNum-1);
             model.addAttribute("taskNum", taskNum);

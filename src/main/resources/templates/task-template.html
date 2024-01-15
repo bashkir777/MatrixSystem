@@ -9,15 +9,27 @@
     <title th:text="'eazy-ege: Задание ' + ${taskNum} + ' ЕГЭ'"></title>
 </head>
 <body>
-    <div th:insert="~{header :: header}"></div>
-    <div class = "task-container">
-        <div class="task">
-            <span th:text="${task.getTask()}"></span>
+<div th:insert="~{header :: header}"></div>
+
+<div class="app">
+    <!-- Новый блок div добавлен с классом left-block -->
+    <div class="left-block">
+        <div class="task-container">
+            <div class="task">
+                <span>Задание: </span>
+                <span th:text="${task.getTask()}"></span>
+            </div>
+            <div class="answer">
+                <span th:text="${task.getAnswer()}"></span>
+            </div>
         </div>
-        <div class="answer">
-            <span th:text="${task.getAnswer()}"></span>
+
+        <!-- Ваш новый div -->
+        <div class="additional-div">
+            <!-- Ваш контент для нового блока -->
         </div>
     </div>
+
     <div class="canvas-panel">
         <div class="canvas-header">
             <div id="clear">
@@ -35,8 +47,8 @@
         <canvas id="whiteboard" width="700" height="600">
 
         </canvas>
-
     </div>
+</div>
 
 </body>
 </html>
