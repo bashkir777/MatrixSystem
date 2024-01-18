@@ -12,21 +12,29 @@
 <div th:insert="~{header :: header}"></div>
 
 <div class="app">
-    <!-- Новый блок div добавлен с классом left-block -->
+
     <div class="left-block">
         <div class="task-container">
             <div class="task">
-                <span>Задание: </span>
-                <span th:text="${task.getTask()}"></span>
+                <span class="label">Задание: </span>
+                <div class="task-text" th:text="${task.getTask()}"></div>
+                <div style="display: flex; margin-top: 10px">
+                    <div class="placeholder"></div>
+                    <div>
+                        Ответ:
+                        <input type="text">
+                        <button>Отправить</button>
+                    </div>
+                </div>
             </div>
             <div class="answer">
                 <span th:text="${task.getAnswer()}"></span>
             </div>
         </div>
 
-        <!-- Ваш новый div -->
+
         <div class="additional-div">
-            <!-- Ваш контент для нового блока -->
+            Рекламный блок
         </div>
     </div>
 
