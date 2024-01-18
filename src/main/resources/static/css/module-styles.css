@@ -16,7 +16,10 @@ canvas{
     background-color: white;
     border-radius: 40px;
     margin-top: 10px;
-    cursor: pointer;
+    cursor:pointer;
+}
+.cursor-cross-hair{
+    cursor: crosshair;
 }
 
 #pan, #clear, #rubber{

@@ -78,12 +78,13 @@ document.addEventListener("DOMContentLoaded", function () {
     rubberButton.onclick = () => {
         canvas.removeEventListener("click", lineClickHandler);
         context.strokeStyle = "white";
-        context.lineWidth = 14;
+        context.lineWidth = 30;
         firstClickWithSelectedLine = true;
         addEventListenersOnDraw();
         rubberButton.classList.add("selected-border");
         panButton.classList.remove("selected-border");
         lineButton.classList.remove("selected-border");
+        canvas.classList.add("cursor-cross-hair");
     }
     const panButton = document.getElementById("pan");
     panButton.onclick = () => {
@@ -96,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
         panButton.classList.add("selected-border");
         rubberButton.classList.remove("selected-border");
         lineButton.classList.remove("selected-border");
+        canvas.classList.remove("cursor-cross-hair");
     }
 
     const lineButton = document.getElementById("line");
@@ -107,6 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
         panButton.classList.remove("selected-border");
         rubberButton.classList.remove("selected-border");
         lineButton.classList.add("selected-border");
+        canvas.classList.add("cursor-cross-hair");
     }
 
 });
