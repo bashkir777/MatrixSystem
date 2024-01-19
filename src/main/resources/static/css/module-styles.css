@@ -22,13 +22,13 @@ canvas{
     cursor: crosshair;
 }
 
-#pan, #clear, #rubber{
-    font-size: 14px;
+#pan, #clear, #rubber, #line, .send{
+    font-size: 16px;
     font-family: 'Helvetica', sans-serif;
 }
 
-#pan, #clear, #rubber, #line{
-    padding: 5px 10px;
+#pan, #clear, #rubber, #line, .send{
+    padding: 5px 15px;
     display: inline-block;
     background-color: rgba(0, 0, 0, 0.92);
     border-radius: 5px;
@@ -36,7 +36,7 @@ canvas{
     border: 3px solid #f5f5f5bf;
     margin-left: 10px;
 }
-#pan:hover, #clear:hover, #rubber:hover, #line:hover{
+#pan:hover, #clear:hover, #rubber:hover, #line:hover, .send:hover{
     cursor: pointer;
     opacity: 0.8;
 }
@@ -82,7 +82,7 @@ canvas{
     margin-top: 80px;
 }
 .label{
-    font-size: 18px;
+    font-size: 22px;
     margin-left: 10px;
 }
 
@@ -93,6 +93,7 @@ canvas{
     border: 1px solid white;
 }
 .task-text{
+    font-size: 18px;
     display: inline-block;
     padding: 10px;
 }
@@ -107,4 +108,41 @@ input[type='text']{
 }
 input[type='text']:focus{
     outline: none;
+}
+
+.send{
+    font-size: 18px;
+    padding: 6px 20px;
+    border-radius: 20px;
+}
+.user-panel{
+    margin-left: 30px;
+}
+
+.wrapper{
+    margin-top: 80px;
+}
+
+.answer{
+    font-size: 18px;
+    padding: 10px;
+    text-align: left;
+}
+.display-none{
+    display: none!important;
+}
+.answer-wrapper{
+    margin-top: 10px;
+    text-align: right;
+}
+
+#show_answer{
+    border: none;
+    background: none;
+    text-decoration: underline;
+    font-size: 14px;
+    color: #f5f5f5bf;
+}
+#show_answer:hover{
+    cursor: pointer;
 }
