@@ -72,6 +72,7 @@ canvas{
     border-radius: 40px;
     margin-right: 70px;
     width: 550px;
+    transition: height 0.5s ease;
 }
 
 .task, .answer{
@@ -134,6 +135,7 @@ input[type='text']:focus{
 .answer-wrapper{
     margin-top: 10px;
     text-align: right;
+
 }
 
 #show_answer{
@@ -145,4 +147,9 @@ input[type='text']:focus{
 }
 #show_answer:hover{
     cursor: pointer;
+}
+.wrapper-2{
+    text-align: right;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

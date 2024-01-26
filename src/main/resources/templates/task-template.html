@@ -19,7 +19,7 @@
             <div class="task">
                 <span class="label">Задание: </span>
                 <div class="task-text" th:text="${task.getTask()}"></div>
-                <div style="display: flex; margin-top: 10px">
+                <div th:if="${task.getImg()!=null}" style="display: flex; margin-top: 10px">
                     <div class="placeholder"></div>
                     <div class="user-panel">
                         <div class="wrapper">
@@ -27,13 +27,14 @@
                             <button class="send">Отправить</button>
                         </div>
                     </div>
-
-
+                </div>
+                <div th:if="${task.getImg()==null}" class="wrapper-2">
+                    <input placeholder="Введите ответ:" type="text">
+                    <button class="send">Отправить</button>
                 </div>
             </div>
             <div class="answer-wrapper">
                 <button id="show_answer">Показать ответ</button>
-
                 <div id="answer" class="answer display-none">
                     <hr>
                     <span th:text="'Ответ: '+ ${task.getAnswer()}"></span>
