@@ -15,7 +15,7 @@
 <div class="app">
 
     <div class="left-block">
-        <div class="task-container">
+        <div id="container" class="task-container">
             <div class="task">
                 <span class="label">Задание: </span>
                 <div class="task-text" th:text="${task.getTask()}"></div>
@@ -40,13 +40,20 @@
                     <span th:text="'Ответ: '+ ${task.getAnswer()}"></span>
                 </div>
             </div>
-
+            <a id="arrow_left" th:if="${taskNum != 1}" class="arrow-left" th:attr="href=@{/app/all-tasks/module/{moduleNum}/task/{taskNum}(moduleNum=${moduleNum}, taskNum=${taskNum - 1})}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+                    <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+                </svg>
+            </a>
+            <a id="arrow_right" th:if="${moduleCapacity != taskNum}" class="arrow-right" th:attr="href=@{/app/all-tasks/module/{moduleNum}/task/{taskNum}(moduleNum=${moduleNum}, taskNum=${taskNum + 1})}">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+                    <path d="M 10 10 L 25 30 L 10 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+                </svg>
+            </a>
         </div>
-
-
-        <div class="additional-div">
-            Рекламный блок
-        </div>
+<!--        <div class="additional-div">-->
+<!--            Рекламный блок-->
+<!--        </div>-->
     </div>
 
     <div class="canvas-panel">

@@ -38,6 +38,8 @@ public class MainController {
             Task task = list.get(taskNum-1);
             model.addAttribute("taskNum", taskNum);
             model.addAttribute("task", task);
+            model.addAttribute("moduleNum", moduleNum);
+            model.addAttribute("moduleCapacity", manager.getModuleTaskCounterMap().get(moduleNum - 1));
             return new ModelAndView("task-template", model.asMap());
         }catch (IndexOutOfBoundsException | NullPointerException e){
             model.addAttribute("error", "Задания с таким id нет в данном модуле");
