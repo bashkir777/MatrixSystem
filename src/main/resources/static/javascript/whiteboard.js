@@ -5,6 +5,42 @@ let yLineStart = 0;
 let isDrawing = false;
 let lastX, lastY;
 
+let savedSettings = {
+    lineWidth: 2,
+    strokeStyle: "black",
+    fillStyle: "black"
+};
+
+function saveContextStyle(context){
+    savedSettings.lineWidth = context.lineWidth;
+    savedSettings.strokeStyle = context.strokeStyle;
+    savedSettings.fillStyle = context.fillStyle;
+}
+
+function applySavedContextSettings(context){
+    context.lineWidth = savedSettings.lineWidth;
+    context.strokeStyle = savedSettings.strokeStyle;
+    savedSettings.fillStyle = context.fillStyle;
+}
+
+let canvasStateStack = [];
+
+function saveCanvasState(canvas){
+    let context = canvas.getContext("2d");
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height - 30);
+    canvasStateStack.push(imageData);
+}
+
+function returnLastCanvasState(canvas){
+    let imageData = canvasStateStack.pop();
+    if (imageData !== undefined) {
+        let context = canvas.getContext("2d");
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.putImageData(imageData, 0, 0);
+        drawArrowDown(canvas, "black");
+    }
+}
+
 function drawArrowDown(canvas, color) {
     let context = canvas.getContext('2d');
     context.imageSmoothingEnabled = false;
@@ -41,18 +77,11 @@ document.addEventListener("DOMContentLoaded", function () {
         context.closePath();
     }
     function clearCanvas() {
-        let savedSettings = {
-            lineWidth: context.lineWidth,
-            strokeStyle: context.strokeStyle,
-            fillStyle: context.fillStyle,
-            font: context.font
-        };
+
+        saveContextStyle(context);
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawArrowDown(canvas, 'black');
-        context.lineWidth = savedSettings.lineWidth;
-        context.strokeStyle = savedSettings.strokeStyle;
-        context.fillStyle = savedSettings.fillStyle;
-        context.font = savedSettings.font;
+        applySavedContextSettings(context);
     }
 
     canvas.addEventListener("click", (event)=>{
@@ -60,21 +89,13 @@ document.addEventListener("DOMContentLoaded", function () {
        if (Math.abs(event.clientX - canvas.offsetLeft - (canvas.width/2)) < 40 &&
            Math.abs(event.clientY - canvas.offsetTop + window.scrollY - canvas.height) < 40){
 
-           let savedSettings = {
-               lineWidth: context.lineWidth,
-               strokeStyle: context.strokeStyle,
-               fillStyle: context.fillStyle,
-               font: context.font
-           };
+           saveContextStyle(context);
            eraseSquareInCenter(canvas, 35);
            let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
            canvas.height += 300;
            context.putImageData(imageData, 0, 0);
            drawArrowDown(canvas, 'black');
-           context.lineWidth = savedSettings.lineWidth;
-           context.strokeStyle = savedSettings.strokeStyle;
-           context.fillStyle = savedSettings.fillStyle;
-           context.font = savedSettings.font;
+           applySavedContextSettings(context);
        }
     });
     function addEventListenersOnDraw(){
@@ -94,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
         context.lineWidth = 2;
         context.strokeStyle = "#000";
         if (firstClickWithSelectedLine){
+            saveCanvasState(canvas);
             xLineStart = event.clientX - canvas.offsetLeft;
             yLineStart = event.clientY - canvas.offsetTop + window.scrollY;
             line(context, xLineStart, yLineStart, xLineStart+1, yLineStart+1);
@@ -105,8 +127,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function startDrawing(e) {
-        isDrawing = true;
-        [lastX, lastY] = [e.clientX - canvas.offsetLeft, e.clientY- canvas.offsetTop + window.scrollY];
+        if(e.button !== 2){
+            saveCanvasState(canvas);
+            isDrawing = true;
+            [lastX, lastY] = [e.clientX - canvas.offsetLeft, e.clientY- canvas.offsetTop + window.scrollY];
+        }
     }
 
     function drawLine(e) {
@@ -130,6 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const clearButton = document.getElementById("clear");
     clearButton.onclick = () => {
+        saveCanvasState(canvas);
         clearCanvas();
     }
     const rubberButton = document.getElementById("rubber");
@@ -170,4 +196,19 @@ document.addEventListener("DOMContentLoaded", function () {
         canvas.classList.add("cursor-cross-hair");
     }
 
+    const backButton = document.getElementById("back");
+
+    const contextStyleSafeCanvasStatementReturn = (canvas, context) =>{
+        firstClickWithSelectedLine = true;
+        saveContextStyle(context);
+        returnLastCanvasState(canvas, context);
+        applySavedContextSettings(context);
+    }
+    backButton.addEventListener("click", ()=>{
+        contextStyleSafeCanvasStatementReturn(canvas, context);
+    })
+    canvas.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+        contextStyleSafeCanvasStatementReturn(canvas, context);
+    });
 });
