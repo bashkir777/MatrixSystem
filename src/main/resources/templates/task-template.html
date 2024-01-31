@@ -11,7 +11,19 @@
 </head>
 <body>
 <div th:insert="~{header :: header}"></div>
-
+<div class="canvas-header">
+    <div id="clear">
+        Очистить
+    </div>
+    <div id="rubber">Стиралка</div>
+    <div id="pan" class="selected-border">
+        Ручка
+    </div>
+    <div id="line">
+        <div class="description">Нажмите по области два раза, точки соединятся линией</div>
+        Линия
+    </div>
+</div>
 <div class="app">
 
     <div class="left-block">
@@ -57,19 +69,6 @@
     </div>
 
     <div class="canvas-panel">
-        <div class="canvas-header">
-            <div id="clear">
-                Очистить
-            </div>
-            <div id="rubber">Стиралка</div>
-            <div id="pan" class="selected-border">
-                Ручка
-            </div>
-            <div id="line">
-                <div class="description">Нажмите по области два раза, точки соединятся линией</div>
-                Линия
-            </div>
-        </div>
         <canvas id="whiteboard" width="700" height="600">
 
         </canvas>
