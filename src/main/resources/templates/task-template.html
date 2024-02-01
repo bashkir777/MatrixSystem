@@ -30,14 +30,14 @@
                 </div>
                 <div th:if="${task.getImg()==null}" class="wrapper-2">
                     <input placeholder="Введите ответ:" type="text">
-                    <button class="send">Отправить</button>
+                    <button id="send" class="send">Отправить</button>
                 </div>
             </div>
             <div class="answer-wrapper">
                 <button id="show_answer">Показать ответ</button>
                 <div id="answer" class="answer display-none">
                     <hr>
-                    <span th:text="'Ответ: '+ ${task.getAnswer()}"></span>
+                    Ответ: <span id="_answer" th:text="${task.getAnswer()}"></span>
                 </div>
             </div>
             <a id="arrow_left" th:if="${taskNum != 1}" class="arrow-left" th:attr="href=@{/app/all-tasks/module/{moduleNum}/task/{taskNum}(moduleNum=${moduleNum}, taskNum=${taskNum - 1})}">
