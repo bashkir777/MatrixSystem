@@ -23,36 +23,4 @@ public class Task {
 
     @Column(name = "img")
     private String img;
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public String getTask() {
-        return task;
-    }
-
-    public void setTask(String task) {
-        this.task = task;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public Integer getModuleId() {
-        return moduleId;
-    }
-
-    public void setModuleId(Integer moduleId) {
-        this.moduleId = moduleId;
-    }
 }

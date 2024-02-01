@@ -8,40 +8,25 @@ let send = document.getElementById("send");
 let input_answer = document.getElementsByTagName("input")[0];
 //содержимое ответа
 let _answer = document.getElementById("_answer");
+let taskId = document.getElementById("task_id");
 
-function getModuleTaskRelationFromUrl(){
-    let tempArr = location.href.toString().split("/");
-    for (let i = 0; i < tempArr.length; i++){
-        if(tempArr[i] === "module"){
-            return [tempArr[i+1], tempArr[i+3]]
-        }
-    }
-}
 
 function markCurrentTaskAsCompleted(){
     let completedTasks = JSON.parse(localStorage.getItem("completed_tasks"));
-    let tempArr = getModuleTaskRelationFromUrl();
-    completedTasks[tempArr[0]].push(tempArr[1]) ;
+    completedTasks.push(taskId.innerText);
     localStorage.setItem("completed_tasks", JSON.stringify(completedTasks));
 }
 
 function isCurrentTaskCompleted(){
     let completedTasks = JSON.parse(localStorage.getItem("completed_tasks"));
-    let tempArr = getModuleTaskRelationFromUrl();
-    return completedTasks[tempArr[0]].includes(tempArr[1]);
+    return completedTasks.includes(taskId.innerText);
 }
 
 let answerIsShow = false;
 
 //local storage initialization
 if(localStorage.getItem("completed_tasks") === null){
-    let completedTasks = {
-    }
-    for (let i = 1; i <= 19; i++){
-        completedTasks[i] = [];
-    }
-    console.log(completedTasks);
-    localStorage.setItem("completed_tasks", JSON.stringify(completedTasks));
+    localStorage.setItem("completed_tasks", JSON.stringify([]));
 }
 
 showAnswer.addEventListener("click", ()=>{
