@@ -35,7 +35,3 @@ if (arrowRight !== null){
         container.classList.remove("rotate-1-right");
     });
 }
-
-
-
-
