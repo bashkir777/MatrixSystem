@@ -15,6 +15,12 @@
 <div class="app">
 
     <div class="left-block">
+        <div class="navigation-block" >
+
+            <a th:id="'tab_'+${i}" th:each="i : ${#numbers.sequence(1, moduleCapacity)}" class="navigation-button" th:text="${i}"
+               th:href="@{/app/all-tasks/module/{moduleNum}/task/{taskId}(moduleNum=${moduleNum}, taskId=${i})}"></a>
+        </div>
+
         <div id="container" class="task-container">
             <div class="task">
                 <span class="label">Задание: </span>

@@ -10,6 +10,13 @@ let input_answer = document.getElementsByTagName("input")[0];
 let _answer = document.getElementById("_answer");
 let taskId = document.getElementById("task_id");
 
+function getCurrentTaskNumFromUrl(){
+    return location.href.split("/").pop();
+}
+let taskTab = document.getElementById("tab_"+getCurrentTaskNumFromUrl());
+taskTab.classList.add("no-transition");
+taskTab.classList.add("navigation-tab-selected");
+taskTab.classList.remove("no-transition");
 
 function markCurrentTaskAsCompleted(){
     let completedTasks = JSON.parse(localStorage.getItem("completed_tasks"));
