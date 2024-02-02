@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/css/header-styles.css">
+  <link rel="stylesheet" href="/css/module-styles.css">
+  <script src="/javascript/whiteboard.js" defer></script>
+  <script src="/javascript/module_template_logic.js" defer></script>
+  <title th:text="'Задание ' + ${moduleNum} + ' ЕГЭ'"></title>
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+<div class="app">
+
+  <div class="left-block">
+    <div class="navigation-block-wrapper">
+      <button id="scroll_left">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+          <path d="M 26 1 L 1 15 L 26 30 L 26 1" fill="#f5f5f5bf" stroke-width="0"/>
+        </svg>
+      </button>
+      <div class="navigation-block" >
+        <div id="navigation_buttons_wrapper" class="navigation-buttons-wrapper">
+          <span th:id="'tab_'+${i}" th:each="i : ${#numbers.sequence(1, moduleCapacity)}"
+                class="navigation-button" th:text="${i}"></span>
+        </div>
+      </div>
+      <button id="scroll_right">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+          <path d="M 5 1 L 30 15 L 5 30 L 5 1" fill="#f5f5f5bf" stroke-width="0"/>
+        </svg>
+      </button>
+    </div>
+
+    <div id="container" class="task-container">
+      <div class="task">
+        <span class="label">Задание: </span>
+        <div id="task-text" class="task-text"></div>
+        <div id="task-with-img" class="display-none" style="display: flex; margin-top: 10px">
+          <div class="placeholder"></div>
+          <div class="user-panel">
+            <div class="wrapper">
+              <input placeholder="Введите ответ:" type="text">
+              <button class="send">Отправить</button>
+            </div>
+          </div>
+        </div>
+        <div id="task-without-img" class="wrapper-2">
+          <input placeholder="Введите ответ:" type="text">
+          <button id="send" class="send">Отправить</button>
+        </div>
+      </div>
+      <div class="answer-wrapper">
+        <button id="show_answer">Показать ответ</button>
+        <div id="answer" class="answer display-none">
+          <hr>
+          Ответ: <span id="_answer"></span>
+        </div>
+      </div>
+      <div id="arrow_left" class="arrow-left">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+          <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+        </svg>
+      </div>
+      <div id="arrow_right" class="arrow-right">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+          <path d="M 10 10 L 25 30 L 10 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas-panel">
+    <div id="canvas_header" class="canvas-header">
+
+      <div id="pan" class="selected-border">
+        Ручка
+      </div>
+      <div id="rubber">Стиралка</div>
+      <div id="line">
+        <div class="description">Нажмите по области два раза, точки соединятся линией</div>
+        Линия
+      </div>
+      <div id="clear">
+        Очистить
+      </div>
+      <div id="back">
+        <div class="description">Или правая кнопка мыши</div>
+        Отмена
+      </div>
+    </div>
+    <canvas id="whiteboard" width="700" height="600">
+
+    </canvas>
+  </div>
+</div>
+
+</body>
+</html>

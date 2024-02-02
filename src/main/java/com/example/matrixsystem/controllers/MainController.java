@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -31,16 +32,12 @@ public class MainController {
         return "all-tasks";
     }
 
-    @GetMapping("/all-tasks/module/{moduleNum}/task/{taskNum}")
-    public ModelAndView hello(@PathVariable int moduleNum, @PathVariable int taskNum, Model model) {
-        ArrayList<Task> list = manager.getAllModuleTasks(moduleNum-1);
+    @GetMapping("/all-tasks/module/{moduleNum}")
+    public ModelAndView modulePage(@PathVariable int moduleNum, Model model) {
         try{
-            Task task = list.get(taskNum-1);
-            model.addAttribute("taskNum", taskNum);
-            model.addAttribute("task", task);
             model.addAttribute("moduleNum", moduleNum);
-            model.addAttribute("moduleCapacity", manager.getModuleTaskCounterMap().get(moduleNum - 1));
-            return new ModelAndView("task-template", model.asMap());
+            model.addAttribute("moduleCapacity", manager.getModuleTaskCounterMap().get(moduleNum-1));
+            return new ModelAndView("module-template", model.asMap());
         }catch (IndexOutOfBoundsException | NullPointerException e){
             model.addAttribute("error", "Задания с таким id нет в данном модуле");
             return new ModelAndView("error-view", model.asMap());

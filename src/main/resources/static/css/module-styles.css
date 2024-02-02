@@ -194,6 +194,8 @@ input[type='text']:focus{
 }
 
 .navigation-button{
+    cursor: pointer;
+    user-select: none;
     text-decoration: none;
     border-radius: 5px;
     padding: 8px 11px;
@@ -222,8 +224,13 @@ input[type='text']:focus{
 
 .navigation-buttons-wrapper{
     padding: 15px 0;
-    overflow-x: hidden;
+    overflow-x: auto;
     scroll-behavior: smooth;
+    scrollbar-width: none;
+}
+.navigation-buttons-wrapper::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 .no-smooth-behavior{
     scroll-behavior: auto!important;
