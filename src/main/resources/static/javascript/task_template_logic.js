@@ -6,6 +6,9 @@ let arrowRight = document.getElementById("arrow_right");
 let container = document.getElementById("container");
 let send = document.getElementById("send");
 let input_answer = document.getElementsByTagName("input")[0];
+let scrollLeft = document.getElementById("scroll_left");
+let scrollRight = document.getElementById("scroll_right");
+let navigationButtonsWrapper = document.getElementById("navigation_buttons_wrapper");
 //содержимое ответа
 let _answer = document.getElementById("_answer");
 let taskId = document.getElementById("task_id");
@@ -81,4 +84,15 @@ send.addEventListener("click", () => {
             input_answer.setAttribute("value", "");
         }, 3000);
     }
+});
+// перемотка при заходе на страницу
+navigationButtonsWrapper.classList.add("no-smooth-behavior");
+navigationButtonsWrapper.scrollLeft += (40 * (Number(getCurrentTaskNumFromUrl()) -1));
+navigationButtonsWrapper.classList.remove("no-smooth-behavior");
+
+scrollLeft.addEventListener("click", () => {
+    navigationButtonsWrapper.scrollLeft -= 200;
+});
+scrollRight.addEventListener("click", function() {
+    navigationButtonsWrapper.scrollLeft += 200;
 });

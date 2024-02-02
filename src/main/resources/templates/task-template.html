@@ -15,10 +15,23 @@
 <div class="app">
 
     <div class="left-block">
-        <div class="navigation-block" >
-
-            <a th:id="'tab_'+${i}" th:each="i : ${#numbers.sequence(1, moduleCapacity)}" class="navigation-button" th:text="${i}"
-               th:href="@{/app/all-tasks/module/{moduleNum}/task/{taskId}(moduleNum=${moduleNum}, taskId=${i})}"></a>
+        <div class="navigation-block-wrapper">
+            <button id="scroll_left">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+                    <path d="M 26 1 L 1 15 L 26 30 L 26 1" fill="#f5f5f5bf" stroke-width="0"/>
+                </svg>
+            </button>
+            <div class="navigation-block" >
+                <div id="navigation_buttons_wrapper" class="navigation-buttons-wrapper">
+                <a th:id="'tab_'+${i}" th:each="i : ${#numbers.sequence(1, moduleCapacity)}" class="navigation-button" th:text="${i}"
+                   th:href="@{/app/all-tasks/module/{moduleNum}/task/{taskId}(moduleNum=${moduleNum}, taskId=${i})}"></a>
+                </div>
+            </div>
+            <button id="scroll_right">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+                    <path d="M 5 1 L 30 15 L 5 30 L 5 1" fill="#f5f5f5bf" stroke-width="0"/>
+                </svg>
+            </button>
         </div>
 
         <div id="container" class="task-container">
