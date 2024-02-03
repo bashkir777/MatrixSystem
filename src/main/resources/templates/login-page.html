@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <title>Войдите в аккаунт</title>
+  <style>
+    body{
+      background-color: #e7e6e6;
+      font-family: "Helvetica",serif;
+    }
+    form{
+      display: inline-block;
+    }
+    .wrapper{
+      padding: 50px 45px;
+      border-radius: 60px;
+      text-align: center;
+      border: 2px solid black;
+      background-color: #0f0f0f;
+
+    }
+    .page{
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      height: 90vh;
+    }
+    .label{
+      color: #e7e6e6;
+      font-size: 35px;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    input{
+      display: block;
+      outline: none;
+      border: none;
+      padding-left: 10px;
+      width: 40vh;
+      height: 6vh;
+      font-size: 25px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      margin-top: 40px;
+    }
+    .enter{
+      border: 2px solid #0f0f0f;
+      color: #e7e6e6;
+      font-size: 25px;
+      padding: 11px 70px;
+      background-color: #cc0b0b;
+      border-radius: 25px;
+      margin-top: 25px;
+      transition: padding-left 1s ease, padding-right 1s ease;
+    }
+    .enter:hover{
+      cursor: pointer;
+      opacity: 0.9;
+    }
+    .extended{
+      padding: 11px 90px;
+    }
+
+    .comment-block {
+      font-size: 17px;
+      position: relative;
+      max-width: 300px;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+
+    .comment-block:after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      right: -30px;
+      width: 60px;
+      height: 60px;
+      background-color: #f9f9f9;
+      clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
+      transform: rotate(-45deg);
+    }
+    .above-table-block{
+      position: absolute;
+      right: 80px;
+      transform: rotate(-3deg);
+    }
+    .comment-text {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="page">
+    <div class="wrapper">
+    <form action="/login" method="post">
+      <div class="label">
+        Войти
+      </div>
+        <input placeholder="Логин" type="text" id="username" name="username" required>
+
+      <input placeholder="Пароль" type="password" id="password" name="password" required>
+      <div>
+        <button id="enter" class="enter" type="submit">Войти</button>
+      </div>
+    </form>
+  </div>
+  <div class="above-table-block">
+    <div class="comment-block">
+      <p th:if="${param.error}" class="comment-text">Упс... Похоже ты ввел неправильный логин или пароль.</p>
+      <p th:if="${#strings.isEmpty(param.error)}" class="comment-text">Данные для входа учитель должен был прислать тебе в приветственном сообщении, напомни ему, если он этого не сделал.</p>
+    </div>
+  </div>
+
+
+</div>
+<script>
+  let enter = document.getElementById("enter");
+  let interval;
+
+  function animationFrame(){
+    if (enter.classList.contains("extended")){
+      enter.classList.remove("extended");
+    }else{
+      enter.classList.add("extended");
+    }
+  }
+  function startAnimation(){
+    interval = setInterval(()=>{
+      animationFrame();
+    }, 800);
+  }
+
+  enter.addEventListener("mouseover", ()=>{
+    clearInterval(interval);
+  })
+  enter.addEventListener("mouseout", ()=>{
+    animationFrame();
+    startAnimation();
+  });
+  startAnimation();
+
+</script>
+</body>
+</html>

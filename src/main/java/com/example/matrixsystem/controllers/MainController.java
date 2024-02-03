@@ -47,4 +47,5 @@ public class MainController {
     public String addInformation(){
         return "add";
     }
+
 }

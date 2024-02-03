@@ -37,7 +37,10 @@ public class SecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers("/app", "/api").permitAll()
-                .anyRequest().authenticated()).formLogin(Customizer.withDefaults());;
+                .anyRequest().authenticated()).formLogin(login -> login
+                .loginPage("/login")
+                .failureUrl("/login?error=true")
+                .permitAll());;
         return http.build();
     }
 
