@@ -1,13 +1,11 @@
 package com.example.matrixsystem.spring_data.entities;
 
 import com.sun.istack.internal.NotNull;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Data
@@ -21,4 +19,9 @@ public class Users {
     private String login;
     @NotNull
     private String password;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "authority", referencedColumnName="id")
+    private Authority role;
 }
