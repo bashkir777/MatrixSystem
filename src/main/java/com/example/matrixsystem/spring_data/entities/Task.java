@@ -18,8 +18,9 @@ public class Task {
     @Column(name = "answer")
     private String answer;
 
-    @Column(name = "module_id")
-    private Integer moduleId;
+    @ManyToOne
+    @JoinColumn(name = "module", referencedColumnName = "id")
+    private Module module;
 
     @Column(name = "img")
     private String img;

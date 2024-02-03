@@ -28,7 +28,7 @@ public class DatabaseManager {
             moduleTaskMap.put(i, new ArrayList<>());
         }
         for (Task task : taskRepository.findAll()) {
-            int moduleId = task.getModuleId();
+            int moduleId = task.getModule().getId();
             moduleTaskMap.get(moduleId-1).add(task);
         }
     }
