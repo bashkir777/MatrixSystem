@@ -62,7 +62,8 @@ fetch(`/api/v1/module/${getModuleNumFromUrl()}`, {
     .then(response => response.json())
     .then(data => {
         arrOfTaskIds = data;
-        selectTask(arrOfTaskIds[0]);
+        navigationButtons[0].click();
+        prevNavigationButton = navigationButtons[0];
     })
     .catch((error) => {
         console.error('Ошибка:', error);
@@ -109,8 +110,8 @@ send.addEventListener("click", () => {
     // объявляем тут, так как поле может различаться от задания с изображением к заданию без него
     // выбираем input в зависимости от того какой тип задания выбран в данный момент
     let inputAnswer = returnCurrentInputElement();
-    console.log(inputAnswer.value);
-    console.log(answerText.innerText);
+
+
     if(inputAnswer.value === answerText.innerText){
         container.classList.add("selected-border");
         container.classList.remove("red-border");
@@ -148,9 +149,7 @@ for (let i = 0; i < navigationButtons.length; i++){
             prevNavigationButton = navigationButtons[i];
         })
 }
-//по дефолту открывается первое задание
-navigationButtons[0].click();
-prevNavigationButton = navigationButtons[0];
+
 
 function wheelHandler(event) {
     //если это тачпад ничего не делаем он и так хорошо работает
