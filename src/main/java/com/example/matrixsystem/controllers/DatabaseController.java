@@ -1,15 +1,14 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.dto.TaskDTO;
+import com.example.matrixsystem.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.exceptions.NoSuchTaskInDB;
 import com.example.matrixsystem.spring_data.entities.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,5 +44,19 @@ public class DatabaseController {
         }catch (NoSuchTaskInDB e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+    @PostMapping("/task")
+    public ResponseEntity<String> addNewTaskToTheModule(@RequestBody TaskDTO taskDTO){
+        Task task = new Task();
+        try{
+            task.setModule(manager.getModuleById(taskDTO.getModule()));
+        }catch (NoSuchModuleInDB noSuchModuleInDB){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(noSuchModuleInDB.getMessage());
+        }
+        task.setTask(taskDTO.getTask());
+        task.setImg(taskDTO.getImg());
+        task.setAnswer(taskDTO.getAnswer());
+        manager.addNewTask(task);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
     }
 }

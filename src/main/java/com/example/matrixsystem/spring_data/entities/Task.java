@@ -3,6 +3,9 @@ package com.example.matrixsystem.spring_data.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name="task")
@@ -24,4 +27,7 @@ public class Task {
 
     @Column(name = "img")
     private String img;
+
+    @ManyToMany(mappedBy = "tasks")
+    private Set<Users> users = new HashSet<>();
 }

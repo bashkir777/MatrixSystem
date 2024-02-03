@@ -43,4 +43,8 @@ public class MainController {
             return new ModelAndView("error-view", model.asMap());
         }
     }
+    @GetMapping("/add")
+    public String addInformation(){
+        return "add";
+    }
 }
