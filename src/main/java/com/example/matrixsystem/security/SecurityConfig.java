@@ -5,7 +5,6 @@ import com.example.matrixsystem.spring_data.interfaces.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -59,7 +58,7 @@ public class SecurityConfig {
                     throw new UsernameNotFoundException("Пользователя с логином: " + login + " не существует");
                 }
                 System.out.println(user);
-                GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getRole());
+                GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
                 List<GrantedAuthority> authorityList = new ArrayList<>();
                 authorityList.add(authority);
                 return new User(login, user.getPassword(), authorityList);

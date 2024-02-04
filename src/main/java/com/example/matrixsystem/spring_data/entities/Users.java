@@ -1,11 +1,12 @@
 package com.example.matrixsystem.spring_data.entities;
 
+import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.sun.istack.internal.NotNull;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,16 +24,9 @@ public class Users {
     @NotNull
     private String password;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "authority", referencedColumnName="id")
-    private Authority role;
+    @Enumerated(EnumType.STRING)
+    private Roles role;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "users_tasks",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "id")
-    )
-    private Set<Task> tasks = new HashSet<>();
+    @OneToMany(mappedBy = "userReference", fetch = FetchType.EAGER)
+    private Set<UserTask> userTask = new HashSet<>();
 }

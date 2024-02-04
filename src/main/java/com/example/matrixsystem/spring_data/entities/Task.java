@@ -28,6 +28,6 @@ public class Task {
     @Column(name = "img")
     private String img;
 
-    @ManyToMany(mappedBy = "tasks")
-    private Set<Users> users = new HashSet<>();
+    @OneToMany(mappedBy = "taskReference", fetch = FetchType.EAGER)
+    private Set<UserTask> userTask = new HashSet<>();
 }
