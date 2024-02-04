@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .anyRequest().authenticated()).formLogin(login -> login
                 .loginPage("/login")
                 .failureUrl("/login?error=true")
-                .permitAll());;
+                .permitAll());
         return http.build();
     }
 

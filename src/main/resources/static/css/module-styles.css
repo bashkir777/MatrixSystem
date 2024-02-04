@@ -95,6 +95,9 @@ canvas{
     position: absolute;
     top: 40%;
 }
+.arrow-left:hover, .arrow-right:hover{
+    cursor: pointer;
+}
 .rotate-1-right{
     transform: rotate(1deg);
 }
