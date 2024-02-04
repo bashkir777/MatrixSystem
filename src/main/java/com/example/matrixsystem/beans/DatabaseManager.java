@@ -4,6 +4,7 @@ import com.example.matrixsystem.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.exceptions.NoSuchTaskInDB;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
+import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.example.matrixsystem.spring_data.interfaces.ModuleRepository;
 import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
@@ -88,5 +89,14 @@ public class DatabaseManager {
 
     public Roles getUserRoleByLogin(String login){
         return userRepository.findByLogin(login).getRole();
+    }
+
+    public boolean addNewUser(Users user){
+        try {
+            userRepository.save(user);
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 }

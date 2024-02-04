@@ -1,4 +1,4 @@
-package com.example.matrixsystem.security;
+package com.example.matrixsystem.security.config;
 
 import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;

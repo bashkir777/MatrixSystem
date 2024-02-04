@@ -3,6 +3,7 @@ package com.example.matrixsystem.spring_data.entities;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames={"userReference", "taskReference"}))
+@Builder
 public class UserTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
