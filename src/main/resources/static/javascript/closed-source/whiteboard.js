@@ -65,6 +65,24 @@ function eraseSquareInCenter(canvas, size) {
 }
 document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("whiteboard");
+    let canvasPanel = document.getElementById("canvas_panel");
+    let canvasRect = canvas.getBoundingClientRect();
+
+    //получаем margin нашего canvas
+    const CANVAS_MARGIN = parseInt(window.getComputedStyle(canvas).marginTop);
+    console.log(CANVAS_MARGIN);
+    //получаем отступ элемента, в который обернута наша панель
+    const TOP_OFFSET = canvasPanel.getBoundingClientRect().top;
+
+
+    function computeY(event){
+        // Получаем текущее значение прокрутки по вертикали (в пикселях)
+        let SCROLL = canvasPanel.scrollTop;
+        console.log(SCROLL);
+        //отнимаем и прибавляем, учитывая тот факт, что отсчет y в канвасе ведется сверху вниз
+        return event.clientY - CANVAS_MARGIN - TOP_OFFSET + SCROLL;
+    }
+
     drawArrowDown(canvas, "black");
     let context = canvas.getContext("2d");
     context.strokeStyle = "black";
@@ -77,7 +95,6 @@ document.addEventListener("DOMContentLoaded", function () {
         context.closePath();
     }
     function clearCanvas() {
-
         saveContextStyle(context);
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawArrowDown(canvas, 'black');
@@ -86,9 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     canvas.addEventListener("click", (event)=>{
 
-       if (Math.abs(event.clientX - canvas.offsetLeft - (canvas.width/2)) < 40 &&
-           Math.abs(event.clientY - canvas.offsetTop + window.scrollY - canvas.height) < 40){
-
+       if (Math.abs(event.clientX - canvasRect.left - (canvas.width/2)) < 40 &&
+           Math.abs(computeY(event) - canvas.height) < 40){
            saveContextStyle(context);
            eraseSquareInCenter(canvas, 35);
            let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -116,13 +132,16 @@ document.addEventListener("DOMContentLoaded", function () {
         context.strokeStyle = "#000";
         if (firstClickWithSelectedLine){
             saveCanvasState(canvas);
-            xLineStart = event.clientX - canvas.offsetLeft;
-            yLineStart = event.clientY - canvas.offsetTop + window.scrollY;
+            xLineStart = event.clientX - canvasRect.left;
+            yLineStart = computeY(event);
             line(context, xLineStart, yLineStart, xLineStart+1, yLineStart+1);
             firstClickWithSelectedLine = false;
         }else{
             firstClickWithSelectedLine = true;
-            line(context, xLineStart, yLineStart, event.clientX - canvas.offsetLeft, yLineStart = event.clientY- canvas.offsetTop + window.scrollY);
+
+            let currentY = computeY(event);
+
+            line(context, xLineStart, yLineStart, event.clientX - canvasRect.left, yLineStart = currentY);
         }
     }
 
@@ -130,16 +149,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if(e.button !== 2){
             saveCanvasState(canvas);
             isDrawing = true;
-            [lastX, lastY] = [e.clientX - canvas.offsetLeft, e.clientY- canvas.offsetTop + window.scrollY];
+
+            let currentY = computeY(event);
+
+            [lastX, lastY] = [e.clientX - canvasRect.left, currentY];
         }
     }
 
     function drawLine(e) {
         if (!isDrawing) return;
 
-        let currentX = e.clientX - canvas.offsetLeft;
-        let currentY = e.clientY - canvas.offsetTop + window.scrollY;
-
+        let currentX = e.clientX - canvasRect.left;
+        let currentY = computeY(e);
         context.beginPath();
         context.moveTo(lastX, lastY);
         context.lineTo(currentX, currentY);
