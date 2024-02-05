@@ -2,6 +2,7 @@ package com.example.matrixsystem.beans;
 
 import com.example.matrixsystem.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.exceptions.NoSuchTaskInDB;
+import com.example.matrixsystem.exceptions.NoSuchUserInDB;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.Users;
@@ -91,6 +92,13 @@ public class DatabaseManager {
         return userRepository.findByLogin(login).getRole();
     }
 
+    public Users getUserByLogin(String login) throws NoSuchUserInDB{
+        Users user = userRepository.findByLogin(login);
+        if(user == null){
+            throw new NoSuchUserInDB();
+        }
+        return user;
+    }
     public boolean addNewUser(Users user){
         try {
             userRepository.save(user);

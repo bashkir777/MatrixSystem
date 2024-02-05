@@ -1,5 +1,7 @@
 package com.example.matrixsystem.security.config;
 
+import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.exceptions.NoSuchUserInDB;
 import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,11 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private UserRepository userRepository;
 
+    private DatabaseManager databaseManager;
     @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public void setUserRepository(DatabaseManager databaseManager) {
+        this.databaseManager = databaseManager;
     }
 
     @Bean
@@ -52,12 +54,13 @@ public class SecurityConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-                Users user = userRepository.findByLogin(login);
-
-                if (user == null) {
-                    throw new UsernameNotFoundException("Пользователя с логином: " + login + " не существует");
+                Users user;
+                try{
+                    user = databaseManager.getUserByLogin(login);
+                }catch (NoSuchUserInDB e){
+                    throw new UsernameNotFoundException(e.getMessage());
                 }
-                System.out.println(user);
+
                 GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().toString());
                 List<GrantedAuthority> authorityList = new ArrayList<>();
                 authorityList.add(authority);
