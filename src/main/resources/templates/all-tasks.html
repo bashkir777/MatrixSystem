@@ -2,17 +2,21 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/closed-source/all-tasks.css">
+
     <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/particles-styles.css}" />
+    <link rel="stylesheet" href="/css/closed-source/all-tasks.css">
     <title>ЕГЭ-2024: задания, ответы, решения</title>
 </head>
 <body>
-
 <div th:insert="~{header :: header}"></div>
-<div class="part first-part">
-            Первая часть &mdash; задания с кратким ответом
-        </div>
+<div id="particles-js"></div>
 
+<script th:src="@{/javascript/open-source/particles-lib/particles.js}"></script>
+<script th:src="@{/javascript/open-source/particles-lib/design-settings/calm_dark_design.js}"></script>
+
+<div class="wrapper">
+<div class="part">Первая часть - задания с коротким ответом</div>
 <a class="task-container" href="/app/all-tasks/module/1">
     <span class="task-num">Задание №1</span>
     <hr>
@@ -85,11 +89,7 @@
     <span>Максимум и минимум функции</span>
     <span class="counter">0/<span th:text="${map.get(11)}"></span></span>
 </a>
-
-<div class="part">
-            Вторая часть &mdash; задания с развернутым ответом
-</div>
-
+    <div class="part">Вторая часть - задания с развернутым ответом</div>
 <a class="task-container" href="/app/all-tasks/module/13">
     <span class="task-num">Задание №13</span>
     <hr>
@@ -132,6 +132,6 @@
     <span>Числа и их свойства</span>
     <span class="counter">0/<span th:text="${map.get(18)}"></span></span>
 </a>
-
+</div>
 </body>
 </html>

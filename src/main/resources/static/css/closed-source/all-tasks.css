@@ -3,6 +3,7 @@ body{
 }
 
 .task-container{
+    opacity: 0.8;
     position: relative;
     color: white;
     background-color: #262626;
@@ -18,11 +19,12 @@ body{
     transition: opacity 0.5s, padding 0.5s;
 }
 .task-num{
+    pointer-events: none;
     font-size: 18px!important;
     transition: color 0.5s;
 }
 .task-container:hover{
-    opacity: 0.8;
+    opacity: 0.6;
     cursor: pointer;
     padding: 15px 25px;
 }
@@ -36,6 +38,7 @@ body{
     font-family: 'Helvetica', sans-serif;
 }
 .part{
+    pointer-events: none;
     margin-bottom: 20px;
     margin-top: 20px;
     color: #f5f5f5bf;
@@ -58,4 +61,12 @@ body{
 }
 .first-part{
     margin-top: 80px;
+}
+.wrapper{
+    position: absolute;
+    top: 5%;
+}
+
+#particles-js {
+    background-color: #000000;
 }
