@@ -1,6 +1,7 @@
 package com.example.matrixsystem.security.aspects;
 
 import com.example.matrixsystem.security.annotations.RolesAllowed;
+import com.example.matrixsystem.security.annotations.RolesNotAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,6 +27,16 @@ public class RolesInspector {
         String userRole = userInfo.getUserRole().toString();
         boolean allowed = Arrays.asList(allowedRoles).contains(userRole);
         if  (!allowed){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У вас нет прав на данное действие");
+        }
+        return joinPoint.proceed();
+    }
+    @Around("@annotation(rolesNotAllowed)")
+    public Object checkRoles(ProceedingJoinPoint joinPoint, RolesNotAllowed rolesNotAllowed) throws Throwable{
+        String[] notAllowedRoles = rolesNotAllowed.value();
+        String userRole = userInfo.getUserRole().toString();
+        boolean notAllowed = Arrays.asList(notAllowedRoles).contains(userRole);
+        if  (notAllowed){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У вас нет прав на данное действие");
         }
         return joinPoint.proceed();
