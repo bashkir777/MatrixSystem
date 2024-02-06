@@ -1,4 +1,4 @@
-package com.example.matrixsystem.exceptions;
+package com.example.matrixsystem.spring_data.exceptions;
 
 
 public class ErrorCreatingUserTaskRecord extends Exception{

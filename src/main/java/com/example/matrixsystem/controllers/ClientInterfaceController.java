@@ -1,7 +1,8 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
-import com.example.matrixsystem.exceptions.NoSuchTaskInDB;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchTaskInDB;
+import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.List;
 // который не связан с менеджментом
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/client")
 public class ClientInterfaceController {
     private final DatabaseManager manager;
 
@@ -41,11 +42,8 @@ public class ClientInterfaceController {
     }
 
     @GetMapping("/task/{taskId}")
-    public ResponseEntity<Object> getTaskById(@PathVariable Integer taskId) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(manager.getTaskById(taskId));
-        } catch (NoSuchTaskInDB e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+    @HandleDataActionExceptions
+    public ResponseEntity<Object> getTaskById(@PathVariable Integer taskId) throws NoSuchTaskInDB{
+        return ResponseEntity.status(HttpStatus.OK).body(manager.getTaskById(taskId));
     }
 }

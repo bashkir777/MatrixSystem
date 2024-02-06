@@ -34,7 +34,7 @@ function selectTask(id){
     container.classList.remove("selected-border");
     container.classList.remove("red-border");
     returnCurrentInputElement().value="";
-    fetch(`/api/v1/task/${id}`, {
+    fetch(`/api/v1/client/task/${id}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -53,7 +53,7 @@ function selectTask(id){
 
 
 // инициализируем массив с id всех заданий модуля
-fetch(`/api/v1/module/${getModuleNumFromUrl()}`, {
+fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json'

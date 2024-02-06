@@ -1,9 +1,8 @@
 package com.example.matrixsystem.security.config;
 
 import com.example.matrixsystem.beans.DatabaseManager;
-import com.example.matrixsystem.exceptions.NoSuchUserInDB;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import com.example.matrixsystem.spring_data.entities.Users;
-import com.example.matrixsystem.spring_data.interfaces.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

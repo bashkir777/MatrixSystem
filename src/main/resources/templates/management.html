@@ -53,7 +53,7 @@
     let jsonData = JSON.stringify(taskData);
 
     // Отправляем данные методом POST на сервер
-    fetch(`/api/v1/add/user/${taskData.role}`, {
+    fetch(`/api/v1/management/add/user/${taskData.role}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -84,7 +84,7 @@
     let jsonData = JSON.stringify(taskData);
 
     // Отправляем данные методом POST на сервер
-    fetch('/api/v1/add/task/common-pull', {
+    fetch('/api/v1/management/add/task/common-pull', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

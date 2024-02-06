@@ -3,10 +3,11 @@ package com.example.matrixsystem.controllers;
 import com.example.matrixsystem.beans.DatabaseManager;
 import com.example.matrixsystem.dto.TaskDTO;
 import com.example.matrixsystem.dto.UserDTO;
-import com.example.matrixsystem.exceptions.ErrorCreatingTaskRecord;
-import com.example.matrixsystem.exceptions.ErrorCreatingUserRecord;
-import com.example.matrixsystem.exceptions.NoSuchModuleInDB;
+import com.example.matrixsystem.spring_data.exceptions.ErrorCreatingTaskRecord;
+import com.example.matrixsystem.spring_data.exceptions.ErrorCreatingUserRecord;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
+import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.Users;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 // этот контроллер содержит методы, посредством которых осуществляется весь менеджмент
 // добавление студентов, учителей, заданий и тп.
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/management")
 public class ManagementController {
     private final DatabaseManager manager;
 
@@ -31,35 +32,26 @@ public class ManagementController {
 
     @PostMapping("/add/task/common-pull")
     @RolesAllowed("GOD")
-    public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestBody TaskDTO taskDTO) {
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestBody TaskDTO taskDTO) throws NoSuchModuleInDB,
+            ErrorCreatingTaskRecord{
         Module module;
-        try {
-            module = manager.getModuleById(taskDTO.getModule());
-        } catch (NoSuchModuleInDB noSuchModuleInDB) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(noSuchModuleInDB.getMessage());
-        }
+
+        module = manager.getModuleById(taskDTO.getModule());
 
         Task task = Task.builder().task(taskDTO.getTask())
                 .img(taskDTO.getImg()).answer(taskDTO.getAnswer())
                 .module(module).build();
 
-        try{
-            manager.addTask(task);
-        }catch (ErrorCreatingTaskRecord e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
+        manager.addTask(task);
 
+        return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
     }
 
-    private ResponseEntity<String> addUserLogic(UserDTO userDTO, Roles role) {
+    private ResponseEntity<String> addUserLogic(UserDTO userDTO, Roles role) throws ErrorCreatingUserRecord{
         Users user = Users.builder().login(userDTO.getLogin())
                 .role(role).password(userDTO.getPassword()).build();
-        try{
-            manager.addUser(user);
-        }catch (ErrorCreatingUserRecord e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        manager.addUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(role + " успешно добавлен");
     }
 
@@ -74,25 +66,29 @@ public class ManagementController {
 
     @PostMapping("/add/user/student")
     @RolesAllowed({"GOD", "TEACHER"})
-    public ResponseEntity<String> addNewStudent(@RequestBody UserDTO userDTO) {
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addNewStudent(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
         return addUserLogic(userDTO, Roles.STUDENT);
     }
 
     @PostMapping("/add/user/teacher")
     @RolesAllowed({"GOD", "MANAGER"})
-    public ResponseEntity<String> addNewTeacher(@RequestBody UserDTO userDTO) {
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addNewTeacher(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
         return addUserLogic(userDTO, Roles.TEACHER);
     }
 
     @PostMapping("/add/user/manager")
     @RolesAllowed("GOD")
-    public ResponseEntity<String> addNewManager(@RequestBody UserDTO userDTO) {
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addNewManager(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
         return addUserLogic(userDTO, Roles.MANAGER);
     }
 
     @PostMapping("/add/user/god")
     @RolesAllowed("GOD")
-    public ResponseEntity<String> addNewGod(@RequestBody UserDTO userDTO) {
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addNewGod(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
         return addUserLogic(userDTO, Roles.GOD);
     }
 }

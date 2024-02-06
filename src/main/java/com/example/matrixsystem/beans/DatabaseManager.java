@@ -1,12 +1,12 @@
 package com.example.matrixsystem.beans;
 
-import com.example.matrixsystem.exceptions.*;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.UserTask;
 import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
+import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.spring_data.interfaces.ModuleRepository;
 import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;
@@ -69,7 +69,7 @@ public class DatabaseManager {
         return toReturn;
     }
 
-    public Task getTaskById(Integer id) throws NoSuchTaskInDB{
+    public Task getTaskById(Integer id) throws NoSuchTaskInDB {
         Optional<Task> optional = taskRepository.findById(id);
         if (optional.isPresent()){
             return optional.get();
@@ -77,7 +77,7 @@ public class DatabaseManager {
             throw new NoSuchTaskInDB();
         }
     }
-    public void addTask(Task task) throws ErrorCreatingTaskRecord{
+    public void addTask(Task task) throws ErrorCreatingTaskRecord {
         try {
             taskRepository.save(task);
         }catch (Exception e){
@@ -102,7 +102,7 @@ public class DatabaseManager {
         }
         return user;
     }
-    public void addUser(Users user) throws ErrorCreatingUserRecord{
+    public void addUser(Users user) throws ErrorCreatingUserRecord {
         try {
             userRepository.save(user);
         }catch (Exception e){
@@ -110,7 +110,7 @@ public class DatabaseManager {
         }
     }
 
-    public void addUserTaskRelation(Users user, Task task, UserTaskRelationTypes relationType) throws ErrorCreatingUserTaskRecord{
+    public void addUserTaskRelation(Users user, Task task, UserTaskRelationTypes relationType) throws ErrorCreatingUserTaskRecord {
         try {
             UserTask userTask = UserTask.builder().taskReference(task)
                     .userReference(user).relationType(relationType).build();
