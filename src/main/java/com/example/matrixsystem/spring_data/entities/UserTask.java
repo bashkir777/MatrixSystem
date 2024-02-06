@@ -24,6 +24,6 @@ public class UserTask {
     @JoinColumn(name="userReference", referencedColumnName = "id")
     private Users userReference;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private UserTaskRelationTypes relationType;
 }

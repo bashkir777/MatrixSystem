@@ -18,40 +18,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+// этот контроллер содержит методы, посредством которых осуществляется весь менеджмент
+// добавление студентов, учителей, заданий и тп.
 @RestController
 @RequestMapping("/api/v1")
-public class DatabaseController {
+public class ManagementController {
     private final DatabaseManager manager;
 
     @Autowired
-    public DatabaseController(DatabaseManager manager) {
+    public ManagementController(DatabaseManager manager) {
         this.manager = manager;
-    }
-
-
-    @GetMapping("/module/{num}")
-    public List<Integer> allTasksIds(@PathVariable Integer num) {
-        return manager.getAllModuleTasksIds(num);
-    }
-
-    @GetMapping("/module/{moduleNum}/task/{taskNum}")
-    public ResponseEntity<Object> getTaskId(@PathVariable Integer moduleNum, @PathVariable Integer taskNum) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(manager.getAllModuleTasks(moduleNum).get(taskNum - 1).getId());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Модуль с таким id не найден " +
-                    "/ задания с таким номером не существует");
-        }
-    }
-
-    @GetMapping("/task/{taskId}")
-    public ResponseEntity<Object> getTaskById(@PathVariable Integer taskId) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(manager.getTaskById(taskId));
-        } catch (NoSuchTaskInDB e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
     }
 
     @PostMapping("/add/task/common-pull")

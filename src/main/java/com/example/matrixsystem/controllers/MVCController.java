@@ -13,11 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/app")
-public class MainController {
+public class MVCController {
 
     private final DatabaseManager manager;
     @Autowired
-    public MainController(DatabaseManager manager){
+    public MVCController(DatabaseManager manager){
         this.manager = manager;
     }
 
