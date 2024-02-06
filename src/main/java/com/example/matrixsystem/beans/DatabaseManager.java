@@ -119,4 +119,20 @@ public class DatabaseManager {
             throw new ErrorCreatingUserTaskRecord();
         }
     }
+
+    public List<UserTask> getUserTasksByUserReference(Users user) throws NoSuchUserTaskRelation{
+        try{
+            return userTaskRepository.getUserTasksByUserReference(user);
+        }catch (Exception e){
+            throw new NoSuchUserTaskRelation();
+        }
+    }
+
+    public List<Task> getTasksByModule(Module module) throws NoSuchTaskInDB{
+        try{
+            return taskRepository.getTasksByModule(module);
+        }catch (Exception e){
+            throw new NoSuchTaskInDB();
+        }
+    }
 }
