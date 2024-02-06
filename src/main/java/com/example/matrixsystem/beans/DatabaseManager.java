@@ -1,15 +1,16 @@
 package com.example.matrixsystem.beans;
 
-import com.example.matrixsystem.exceptions.NoSuchModuleInDB;
-import com.example.matrixsystem.exceptions.NoSuchTaskInDB;
-import com.example.matrixsystem.exceptions.NoSuchUserInDB;
+import com.example.matrixsystem.exceptions.*;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
+import com.example.matrixsystem.spring_data.entities.UserTask;
 import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
+import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import com.example.matrixsystem.spring_data.interfaces.ModuleRepository;
 import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;
+import com.example.matrixsystem.spring_data.interfaces.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class DatabaseManager {
     private final TaskRepository taskRepository;
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
+    private final UserTaskRepository userTaskRepository;
     //обновляем задания каждые 10 минут
     @Scheduled(fixedDelay = 600000)
     public void renewMap(){
@@ -44,10 +46,12 @@ public class DatabaseManager {
     }
 
     @Autowired
-    public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository, UserRepository userRepository) {
+    public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
+            , UserRepository userRepository, UserTaskRepository userTaskRepository) {
         this.taskRepository = taskRepository;
         this.moduleRepository = moduleRepository;
         this.userRepository = userRepository;
+        this.userTaskRepository = userTaskRepository;
         this.renewMap();
     }
     public ArrayList<Task> getAllModuleTasks(int moduleId){
@@ -73,13 +77,12 @@ public class DatabaseManager {
             throw new NoSuchTaskInDB();
         }
     }
-    public boolean addNewTask(Task task){
+    public void addTask(Task task) throws ErrorCreatingTaskRecord{
         try {
             taskRepository.save(task);
         }catch (Exception e){
-            return false;
+            throw new ErrorCreatingTaskRecord();
         }
-        return true;
     }
 
     public Module getModuleById(Integer id) throws NoSuchModuleInDB {
@@ -99,12 +102,21 @@ public class DatabaseManager {
         }
         return user;
     }
-    public boolean addNewUser(Users user){
+    public void addUser(Users user) throws ErrorCreatingUserRecord{
         try {
             userRepository.save(user);
         }catch (Exception e){
-            return false;
+            throw new ErrorCreatingUserRecord();
         }
-        return true;
+    }
+
+    public void addUserTaskRelation(Users user, Task task, UserTaskRelationTypes relationType) throws ErrorCreatingUserTaskRecord{
+        try {
+            UserTask userTask = UserTask.builder().taskReference(task)
+                    .userReference(user).relationType(relationType).build();
+            this.userTaskRepository.save(userTask);
+        }catch (Exception e){
+            throw new ErrorCreatingUserTaskRecord();
+        }
     }
 }

@@ -3,8 +3,9 @@ package com.example.matrixsystem.controllers;
 import com.example.matrixsystem.beans.DatabaseManager;
 import com.example.matrixsystem.dto.TaskDTO;
 import com.example.matrixsystem.dto.UserDTO;
+import com.example.matrixsystem.exceptions.ErrorCreatingTaskRecord;
+import com.example.matrixsystem.exceptions.ErrorCreatingUserRecord;
 import com.example.matrixsystem.exceptions.NoSuchModuleInDB;
-import com.example.matrixsystem.exceptions.NoSuchTaskInDB;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
@@ -15,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 // этот контроллер содержит методы, посредством которых осуществляется весь менеджмент
 // добавление студентов, учителей, заданий и тп.
@@ -44,19 +43,24 @@ public class ManagementController {
                 .img(taskDTO.getImg()).answer(taskDTO.getAnswer())
                 .module(module).build();
 
-        if (manager.addNewTask(task))
-            return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
+        try{
+            manager.addTask(task);
+        }catch (ErrorCreatingTaskRecord e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Задание не подходит под ограничения базы данных");
     }
 
-    private ResponseEntity<String> addNewUserLogic(UserDTO userDTO, Roles role) {
+    private ResponseEntity<String> addUserLogic(UserDTO userDTO, Roles role) {
         Users user = Users.builder().login(userDTO.getLogin())
                 .role(role).password(userDTO.getPassword()).build();
-
-        if (manager.addNewUser(user)) return ResponseEntity.status(HttpStatus.CREATED).body(role + " успешно добавлен");
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Пользователь с таким логином уже есть в базе данных");
+        try{
+            manager.addUser(user);
+        }catch (ErrorCreatingUserRecord e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(role + " успешно добавлен");
     }
 
     @PostMapping("/add/task/custom-task")
@@ -71,24 +75,24 @@ public class ManagementController {
     @PostMapping("/add/user/student")
     @RolesAllowed({"GOD", "TEACHER"})
     public ResponseEntity<String> addNewStudent(@RequestBody UserDTO userDTO) {
-        return addNewUserLogic(userDTO, Roles.STUDENT);
+        return addUserLogic(userDTO, Roles.STUDENT);
     }
 
     @PostMapping("/add/user/teacher")
     @RolesAllowed({"GOD", "MANAGER"})
     public ResponseEntity<String> addNewTeacher(@RequestBody UserDTO userDTO) {
-        return addNewUserLogic(userDTO, Roles.TEACHER);
+        return addUserLogic(userDTO, Roles.TEACHER);
     }
 
     @PostMapping("/add/user/manager")
     @RolesAllowed("GOD")
     public ResponseEntity<String> addNewManager(@RequestBody UserDTO userDTO) {
-        return addNewUserLogic(userDTO, Roles.MANAGER);
+        return addUserLogic(userDTO, Roles.MANAGER);
     }
 
     @PostMapping("/add/user/god")
     @RolesAllowed("GOD")
     public ResponseEntity<String> addNewGod(@RequestBody UserDTO userDTO) {
-        return addNewUserLogic(userDTO, Roles.GOD);
+        return addUserLogic(userDTO, Roles.GOD);
     }
 }
