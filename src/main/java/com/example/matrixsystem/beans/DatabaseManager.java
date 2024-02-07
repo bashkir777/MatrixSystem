@@ -145,7 +145,7 @@ public class DatabaseManager {
         userTaskRepository.delete(userTask);
     }
 
-    public UserTask getUserTaskByTask(Task task) throws NoSuchUserInDB, NoSuchUserTaskRelation {
+    public UserTask getCurrentUserTaskByTask(Task task) throws NoSuchUserInDB, NoSuchUserTaskRelation {
         List<UserTask> userTaskList = getUserTasksByUserReference(userInformation.getUser());
 
         for(UserTask userTask: userTaskList){
@@ -175,6 +175,6 @@ public class DatabaseManager {
     // удаляет связь user-task текущего пользователя с переданным в параметре заданием
     public void deleteUserTaskRelationOfCurrentUserByTask(Task task) throws NoSuchUserTaskRelation
             , NoSuchUserInDB, ErrorDeletingUserTaskRecord {
-        this.deleteUserTask(getUserTaskByTask(task));
+        this.deleteUserTask(getCurrentUserTaskByTask(task));
     }
 }

@@ -10,6 +10,7 @@ import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes
 import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,7 +87,7 @@ public class ClientInterfaceController {
         return ResponseEntity.status(HttpStatus.OK).body(UserTaskRelationTypes.NONE.name());
     }
 
-    @PostMapping("submit/task")
+    @PostMapping("task/submit")
     @HandleDataActionExceptions
     public ResponseEntity<String> submitTask(@RequestBody TaskForSubmittingDTO dto) throws NoSuchTaskInDB
             , NoSuchUserInDB, ErrorCreatingUserTaskRecord, NoSuchUserTaskRelation, ErrorDeletingUserTaskRecord {
@@ -112,6 +113,29 @@ public class ClientInterfaceController {
             manager.addUserTaskRelation(user, taskInDB, result);
         }
         return ResponseEntity.status(HttpStatus.OK).body(result.name());
+    }
+
+    @GetMapping("task/{id}/answer")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> getAnswer(@PathVariable Integer id) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord, ErrorDeletingUserTaskRecord {
+        Task task = manager.getTaskById(id);
+        UserTask userTask;
+        Users user = userInformation.getUser();
+        // если статус none то выброситься ошибка NoSuchUserTaskRelation
+        // отлавливаем ее и стави FAILED
+        try{
+            userTask = manager.getCurrentUserTaskByTask(task);
+        }catch (NoSuchUserTaskRelation e){
+            manager.addUserTaskRelation(user, task, UserTaskRelationTypes.FAILED);
+            return ResponseEntity.status(HttpStatus.OK).body(task.getAnswer());
+        }
+
+        UserTaskRelationTypes relation = userTask.getRelationType();
+        if(relation.equals(UserTaskRelationTypes.TRIED)){
+            manager.deleteUserTask(userTask);
+            manager.addUserTaskRelation(user, task, UserTaskRelationTypes.FAILED);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(task.getAnswer());
     }
 
 

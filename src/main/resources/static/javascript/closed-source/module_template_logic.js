@@ -81,10 +81,21 @@ function markContainerBasedOnStatus(status){
         clearContainer();
     }
 }
+
+function displayInputAndSubmitElementsBasedOnStatus(status){
+    if(status === "DONE" || status === "FAILED"){
+        returnCurrentInputElement().classList.add("display-none");
+        send.classList.add("display-none");
+    }else{
+        returnCurrentInputElement().classList.remove("display-none");
+        send.classList.remove("display-none");
+    }
+}
+
 function selectTask(id){
     currentTaskId = id;
 
-
+    if (answerIsShow) showAnswer.click();
     // запрашиваем статус задания и красим в зависимости от него
     fetch(`/api/v1/client/task/${id}/status`, {
         method: 'GET',
@@ -94,11 +105,13 @@ function selectTask(id){
     })
         .then(response => response.text())
         .then(data => {
-            console.log(data);
+            if(data === "FAILED" && !answerIsShow){
+                showAnswer.click();
+            }
             markButtonBasedOnStatus(getCurrentButton(), data);
             clearContainer();
             markContainerBasedOnStatus(data);
-            console.log(data);
+            displayInputAndSubmitElementsBasedOnStatus(data);
         })
         .catch((error) => {
             console.error('Ошибка:', error);
@@ -117,7 +130,7 @@ function selectTask(id){
         .then(data => {
             currentTaskId = id;
             taskText.innerText = data.task;
-            answerText.innerText = data.answer;
+            //answerText.innerText = data.answer;
         })
         .catch((error) => {
             console.error('Ошибка:', error);
@@ -144,7 +157,7 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
     .then(data => {
         arrOfTaskIds = data;
         currentTaskId = arrOfTaskIds[0];
-        navigationButtons[0].click();
+        selectTask(currentTaskId);
         prevNavigationButton = navigationButtons[0];
     })
     .catch((error) => {
@@ -177,7 +190,35 @@ markTasks();
 showAnswer.addEventListener("click", ()=>{
     if (!answerIsShow){
         answerIsShow = true;
-        answer.classList.remove("display-none");
+        fetch(`/api/v1/client/task/${currentTaskId}/answer`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.text())
+            .then(data => {
+                answer.classList.remove("display-none");
+                answerText.innerText = data;
+
+                fetch(`/api/v1/client/task/${currentTaskId}/status`,{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => response.text())
+                    .then(data => {
+                        markButtonBasedOnStatus(getCurrentButton(), data);
+                        clearContainer();
+                        markContainerBasedOnStatus(data);
+                        displayInputAndSubmitElementsBasedOnStatus(data);
+                    }).catch((error) => {
+                    console.error('Ошибка:', error);
+                });
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
         showAnswer.textContent = "Скрыть ответ";
     }else{
         answerIsShow = false;
@@ -217,7 +258,7 @@ send.addEventListener("click", () => {
     // объявляем тут, так как поле может различаться от задания с изображением к заданию без него
     // выбираем input в зависимости от того какой тип задания выбран в данный момент
     let inputAnswer = returnCurrentInputElement();
-    fetch(`/api/v1/client/submit/task`, {
+    fetch(`/api/v1/client/task/submit`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
