@@ -1,5 +1,6 @@
 package com.example.matrixsystem.beans;
 
+import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.UserTask;
@@ -12,6 +13,8 @@ import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
@@ -31,6 +34,7 @@ public class DatabaseManager {
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
     private final UserTaskRepository userTaskRepository;
+    private final UserInformation userInformation;
     //обновляем задания каждые 10 минут
     @Scheduled(fixedDelay = 600000)
     public void renewMap(){
@@ -47,11 +51,12 @@ public class DatabaseManager {
 
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
-            , UserRepository userRepository, UserTaskRepository userTaskRepository) {
+            , UserRepository userRepository, UserTaskRepository userTaskRepository, UserInformation userInformation) {
         this.taskRepository = taskRepository;
         this.moduleRepository = moduleRepository;
         this.userRepository = userRepository;
         this.userTaskRepository = userTaskRepository;
+        this.userInformation = userInformation;
         this.renewMap();
     }
     public ArrayList<Task> getAllModuleTasks(int moduleId){
@@ -134,5 +139,42 @@ public class DatabaseManager {
         }catch (Exception e){
             throw new NoSuchTaskInDB();
         }
+    }
+
+    public void deleteUserTask(UserTask userTask) throws ErrorDeletingUserTaskRecord{
+        userTaskRepository.delete(userTask);
+    }
+
+    public UserTask getUserTaskByTask(Task task) throws NoSuchUserInDB, NoSuchUserTaskRelation {
+        List<UserTask> userTaskList = getUserTasksByUserReference(userInformation.getUser());
+
+        for(UserTask userTask: userTaskList){
+            Integer taskIdOfPair = userTask.getTaskReference().getId();
+
+            if(taskIdOfPair.equals(task.getId())){
+                return userTask;
+            }
+        }
+        throw new NoSuchUserTaskRelation();
+    }
+
+    // возвращает статус связи текущего пользователя и переданного задания
+    public UserTaskRelationTypes getUserTaskRelationByTask(Task task) throws NoSuchUserInDB, NoSuchUserTaskRelation {
+        List<UserTask> userTaskList = getUserTasksByUserReference(userInformation.getUser());
+
+        for(UserTask userTask: userTaskList){
+            UserTaskRelationTypes relation = userTask.getRelationType();
+            Integer taskIdOfPair = userTask.getTaskReference().getId();
+
+            if(taskIdOfPair.equals(task.getId())){
+                return userTask.getRelationType();
+            }
+        }
+        return UserTaskRelationTypes.NONE;
+    }
+    // удаляет связь user-task текущего пользователя с переданным в параметре заданием
+    public void deleteUserTaskRelationOfCurrentUserByTask(Task task) throws NoSuchUserTaskRelation
+            , NoSuchUserInDB, ErrorDeletingUserTaskRecord {
+        this.deleteUserTask(getUserTaskByTask(task));
     }
 }

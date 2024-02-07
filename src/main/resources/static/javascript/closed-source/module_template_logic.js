@@ -229,8 +229,9 @@ send.addEventListener("click", () => {
     })
         .then(response => response.text())
         .then(data => {
-            console.log(data)
             let currentButton = getCurrentButton();
+            clearContainer();
+            clearButton(currentButton);
             if(data === "DONE"){
                 currentButton.classList.add("green-border");
                 container.classList.add("green-border");

@@ -88,10 +88,22 @@ public class ClientInterfaceController {
 
     @PostMapping("submit/task")
     @HandleDataActionExceptions
-    public ResponseEntity<String> submitTask(@RequestBody TaskForSubmittingDTO dto) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord {
+    public ResponseEntity<String> submitTask(@RequestBody TaskForSubmittingDTO dto) throws NoSuchTaskInDB
+            , NoSuchUserInDB, ErrorCreatingUserTaskRecord, NoSuchUserTaskRelation, ErrorDeletingUserTaskRecord {
         Task taskInDB = manager.getTaskById(dto.getId());
+
+        UserTaskRelationTypes relation = manager.getUserTaskRelationByTask(taskInDB);
+
+        if(relation.equals(UserTaskRelationTypes.DONE)  || relation.equals(UserTaskRelationTypes.FAILED)){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Нельзя изменять задания со статусом DONE или FAILED");
+        }else if(relation.equals(UserTaskRelationTypes.TRIED)){
+            manager.deleteUserTaskRelationOfCurrentUserByTask(taskInDB);
+        }
+
         Users user = userInformation.getUser();
         UserTaskRelationTypes result;
+        // Сверяем ответ задания из базы данных и ответ из dto
+        // Добавляем связь user-task в соответствии с результатом проверки
         if(taskInDB.getAnswer().equals(dto.getAnswer())){
             result = UserTaskRelationTypes.DONE;
             manager.addUserTaskRelation(user, taskInDB, result);
