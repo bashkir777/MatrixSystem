@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const canvas = document.getElementById("whiteboard");
     let canvasPanel = document.getElementById("canvas_panel");
     let canvasRect = canvas.getBoundingClientRect();
-
+    let copy = document.getElementById("copy");
     //получаем margin нашего canvas
     const CANVAS_MARGIN = parseInt(window.getComputedStyle(canvas).marginTop);
     console.log(CANVAS_MARGIN);
@@ -232,4 +232,26 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         contextStyleSafeCanvasStatementReturn(canvas, context);
     });
+
+
+    function copyCanvasAsImage() {
+        let canvas = document.getElementById('whiteboard');
+        eraseSquareInCenter(canvas, 35);
+        let image = canvas.toDataURL('image/png');
+        drawArrowDown(canvas, "black");
+        fetch(image)
+            .then(res => res.blob())
+            .then(blob => {
+                // Создание ClipboardItem с Blob
+                let item = new ClipboardItem({ 'image/png': blob });
+                // Пытаемся поместить ClipboardItem в буфер обмена
+                navigator.clipboard.write([item]).then(function() {
+                    console.log('Изображение скопировано в буфер обмена');
+                }).catch(function(error) {
+                    console.error('Ошибка при копировании изображения в буфер обмена:', error);
+                });
+            });
+    }
+    copy.addEventListener('click', copyCanvasAsImage);
+
 });
