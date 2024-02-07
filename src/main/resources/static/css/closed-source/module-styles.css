@@ -299,3 +299,37 @@ input[type='text']:focus{
 .app-wrapper{
    position: absolute;
 }
+.comment-block {
+    pointer-events: none;
+    font-size: 17px;
+    position: absolute;
+    top: 60%;
+    left: 3%;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    transform: rotate(5deg);
+    transition: opacity 1s ease;
+}
+
+.comment-block:after {
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    bottom: -45px;
+    left: 0;
+    width: 60px;
+    height: 60px;
+    background-color: #f9f9f9;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
+    transition: opacity 1s ease;
+}
+
+.opacity-0{
+    opacity: 0;
+}
+.opacity-1{
+    opacity: 1;
+}

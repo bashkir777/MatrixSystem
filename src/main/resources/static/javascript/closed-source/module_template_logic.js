@@ -13,7 +13,9 @@ let container = document.getElementById("container");
 let answer = document.getElementById("answer");
 let taskWithImage = document.getElementById("task-with-img");
 let taskWithoutImage = document.getElementById("task-without-img");
-
+let warningComment = document.getElementById("warning_comment");
+let wrongAnswerComment = document.getElementById("wrong_answer_comment");
+let warning = false;
 let currentTaskId;
 let prevNavigationButton;
 let arrOfTaskIds;
@@ -64,6 +66,7 @@ function markButtonBasedOnStatus(button, status){
         button.classList.add("yellow-border");
     }else if (status === "FAILED"){
         button.classList.add("red-border");
+        warning = false;
     }else{
         clearButton(button);
         clearContainer();
@@ -187,8 +190,39 @@ function markTasks(){
 }
 markTasks();
 
+
 showAnswer.addEventListener("click", ()=>{
     if (!answerIsShow){
+
+        if(!warning){
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', `/api/v1/client/task/${currentTaskId}/status`, false); // false означает синхронный запрос
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            try {
+                xhr.send();
+                if (xhr.status === 200) {
+                    let data = xhr.responseText;
+                    if(data === "TRIED" || data === "NONE"){
+                        warning = true;
+                        warningComment.classList.remove("display-none");
+                        warningComment.classList.add("opacity-1");
+                        setTimeout(()=>{
+                            warningComment.classList.remove("opacity-1");
+                            warningComment.classList.add("opacity-0");
+                        }, 5000);
+                        return;
+                    }
+                } else {
+                    console.error('Ошибка:', xhr.status);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        }
+
+
+
         answerIsShow = true;
         fetch(`/api/v1/client/task/${currentTaskId}/answer`, {
             method: 'GET',
@@ -279,18 +313,17 @@ send.addEventListener("click", () => {
             }else {
                 currentButton.classList.add("yellow-border");
                 container.classList.add("yellow-border");
+                wrongAnswerComment.classList.remove("display-none");
+                wrongAnswerComment.classList.add("opacity-1");
+                setTimeout(()=>{
+                    wrongAnswerComment.classList.remove("opacity-1");
+                    wrongAnswerComment.classList.add("opacity-0");
+                }, 5000);
             }
         })
         .catch((error) => {
             console.error('Ошибка:', error);
         });
-    // if(inputAnswer.value === answerText.innerText){
-    //     container.classList.add("selected-border");
-    //     container.classList.remove("red-border");
-    // }else{
-    //     container.classList.add("red-border");
-    //     container.classList.remove("selected-border");
-    // }
 });
 scrollLeft.addEventListener("click", () => {
     navigationButtonsWrapper.scrollLeft -= 200;
