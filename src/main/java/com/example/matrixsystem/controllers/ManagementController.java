@@ -1,7 +1,7 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
-import com.example.matrixsystem.dto.TaskDTO;
+import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.dto.UserDTO;
 import com.example.matrixsystem.spring_data.exceptions.ErrorCreatingTaskRecord;
 import com.example.matrixsystem.spring_data.exceptions.ErrorCreatingUserRecord;
@@ -33,14 +33,14 @@ public class ManagementController {
     @PostMapping("/add/task/common-pull")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions
-    public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestBody TaskDTO taskDTO) throws NoSuchModuleInDB,
+    public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestBody TaskForAddingDTO taskForAddingDTO) throws NoSuchModuleInDB,
             ErrorCreatingTaskRecord{
         Module module;
 
-        module = manager.getModuleById(taskDTO.getModule());
+        module = manager.getModuleById(taskForAddingDTO.getModule());
 
-        Task task = Task.builder().task(taskDTO.getTask())
-                .img(taskDTO.getImg()).answer(taskDTO.getAnswer())
+        Task task = Task.builder().task(taskForAddingDTO.getTask())
+                .img(taskForAddingDTO.getImg()).answer(taskForAddingDTO.getAnswer())
                 .module(module).build();
 
         manager.addTask(task);
@@ -57,7 +57,7 @@ public class ManagementController {
 
     @PostMapping("/add/task/custom-task")
     @RolesAllowed({"GOD", "TEACHER"})
-    public ResponseEntity<String> addNewCustomTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<String> addNewCustomTask(@RequestBody TaskForAddingDTO taskForAddingDTO) {
 
         // !!!здесь будет логика для добавления кастомного задания
 

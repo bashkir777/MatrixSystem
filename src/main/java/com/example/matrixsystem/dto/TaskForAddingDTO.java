@@ -2,11 +2,8 @@ package com.example.matrixsystem.dto;
 
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Data
-public class TaskDTO {
+public class TaskForAddingDTO {
 
     private String task;
 

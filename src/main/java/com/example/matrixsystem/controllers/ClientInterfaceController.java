@@ -1,22 +1,18 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.dto.TaskForSubmittingDTO;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.UserTask;
+import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchTaskInDB;
+import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchUserTaskRelation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -75,8 +71,36 @@ public class ClientInterfaceController {
                 toReturn.put(taskId, UserTaskRelationTypes.NONE.toString());
             }
         }
-
         return toReturn;
     }
+    @GetMapping("task/{id}/status")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> getTasksStatusById(@PathVariable Integer id)
+            throws NoSuchUserInDB, NoSuchUserTaskRelation{
+        List<UserTask> userTaskList = manager.getUserTasksByUserReference(userInformation.getUser());
+        for(UserTask userTask: userTaskList){
+            if(userTask.getTaskReference().getId().equals(id)){
+                return ResponseEntity.status(HttpStatus.OK).body(userTask.getRelationType().name());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(UserTaskRelationTypes.NONE.name());
+    }
+
+    @PostMapping("submit/task")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> submitTask(@RequestBody TaskForSubmittingDTO dto) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord {
+        Task taskInDB = manager.getTaskById(dto.getId());
+        Users user = userInformation.getUser();
+        UserTaskRelationTypes result;
+        if(taskInDB.getAnswer().equals(dto.getAnswer())){
+            result = UserTaskRelationTypes.DONE;
+            manager.addUserTaskRelation(user, taskInDB, result);
+        }else{
+            result = UserTaskRelationTypes.TRIED;
+            manager.addUserTaskRelation(user, taskInDB, result);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(result.name());
+    }
+
 
 }
