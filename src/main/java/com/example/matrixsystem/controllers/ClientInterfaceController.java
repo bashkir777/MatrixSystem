@@ -136,4 +136,12 @@ public class ClientInterfaceController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(task.getAnswer());
     }
+    @GetMapping("/module/{id}/done")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> getTasksDoneCounter(@PathVariable Integer id) throws NoSuchModuleInDB, NoSuchUserInDB {
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                Integer.toString(manager.counterOfDoneCurrentUserTaskRelationsDone(manager.getModuleById(id)))
+        );
+    }
 }

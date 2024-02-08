@@ -2,6 +2,8 @@ package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
 
+import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
@@ -22,8 +24,10 @@ public class MVCController {
     }
 
     @GetMapping("/all-tasks")
-    public String allTasks(Model model){
+    @HandleDataActionExceptions
+    public String allTasks(Model model) throws NoSuchUserInDB {
         model.addAttribute("map", manager.getModuleTaskCounterMap());
+        model.addAttribute("done_map", manager.getDoneMap());
         return "all-tasks";
     }
 

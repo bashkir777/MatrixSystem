@@ -13,10 +13,9 @@ import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
@@ -36,19 +35,6 @@ public class DatabaseManager {
     private final UserTaskRepository userTaskRepository;
     private final UserInformation userInformation;
     //обновляем задания каждые 10 минут
-    @Scheduled(fixedDelay = 600000)
-    public void renewMap(){
-        moduleTaskMap.clear();
-        for (int i = 0; i < moduleRepository.findAll().size(); i++){
-            moduleTaskMap.put(i, new ArrayList<>());
-        }
-        for (Task task : taskRepository.findAll()) {
-            int moduleId = task.getModule().getId();
-            moduleTaskMap.get(moduleId-1).add(task);
-        }
-
-    }
-
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
             , UserRepository userRepository, UserTaskRepository userTaskRepository, UserInformation userInformation) {
@@ -57,7 +43,13 @@ public class DatabaseManager {
         this.userRepository = userRepository;
         this.userTaskRepository = userTaskRepository;
         this.userInformation = userInformation;
-        this.renewMap();
+        for (int i = 0; i < moduleRepository.findAll().size(); i++){
+            moduleTaskMap.put(i, new ArrayList<>());
+        }
+        for (Task task : taskRepository.findAll()) {
+            int moduleId = task.getModule().getId();
+            moduleTaskMap.get(moduleId-1).add(task);
+        }
     }
     public ArrayList<Task> getAllModuleTasks(int moduleId){
         return moduleTaskMap.get(moduleId);
@@ -163,7 +155,6 @@ public class DatabaseManager {
         List<UserTask> userTaskList = getUserTasksByUserReference(userInformation.getUser());
 
         for(UserTask userTask: userTaskList){
-            UserTaskRelationTypes relation = userTask.getRelationType();
             Integer taskIdOfPair = userTask.getTaskReference().getId();
 
             if(taskIdOfPair.equals(task.getId())){
@@ -176,5 +167,29 @@ public class DatabaseManager {
     public void deleteUserTaskRelationOfCurrentUserByTask(Task task) throws NoSuchUserTaskRelation
             , NoSuchUserInDB, ErrorDeletingUserTaskRecord {
         this.deleteUserTask(getCurrentUserTaskByTask(task));
+    }
+
+    public Integer counterOfDoneCurrentUserTaskRelationsDone(Module module) throws NoSuchUserInDB {
+        List<Task> tasks = taskRepository.getTasksByModule(module);
+
+        int counter = 0;
+        for(Task task: tasks){
+            try{
+                if(getUserTaskRelationByTask(task).equals(UserTaskRelationTypes.DONE)){
+                    counter ++;
+                }
+            }catch (NoSuchUserTaskRelation ignored){
+            }
+        }
+        return counter;
+    }
+
+    public HashMap<Integer, Integer> getDoneMap() throws NoSuchUserInDB {
+        List<Module> listModules = moduleRepository.findAll();
+        HashMap<Integer, Integer> doneMap = new HashMap<>();
+        for(Module module: listModules){
+            doneMap.put(module.getId(), counterOfDoneCurrentUserTaskRelationsDone(module));
+        }
+        return doneMap;
     }
 }
