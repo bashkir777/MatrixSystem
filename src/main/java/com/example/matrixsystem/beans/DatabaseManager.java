@@ -13,9 +13,7 @@ import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
@@ -26,15 +24,12 @@ import java.util.Optional;
 @Service
 @SessionScope
 public class DatabaseManager {
-
-    private final HashMap<Integer, ArrayList<Task>> moduleTaskMap = new HashMap<>();
-
     private final TaskRepository taskRepository;
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
     private final UserTaskRepository userTaskRepository;
     private final UserInformation userInformation;
-    //обновляем задания каждые 10 минут
+
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
             , UserRepository userRepository, UserTaskRepository userTaskRepository, UserInformation userInformation) {
@@ -43,25 +38,18 @@ public class DatabaseManager {
         this.userRepository = userRepository;
         this.userTaskRepository = userTaskRepository;
         this.userInformation = userInformation;
-        for (int i = 0; i < moduleRepository.findAll().size(); i++){
-            moduleTaskMap.put(i, new ArrayList<>());
-        }
-        for (Task task : taskRepository.findAll()) {
-            int moduleId = task.getModule().getId();
-            moduleTaskMap.get(moduleId-1).add(task);
-        }
     }
-    public ArrayList<Task> getAllModuleTasks(int moduleId){
-        return moduleTaskMap.get(moduleId);
-    }
-    public List<Integer> getAllModuleTasksIds(int moduleId){
-        return moduleTaskMap.get(moduleId-1).stream().map(Task::getId).toList();
+    public List<Integer> getAllModuleTasksIds(Module module){
+        return taskRepository.getTasksByModule(module).stream().map(Task::getId).toList();
     }
 
     public HashMap<Integer, Integer> getModuleTaskCounterMap(){
         HashMap<Integer, Integer> toReturn = new HashMap<>();
-        for (int i = 0; i < moduleTaskMap.size(); i++){
-            toReturn.put(i, moduleTaskMap.get(i).size());
+
+        List<Module> modules = moduleRepository.findAll();
+
+        for (Module module: modules){
+            toReturn.put(module.getId(), taskRepository.getTasksByModule(module).size());
         }
         return toReturn;
     }
@@ -73,6 +61,9 @@ public class DatabaseManager {
         }else{
             throw new NoSuchTaskInDB();
         }
+    }
+    public Integer getModuleCapacity(Module module){
+        return  taskRepository.getTasksByModule(module).size();
     }
     public void addTask(Task task) throws ErrorCreatingTaskRecord {
         try {

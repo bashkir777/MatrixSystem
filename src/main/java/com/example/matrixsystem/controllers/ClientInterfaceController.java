@@ -32,20 +32,12 @@ public class ClientInterfaceController {
         this.userInformation = userInformation;
     }
 
-    @GetMapping("/module/{num}")
-    public List<Integer> allTasksIds(@PathVariable Integer num) {
-        return manager.getAllModuleTasksIds(num);
+    @GetMapping("/module/{id}")
+    @HandleDataActionExceptions
+    public List<Integer> allTasksIds(@PathVariable Integer id) throws NoSuchModuleInDB {
+        return manager.getAllModuleTasksIds(manager.getModuleById(id));
     }
 
-    @GetMapping("/module/{moduleNum}/task/{taskNum}")
-    public ResponseEntity<Object> getTaskId(@PathVariable Integer moduleNum, @PathVariable Integer taskNum) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(manager.getAllModuleTasks(moduleNum).get(taskNum - 1).getId());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Модуль с таким id не найден " +
-                    "/ задания с таким номером не существует");
-        }
-    }
 
     @GetMapping("/task/{taskId}")
     @HandleDataActionExceptions

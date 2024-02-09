@@ -3,6 +3,7 @@ package com.example.matrixsystem.controllers;
 import com.example.matrixsystem.beans.DatabaseManager;
 
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,8 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 public class MVCController {
 
     private final DatabaseManager manager;
+
     @Autowired
-    public MVCController(DatabaseManager manager){
+    public MVCController(DatabaseManager manager) {
         this.manager = manager;
     }
 
@@ -31,19 +33,15 @@ public class MVCController {
         return "all-tasks";
     }
 
-    @GetMapping("/all-tasks/module/{moduleNum}")
-    public ModelAndView modulePage(@PathVariable int moduleNum, Model model) {
-        try{
-            model.addAttribute("moduleNum", moduleNum);
-            model.addAttribute("moduleCapacity", manager.getModuleTaskCounterMap().get(moduleNum-1));
-            return new ModelAndView("module-template", model.asMap());
-        }catch (IndexOutOfBoundsException | NullPointerException e){
-            model.addAttribute("error", "Задания с таким id нет в данном модуле");
-            return new ModelAndView("error-view", model.asMap());
-        }
+    @GetMapping("/all-tasks/module/{id}")
+    public ModelAndView modulePage(@PathVariable Integer id, Model model) throws NoSuchModuleInDB {
+        model.addAttribute("moduleId", id);
+        model.addAttribute("moduleCapacity", manager.getModuleCapacity(manager.getModuleById(id)));
+        return new ModelAndView("module-template", model.asMap());
     }
+
     @GetMapping("/management")
-    public String addInformation(){
+    public String addInformation() {
         return "management";
     }
 
