@@ -65,8 +65,12 @@ body{
 .wrapper{
     position: absolute;
     top: 5%;
+    left: 1%;
 }
 
 #particles-js {
     background-color: #000000;
+}
+.height-holder{
+    height: 140vh;
 }
