@@ -15,11 +15,12 @@ let taskWithImage = document.getElementById("task-with-img");
 let taskWithoutImage = document.getElementById("task-without-img");
 let warningComment = document.getElementById("warning_comment");
 let wrongAnswerComment = document.getElementById("wrong_answer_comment");
+let taskNum = document.getElementById("task-num");
 let warning = false;
 let currentTaskId;
 let prevNavigationButton;
 let arrOfTaskIds;
-
+let currentTaskNum;
 function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }
@@ -160,6 +161,8 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
     .then(data => {
         arrOfTaskIds = data;
         currentTaskId = arrOfTaskIds[0];
+        currentTaskNum = 1;
+        taskNum.innerText = currentTaskNum;
         selectTask(currentTaskId);
         prevNavigationButton = navigationButtons[0];
     })
@@ -336,6 +339,8 @@ for (let i = 0; i < navigationButtons.length; i++){
     navigationButtons[i].addEventListener("click",
         () => {
             currentTaskId = arrOfTaskIds[i];
+            currentTaskNum = i + 1;
+            taskNum.innerText = currentTaskNum;
             // если это первое по порядку задание то гасим левую стрелку
             // иначе включаем
             if(currentTaskId === arrOfTaskIds[0]){
@@ -370,4 +375,3 @@ function wheelHandler(event) {
 }
 
 navigationButtonsWrapper.addEventListener("wheel", wheelHandler);
-
