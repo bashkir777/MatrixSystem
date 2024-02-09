@@ -191,7 +191,7 @@ function markTasks(){
             console.error('Ошибка:', error);
         });
 }
-markTasks();
+
 
 
 showAnswer.addEventListener("click", ()=>{
@@ -375,3 +375,5 @@ function wheelHandler(event) {
 }
 
 navigationButtonsWrapper.addEventListener("wheel", wheelHandler);
+
+setTimeout(()=>{navigationButtons[0].click(); markTasks();},500);

@@ -1,5 +1,6 @@
 package com.example.matrixsystem.spring_data.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +24,6 @@ public class Section {
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
+    @JsonBackReference
     private Module module;
 }

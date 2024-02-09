@@ -34,6 +34,11 @@ public class MVCController {
         model.addAttribute("moduleCounter", manager.getAllModules().size());
         return "all-tasks";
     }
+    @GetMapping("/theory")
+    @HandleDataActionExceptions
+    public String theory(Model model) {
+        return "theory";
+    }
 
     @GetMapping("/all-tasks/module/{id}")
     public ModelAndView modulePage(@PathVariable Integer id, Model model) throws NoSuchModuleInDB {

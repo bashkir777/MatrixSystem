@@ -1,12 +1,15 @@
 package com.example.matrixsystem.spring_data.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -25,5 +28,6 @@ public class Module {
     private String name;
 
     @OneToMany(mappedBy = "module", fetch = FetchType.EAGER)
-    private Set<Section> sections = new HashSet<>();
+    @JsonManagedReference
+    private List<Section> sections = new ArrayList<>();
 }
