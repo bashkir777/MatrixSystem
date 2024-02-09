@@ -183,4 +183,16 @@ public class DatabaseManager {
         }
         return doneMap;
     }
+
+    public HashMap<Integer, String> getModuleNameMap(){
+        HashMap<Integer, String> moduleNameMap = new HashMap<>();
+        moduleRepository.findAll().forEach((module) -> {
+            moduleNameMap.put(module.getId(), module.getName());
+        });
+        return moduleNameMap;
+    }
+
+    public List<Module> getAllModules(){
+        return moduleRepository.findAll();
+    }
 }

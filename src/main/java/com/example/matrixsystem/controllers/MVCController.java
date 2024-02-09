@@ -30,6 +30,8 @@ public class MVCController {
     public String allTasks(Model model) throws NoSuchUserInDB {
         model.addAttribute("map", manager.getModuleTaskCounterMap());
         model.addAttribute("done_map", manager.getDoneMap());
+        model.addAttribute("module_name_map", manager.getModuleNameMap());
+        model.addAttribute("moduleCounter", manager.getAllModules().size());
         return "all-tasks";
     }
 
