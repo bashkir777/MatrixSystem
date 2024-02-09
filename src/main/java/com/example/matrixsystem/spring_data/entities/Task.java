@@ -21,17 +21,17 @@ public class Task {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "task")
+    @Column(name = "task", length = Integer.MAX_VALUE)
     private String task;
 
-    @Column(name = "answer")
+    @Column(name = "answer", length = Integer.MAX_VALUE)
     private String answer;
 
     @ManyToOne
     @JoinColumn(name = "module", referencedColumnName = "id")
     private Module module;
 
-    @Column(name = "img")
+    @Column(name = "img", length = Integer.MAX_VALUE)
     private String img;
 
     @OneToMany(mappedBy = "taskReference", fetch = FetchType.EAGER)

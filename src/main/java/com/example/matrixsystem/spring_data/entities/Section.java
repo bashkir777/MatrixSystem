@@ -2,28 +2,26 @@ package com.example.matrixsystem.spring_data.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Data
-@Entity
-@Table(name="module")
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Module {
+@Entity
+public class Section {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "name")
+    @Column(length = Integer.MAX_VALUE)
     private String name;
 
-    @OneToMany(mappedBy = "module", fetch = FetchType.EAGER)
-    private Set<Section> sections = new HashSet<>();
+    @Column(length = Integer.MAX_VALUE)
+    private String text;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id")
+    private Module module;
 }
