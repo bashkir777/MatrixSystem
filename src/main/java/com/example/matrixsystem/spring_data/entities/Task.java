@@ -1,5 +1,6 @@
 package com.example.matrixsystem.spring_data.entities;
 
+import com.example.matrixsystem.spring_data.entities.enums.Part;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,9 @@ public class Task {
 
     @Column(name = "img", length = Integer.MAX_VALUE)
     private String img;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT 'TRUE'")
+    private Boolean verifiable;
 
     @OneToMany(mappedBy = "taskReference", fetch = FetchType.EAGER)
     private Set<UserTask> userTask = new HashSet<>();

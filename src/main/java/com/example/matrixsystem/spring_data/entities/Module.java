@@ -1,5 +1,6 @@
 package com.example.matrixsystem.spring_data.entities;
 
+import com.example.matrixsystem.spring_data.entities.enums.Part;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,10 @@ public class Module {
 
     @Column(name = "name")
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(10) DEFAULT 'FIRST'")
+    private Part part;
 
     @OneToMany(mappedBy = "module", fetch = FetchType.EAGER)
     @JsonManagedReference
