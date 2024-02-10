@@ -37,6 +37,7 @@ public class MVCController {
     @GetMapping("/theory")
     @HandleDataActionExceptions
     public String theory(Model model) {
+        model.addAttribute("moduleList", manager.getAllModules());
         return "theory";
     }
 
