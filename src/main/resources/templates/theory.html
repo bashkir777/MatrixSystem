@@ -19,7 +19,7 @@
     <div>
         <table class="table-wrapper" th:each="m : ${moduleList}">
             <thead>
-            <tr class="header">
+            <tr class="header" th:id="'task_' + ${m.id}">
                 <th>Задание №<span th:text="${m.id}"></span></th>
             </tr>
             </thead>
@@ -41,7 +41,15 @@
         </table>
     </div>
 </div>
-
+<div class="navigation-panel">
+    <div class="scroll-proxy">
+        <div th:each="m : ${moduleList}" th:id="'link_'+${m.getId()}" class="navigation-button-wrapper">
+            <div>
+                <span th:text="'Задание №' + ${m.getId()}"></span>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
