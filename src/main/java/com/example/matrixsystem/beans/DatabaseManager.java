@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @SessionScope
@@ -194,5 +191,17 @@ public class DatabaseManager {
 
     public List<Module> getAllModules(){
         return moduleRepository.findAll();
+    }
+
+    public List<Task> generateOption(){
+        List<Task> toReturn = new ArrayList<>();
+        for(Module module: moduleRepository.findAll()){
+            List<Task> list = taskRepository.getTasksByModule(module);
+            Random random = new Random();
+            int randomIndex = random.nextInt(list.size());
+            Task randomTask = list.get(randomIndex);
+            toReturn.add(randomTask);
+        }
+        return toReturn;
     }
 }

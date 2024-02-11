@@ -17,16 +17,21 @@
 
 <div class="wrapper">
 <div class="part">Первая часть - задания с коротким ответом</div>
+    <span th:with="conditionMet=false">
     <span th:each="taskNum : ${#numbers.sequence(1, moduleCounter)}">
-        <a class="task-container" th:href="@{/app/all-tasks/module/__${taskNum}__}">
-            <span class="task-num" th:text="'Задание №' + ${taskNum}"></span>
-            <hr>
-            <span th:text="${module_name_map.get(taskNum)}"></span>
-            <span class="counter">
+
+    <span th:if="${taskNum == firstModuleFromSecondPart}" class="part">
+        Вторая часть - задания с развернутым ответом
+    </span>
+    <a class="task-container" th:href="@{/app/all-tasks/module/__${taskNum}__}">
+        <span class="task-num" th:text="'Задание №' + ${taskNum}"></span>
+        <hr>
+        <span th:text="${module_name_map.get(taskNum)}"></span>
+        <span class="counter">
             <span th:text="${done_map.get(taskNum)}"></span> / <span th:text="${map.get(taskNum)}"></span>
         </span>
-        </a>
-        <div th:if="${taskNum==12}" class="part">Вторая часть - задания с развернутым ответом</div>
+    </a>
+    </span>
     </span>
 </div>
 

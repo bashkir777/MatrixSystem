@@ -44,7 +44,7 @@ public class ClientInterfaceController {
     public ResponseEntity<Object> getTaskById(@PathVariable Integer taskId) throws NoSuchTaskInDB{
         return ResponseEntity.status(HttpStatus.OK).body(manager.getTaskById(taskId));
     }
-    @GetMapping("module/{id}/tasks/statuses")
+    @GetMapping("/module/{id}/tasks/statuses")
     @HandleDataActionExceptions
     public Map<Integer, String> getModuleTasksStatuses(@PathVariable Integer id)
             throws NoSuchUserInDB, NoSuchUserTaskRelation, NoSuchModuleInDB, NoSuchTaskInDB{
@@ -65,7 +65,7 @@ public class ClientInterfaceController {
         }
         return toReturn;
     }
-    @GetMapping("task/{id}/status")
+    @GetMapping("/task/{id}/status")
     @HandleDataActionExceptions
     public ResponseEntity<String> getTasksStatusById(@PathVariable Integer id)
             throws NoSuchUserInDB, NoSuchUserTaskRelation{
@@ -78,7 +78,7 @@ public class ClientInterfaceController {
         return ResponseEntity.status(HttpStatus.OK).body(UserTaskRelationTypes.NONE.name());
     }
 
-    @PostMapping("task/submit")
+    @PostMapping("/task/submit")
     @HandleDataActionExceptions
     public ResponseEntity<String> submitTask(@RequestBody TaskForSubmittingDTO dto) throws NoSuchTaskInDB
             , NoSuchUserInDB, ErrorCreatingUserTaskRecord, NoSuchUserTaskRelation, ErrorDeletingUserTaskRecord {
@@ -106,7 +106,7 @@ public class ClientInterfaceController {
         return ResponseEntity.status(HttpStatus.OK).body(result.name());
     }
 
-    @GetMapping("task/{id}/answer")
+    @GetMapping("/task/{id}/answer")
     @HandleDataActionExceptions
     public ResponseEntity<String> getAnswer(@PathVariable Integer id) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord, ErrorDeletingUserTaskRecord {
         Task task = manager.getTaskById(id);
@@ -136,4 +136,11 @@ public class ClientInterfaceController {
                 Integer.toString(manager.counterOfDoneCurrentUserTaskRelationsDone(manager.getModuleById(id)))
         );
     }
+
+    @GetMapping("/options/autogenerate")
+    @HandleDataActionExceptions
+    public List<Task> getRandomOption() {
+        return manager.generateOption();
+    }
+
 }

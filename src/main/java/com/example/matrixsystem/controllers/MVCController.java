@@ -3,6 +3,7 @@ package com.example.matrixsystem.controllers;
 import com.example.matrixsystem.beans.DatabaseManager;
 
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
+import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,16 @@ public class MVCController {
         model.addAttribute("done_map", manager.getDoneMap());
         model.addAttribute("module_name_map", manager.getModuleNameMap());
         model.addAttribute("moduleCounter", manager.getAllModules().size());
+
+        int firstModuleFromSecondPart = 0;
+        for(Module module: manager.getAllModules()){
+            if(module.getPart().name().equals("SECOND")){
+                firstModuleFromSecondPart = module.getId();
+                break;
+            }
+        }
+        model.addAttribute("firstModuleFromSecondPart", firstModuleFromSecondPart);
+        System.out.println(manager.getAllModules().get(0).getPart());
         return "all-tasks";
     }
     @GetMapping("/theory")
