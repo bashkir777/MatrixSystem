@@ -32,6 +32,12 @@ public class Module {
     @Column(columnDefinition = "varchar(10) DEFAULT 'FIRST'")
     private Part part;
 
+    @Column(columnDefinition = "integer DEFAULT 1")
+    private Integer maxPoints;
+
+    @Column(columnDefinition = "BOOLEAN DEFAULT 'TRUE'")
+    private Boolean verifiable;
+
     @OneToMany(mappedBy = "module", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Section> sections = new ArrayList<>();

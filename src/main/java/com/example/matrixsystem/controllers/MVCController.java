@@ -42,7 +42,6 @@ public class MVCController {
             }
         }
         model.addAttribute("firstModuleFromSecondPart", firstModuleFromSecondPart);
-        System.out.println(manager.getAllModules().get(0).getPart());
         return "all-tasks";
     }
     @GetMapping("/theory")

@@ -1,5 +1,8 @@
 package com.example.matrixsystem.beans;
 
+import com.example.matrixsystem.dto.ModuleDTO;
+import com.example.matrixsystem.dto.TaskForAddingDTO;
+import com.example.matrixsystem.dto.TaskForOptionsDTO;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
@@ -193,14 +196,21 @@ public class DatabaseManager {
         return moduleRepository.findAll();
     }
 
-    public List<Task> generateOption(){
-        List<Task> toReturn = new ArrayList<>();
+    public List<TaskForOptionsDTO> generateOption(){
+        List<TaskForOptionsDTO> toReturn = new ArrayList<>();
         for(Module module: moduleRepository.findAll()){
             List<Task> list = taskRepository.getTasksByModule(module);
             Random random = new Random();
             int randomIndex = random.nextInt(list.size());
             Task randomTask = list.get(randomIndex);
-            toReturn.add(randomTask);
+            Module randomTaskModule = randomTask.getModule();
+            TaskForOptionsDTO randomTaskDTO = TaskForOptionsDTO.builder()
+                    .module(ModuleDTO.builder().id(randomTaskModule.getId())
+                            .verifiable(randomTaskModule.getVerifiable()).maxPoints(module.getMaxPoints())
+                            .build()).task(randomTask.getTask())
+                    .answer(randomTask.getAnswer()).img(randomTask.getImg()).build();
+
+            toReturn.add(randomTaskDTO);
         }
         return toReturn;
     }

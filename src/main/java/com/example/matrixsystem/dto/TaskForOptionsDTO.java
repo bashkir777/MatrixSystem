@@ -1,17 +1,17 @@
 package com.example.matrixsystem.dto;
 
+import com.example.matrixsystem.spring_data.entities.Module;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class TaskForAddingDTO {
-
+public class TaskForOptionsDTO {
     private String task;
 
     private String answer;
 
     private String img;
 
-    private Integer module;
+    private ModuleDTO module;
 }

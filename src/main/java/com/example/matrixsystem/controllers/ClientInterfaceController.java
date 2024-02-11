@@ -1,6 +1,8 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.dto.TaskForAddingDTO;
+import com.example.matrixsystem.dto.TaskForOptionsDTO;
 import com.example.matrixsystem.dto.TaskForSubmittingDTO;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.Task;
@@ -139,7 +141,7 @@ public class ClientInterfaceController {
 
     @GetMapping("/options/autogenerate")
     @HandleDataActionExceptions
-    public List<Task> getRandomOption() {
+    public List<TaskForOptionsDTO> getRandomOption() {
         return manager.generateOption();
     }
 
