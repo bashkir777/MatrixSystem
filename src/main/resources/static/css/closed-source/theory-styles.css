@@ -44,6 +44,7 @@ tr:last-child{
 
 }
 tbody, thead, tr, td, th{
+    user-select: none;
     width: 100%;
 }
 .wrapper{
@@ -163,24 +164,45 @@ tbody, thead, tr, td, th{
 .plus{
     background-color: #119d11;
 }
-.cross{
+.cross, .cancel{
     background-color: #c00b0b;
 }
 .plus:hover, .cross:hover, .edit:hover{
     cursor: pointer;
 }
+.cancel:hover{
+    opacity: 0.8;
+    cursor: pointer;
+}
+
 .plus-wrapper, .cross, .edit{
     position: absolute;
     z-index: 4;
 }
+.cancel{
+    position: absolute;
+    z-index: 101;
+}
 .plus-wrapper{
     bottom: 0;
     left: 80%;
+    transition: opacity 0.2s ease, transform 0.4s ease, background-color 0.4s ease;
+}
+.plus-wrapper:active{
+    opacity: 0.8;
 }
 .cross{
     right:10%;
     top: 10%;
 }
+.cancel{
+    padding: 5px;
+    padding-bottom: 3px;
+    border-radius: 30%;
+    top:6%;
+    right: 7%;
+}
+
 .edit{
     right:17%;
     top: 10%;
@@ -188,4 +210,75 @@ tbody, thead, tr, td, th{
 }
 .context{
     position: relative;
+}
+.display-none{
+    display: none;
+}
+#new_section{
+    border: 3px solid #0d8d0d;
+    position: fixed;
+    background-color: black;
+    z-index: 101;
+    border-radius: 10%;
+    width: 30%;
+    height: 50%;
+    top: 20%;
+    left: 35%;
+    transition: border-color 0.4s ease;
+    padding-bottom: 2%;
+}
+.rotate-90{
+    transform: rotate(-90deg);
+}
+input{
+    pointer-events: all;
+    outline: none;
+    border: none;
+    padding-left: 10px;
+    width: 40vh;
+    height: 6vh;
+    font-size: 25px;
+    border-radius: 20px;
+    margin-top: 15%;
+}
+svg{
+    transition: background-color 0.4s ease;
+}
+#submit-section{
+    user-select: none;
+    display: inline-block;
+    pointer-events: all;
+    color: #f5f5f5bf;
+    font-size: 25px;
+    padding: 11px 70px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 25px;
+    margin-top: 12%;
+    transition: padding-left 1s ease, padding-right 1s ease
+    , background-color 0.4s ease, opacity 0.1s ease;
+    background-color: #0d8d0d;
+}
+#submit-section:hover{
+    background-color: #0f34a6;
+    cursor: pointer;
+}
+#submit-section:active{
+    opacity: 0.8;
+}
+
+#input-wrapper{
+    text-align: center;
+}
+.plus-clicked{
+    background-color: #0f34a6;
+}
+.blue-border{
+    border-color: #0f34a6 !important;
+}
+.smoke{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
 }
