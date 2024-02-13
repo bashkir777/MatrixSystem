@@ -226,6 +226,44 @@ tbody, thead, tr, td, th{
     transition: border-color 0.4s ease;
     padding-bottom: 2%;
 }
+#delete_warning{
+    text-align: center;
+    position: fixed;
+    border-radius: 20px;
+    color: #f5f5f5bf;
+    z-index: 101;
+    background-color: black;
+    width: 50%;
+    height: 20%;
+    top: 20%;
+    left: 25%;
+    font-size: 25px;
+    font-family: 'Helvetica', sans-serif;
+    padding-top: 2%;
+}
+#yes, #no{
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 4%;
+    padding: 2% 4%;
+    border-radius: 20px;
+    width: 20%;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+#yes{
+    background-color: #087c08;
+}
+#no{
+    background-color: #af0505;
+    margin-left: 3%;
+}
+#yes:hover, #no:hover{
+    opacity: 0.8;
+}
+#yes:active, #no:active{
+    background-color: rgba(255,255,255,0.03);
+}
 .rotate-90{
     transform: rotate(-90deg);
 }
@@ -265,7 +303,10 @@ svg{
 #submit-section:active{
     opacity: 0.8;
 }
-
+#delete_warning>span{
+    display: block;
+    text-align: center;
+}
 #input-wrapper{
     text-align: center;
 }

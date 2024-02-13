@@ -31,6 +31,11 @@
         </svg>
     </span>
 </div>
+<div th:if="${isGod}" id="delete_warning" class="display-none">
+    <span>Вы уверены, что хотите удалить эту секцию?</span>
+    <div id="yes">Да</div>
+    <div id="no">Отмена</div>
+</div>
 <div th:if="${isGod}" id="smoke" class="smoke display-none"></div>
 <div class="wrapper">
     <div>

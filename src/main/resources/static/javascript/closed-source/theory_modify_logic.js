@@ -8,6 +8,7 @@ let smoke = document.getElementById("smoke");
 let submit = document.getElementById("submit-section");
 let addResourceName = document.getElementById("add-resource-name");
 let addResourceLink = document.getElementById("add-resource-link");
+let deleteWarning = document.getElementById("delete_warning");
 
 let redBorderTuned = false;
 submit.addEventListener("mouseover", ()=>{
@@ -92,23 +93,33 @@ closeAddSection.addEventListener("click", ()=>{
     newSectionForm.querySelector("#current_module").textContent = null;
     curPlusClicked = null;
 });
+let noButton = document.getElementById("no");
+noButton.addEventListener("click", ()=>{
+    smoke.classList.add("display-none");
+    deleteWarning.classList.add("display-none");
+});
 
 for (let button of crossButtons){
     button.addEventListener("click", () =>{
         let id = button.querySelector("span").textContent;
-        fetch(`/api/v1/management/delete/section/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-                location.reload();
+        smoke.classList.remove("display-none");
+        deleteWarning.classList.remove("display-none");
+        let yesButton = document.getElementById("yes");
+        yesButton.addEventListener("click", ()=>{
+            fetch(`/api/v1/management/delete/section/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
             })
-            .catch((error) => {
-                console.error('Ошибка:', error);
-            });
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.error('Ошибка:', error);
+                });
+        });
     });
 }
