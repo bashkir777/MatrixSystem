@@ -153,7 +153,12 @@ tbody, thead, tr, td, th{
 .cross{
     padding: 10px;
     padding-bottom: 6px;
-    border-radius: 25%;
+    border-radius: 30%;
+}
+.edit{
+    padding: 4px;
+    border-radius: 30%;
+    padding-bottom: 1px;
 }
 .plus{
     background-color: #119d11;
@@ -161,10 +166,10 @@ tbody, thead, tr, td, th{
 .cross{
     background-color: #c00b0b;
 }
-.plus:hover, .cross:hover{
+.plus:hover, .cross:hover, .edit:hover{
     cursor: pointer;
 }
-.plus-wrapper, .cross{
+.plus-wrapper, .cross, .edit{
     position: absolute;
     z-index: 4;
 }
@@ -176,10 +181,11 @@ tbody, thead, tr, td, th{
     right:10%;
     top: 10%;
 }
+.edit{
+    right:17%;
+    top: 10%;
+    background-color: orange;
+}
 .context{
     position: relative;
-}
-
-.rotate-45{
-    transform: rotate(45deg);
 }
