@@ -9,6 +9,7 @@ let submit = document.getElementById("submit-section");
 let addResourceName = document.getElementById("add-resource-name");
 let addResourceLink = document.getElementById("add-resource-link");
 
+let redBorderTuned = false;
 submit.addEventListener("mouseover", ()=>{
     newSectionForm.classList.add("blue-border");
 });
@@ -19,7 +20,7 @@ submit.addEventListener("click", ()=>{
     let name = addResourceName.value;
     let link = addResourceLink.value;
 
-    if(name !== "" && link !==""){
+    if(name.length>5 || link.length>5){
         fetch(`/api/v1/management/add/section`, {
             method: 'POST',
             headers: {
@@ -40,7 +41,22 @@ submit.addEventListener("click", ()=>{
             .catch((error) => {
                 console.error('Ошибка:', error);
             });
-
+    }else{
+        if(!redBorderTuned){
+            addResourceName.classList.add("red-border");
+            addResourceLink.classList.add("red-border");
+            newSectionForm.classList.add("red-border");
+            addResourceName.value="";
+            addResourceLink.value="";
+            redBorderTuned = true;
+            setTimeout( ()=>{
+                console.log("inside")
+                addResourceName.classList.remove("red-border");
+                addResourceLink.classList.remove("red-border");
+                newSectionForm.classList.remove("red-border");
+                redBorderTuned = false;
+            }, 2000);
+        }
     }
 });
 let plus_clicked = false;
