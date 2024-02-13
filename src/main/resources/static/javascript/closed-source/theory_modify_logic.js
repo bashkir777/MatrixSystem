@@ -92,3 +92,23 @@ closeAddSection.addEventListener("click", ()=>{
     newSectionForm.querySelector("#current_module").textContent = null;
     curPlusClicked = null;
 });
+
+for (let button of crossButtons){
+    button.addEventListener("click", () =>{
+        let id = button.querySelector("span").textContent;
+        fetch(`/api/v1/management/delete/section/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
+    });
+}
