@@ -2,8 +2,10 @@ package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
 
+import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.Module;
+import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,11 @@ import org.springframework.web.servlet.ModelAndView;
 public class MVCController {
 
     private final DatabaseManager manager;
-
+    private final UserInformation userInformation;
     @Autowired
-    public MVCController(DatabaseManager manager) {
+    public MVCController(DatabaseManager manager, UserInformation userInformation) {
         this.manager = manager;
+        this.userInformation = userInformation;
     }
 
     @GetMapping("/all-tasks")
@@ -48,6 +51,7 @@ public class MVCController {
     @HandleDataActionExceptions
     public String theory(Model model) {
         model.addAttribute("moduleList", manager.getAllModules());
+        model.addAttribute("isGod", userInformation.getUserRole().equals(Roles.GOD));
         return "theory";
     }
 
