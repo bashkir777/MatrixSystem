@@ -147,20 +147,39 @@ tbody, thead, tr, td, th{
 
 
 .plus{
-    background-color: #119d11;
     padding: 15px;
     border-radius: 30%;
 }
-.plus:hover{
+.cross{
+    padding: 10px;
+    padding-bottom: 6px;
+    border-radius: 25%;
+}
+.plus{
+    background-color: #119d11;
+}
+.cross{
+    background-color: #c00b0b;
+}
+.plus:hover, .cross:hover{
     cursor: pointer;
 }
-.plus-wrapper{
+.plus-wrapper, .cross{
     position: absolute;
-    bottom: 0;
-    left: 85%;
     z-index: 4;
 }
-
+.plus-wrapper{
+    bottom: 0;
+    left: 80%;
+}
+.cross{
+    right:10%;
+    top: 10%;
+}
 .context{
     position: relative;
+}
+
+.rotate-45{
+    transform: rotate(45deg);
 }
