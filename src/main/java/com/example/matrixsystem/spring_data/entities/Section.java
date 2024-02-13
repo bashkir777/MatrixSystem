@@ -20,7 +20,7 @@ public class Section {
     private String name;
 
     @Column(length = Integer.MAX_VALUE)
-    private String text;
+    private String link;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")

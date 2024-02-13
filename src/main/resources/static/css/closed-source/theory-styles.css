@@ -16,7 +16,7 @@ th{
     text-align: center;
 }
 tr{
-    background-color: rgba(255, 255, 255, 0.07);
+    background-color: rgba(255, 255, 255, 0.09);
     border-bottom: 1px solid #f5f5f5bf;
 }
 tr:last-child{
@@ -47,6 +47,7 @@ tbody, thead, tr, td, th{
     width: 100%;
 }
 .section{
+    border-top: 1px solid #f5f5f5bf;
     cursor: pointer;
     position: relative;
     transition: opacity 0.3s ease;
@@ -54,14 +55,8 @@ tbody, thead, tr, td, th{
 .section:hover{
     opacity: 0.8;
 }
-.drop-down{
-    background-color: rgba(255, 255, 255, 0.13);
-}
 .display-none{
     display: none;
-}
-.rotate-180{
-    transform: rotate(180deg);
 }
 
 .arrow{
@@ -69,6 +64,7 @@ tbody, thead, tr, td, th{
     position: absolute;
     right: 4%;
     top: 35%;
+    transform: rotate(-90deg);
 }
 
 #particles-js {
@@ -131,4 +127,11 @@ tbody, thead, tr, td, th{
 }
 .header{
     transition: border-right-color 0.3s ease, border-left-color 0.3s ease, border-top-color 0.3s ease;
+}
+.link{
+    display: block;
+    text-decoration: none;
+    font-size: 18px;
+    font-family: 'Helvetica', sans-serif;
+    color: #f5f5f5bf;
 }
