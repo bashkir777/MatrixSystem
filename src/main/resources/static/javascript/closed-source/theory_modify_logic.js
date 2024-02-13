@@ -6,8 +6,8 @@ let newSectionForm = document.getElementById("new_section");
 let closeAddSection = document.getElementById("close_add_section");
 let smoke = document.getElementById("smoke");
 let submit = document.getElementById("submit-section");
-
-
+let addResourceName = document.getElementById("add-resource-name");
+let addResourceLink = document.getElementById("add-resource-link");
 
 submit.addEventListener("mouseover", ()=>{
     newSectionForm.classList.add("blue-border");
@@ -15,7 +15,34 @@ submit.addEventListener("mouseover", ()=>{
 submit.addEventListener("mouseout", ()=>{
     newSectionForm.classList.remove("blue-border");
 });
+submit.addEventListener("click", ()=>{
+    let name = addResourceName.value;
+    let link = addResourceLink.value;
 
+    if(name !== "" && link !==""){
+        fetch(`/api/v1/management/add/section`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                "name": name,
+                "link": link,
+                "module": newSectionForm.querySelector("#current_module").textContent
+            })
+        })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                closeAddSection.click();
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
+
+    }
+});
 let plus_clicked = false;
 let curPlusClicked = null;
 for(let plus of plusButtons){

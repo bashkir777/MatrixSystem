@@ -117,10 +117,10 @@ public class ManagementController {
         manager.addSection(section);
         return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно обновлена");
     }
-    @PostMapping("/delete/section/{id}")
+    @DeleteMapping("/delete/section/{id}")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions
-    public ResponseEntity<String> removeSectionById(@PathVariable Integer id) throws NoSuchSectionException
+    public ResponseEntity<String> deleteSectionById(@PathVariable Integer id) throws NoSuchSectionException
             , ErrorDeletingSection {
         manager.deleteSection(manager.getSectionById(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Секция успешно удалена");
