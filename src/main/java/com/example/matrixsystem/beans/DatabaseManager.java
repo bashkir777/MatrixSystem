@@ -1,20 +1,14 @@
 package com.example.matrixsystem.beans;
 
 import com.example.matrixsystem.dto.ModuleDTO;
-import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.dto.TaskForOptionsDTO;
 import com.example.matrixsystem.security.beans.UserInformation;
+import com.example.matrixsystem.spring_data.entities.*;
 import com.example.matrixsystem.spring_data.entities.Module;
-import com.example.matrixsystem.spring_data.entities.Task;
-import com.example.matrixsystem.spring_data.entities.UserTask;
-import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import com.example.matrixsystem.spring_data.exceptions.*;
-import com.example.matrixsystem.spring_data.interfaces.ModuleRepository;
-import com.example.matrixsystem.spring_data.interfaces.TaskRepository;
-import com.example.matrixsystem.spring_data.interfaces.UserRepository;
-import com.example.matrixsystem.spring_data.interfaces.UserTaskRepository;
+import com.example.matrixsystem.spring_data.interfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
@@ -29,15 +23,18 @@ public class DatabaseManager {
     private final UserRepository userRepository;
     private final UserTaskRepository userTaskRepository;
     private final UserInformation userInformation;
+    private final SectionRepository sectionRepository;
 
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
-            , UserRepository userRepository, UserTaskRepository userTaskRepository, UserInformation userInformation) {
+            , UserRepository userRepository, UserTaskRepository userTaskRepository
+            , UserInformation userInformation, SectionRepository sectionRepository) {
         this.taskRepository = taskRepository;
         this.moduleRepository = moduleRepository;
         this.userRepository = userRepository;
         this.userTaskRepository = userTaskRepository;
         this.userInformation = userInformation;
+        this.sectionRepository = sectionRepository;
     }
     public List<Integer> getAllModuleTasksIds(Module module){
         return taskRepository.getTasksByModule(module).stream().map(Task::getId).toList();
@@ -213,5 +210,28 @@ public class DatabaseManager {
             toReturn.add(randomTaskDTO);
         }
         return toReturn;
+    }
+
+    public void addSection(Section section) throws ErrorCreatingSection{
+        try{
+            sectionRepository.save(section);
+        }catch (Exception e){
+            throw new ErrorCreatingSection();
+        }
+    }
+    public void deleteSection(Section section) throws ErrorDeletingSection{
+        try{
+            sectionRepository.delete(section);
+        }catch (Exception e){
+            throw new ErrorDeletingSection();
+        }
+    }
+
+    public Section getSectionById(Integer id) throws NoSuchSectionException{
+        try{
+            return sectionRepository.getSectionsById(id);
+        }catch (Exception e){
+            throw new NoSuchSectionException();
+        }
     }
 }

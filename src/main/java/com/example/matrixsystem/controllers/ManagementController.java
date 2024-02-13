@@ -1,11 +1,11 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.dto.SectionDTO;
 import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.dto.UserDTO;
-import com.example.matrixsystem.spring_data.exceptions.ErrorCreatingTaskRecord;
-import com.example.matrixsystem.spring_data.exceptions.ErrorCreatingUserRecord;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
+import com.example.matrixsystem.spring_data.entities.Section;
+import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.Module;
@@ -90,5 +90,39 @@ public class ManagementController {
     @HandleDataActionExceptions
     public ResponseEntity<String> addNewGod(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
         return addUserLogic(userDTO, Roles.GOD);
+    }
+
+    @PostMapping("/add/section")
+    @RolesAllowed("GOD")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addNewSection(@RequestBody SectionDTO sectionDTO) throws NoSuchModuleInDB
+            , ErrorCreatingSection {
+        Section section = Section.builder().link(sectionDTO.getLink()).name(sectionDTO.getName())
+                .module(manager.getModuleById(sectionDTO.getModule())).build();
+        manager.addSection(section);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно создана");
+    }
+    @PostMapping("/update/section/{id}")
+    @RolesAllowed("GOD")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> updateSection(@PathVariable Integer id, @RequestBody SectionDTO sectionDTO) throws NoSuchModuleInDB
+            , ErrorCreatingSection, NoSuchSectionException {
+
+        //проверяем, что секция с таким id есть в БД, если нет то выкиниется ошибка, которая
+        //обработается аннотацией @HandleDataActionExceptions
+        manager.getSectionById(id);
+        // если секция есть в БД то обновляем ее
+        Section section = Section.builder().link(sectionDTO.getLink()).name(sectionDTO.getName())
+                .module(manager.getModuleById(sectionDTO.getModule())).id(id).build();
+        manager.addSection(section);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно обновлена");
+    }
+    @PostMapping("/delete/section/{id}")
+    @RolesAllowed("GOD")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> removeSectionById(@PathVariable Integer id) throws NoSuchSectionException
+            , ErrorDeletingSection {
+        manager.deleteSection(manager.getSectionById(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Секция успешно удалена");
     }
 }
