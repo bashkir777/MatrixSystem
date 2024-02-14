@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,6 +29,9 @@ public class Section {
 
     @Column(columnDefinition = "boolean DEFAULT true")
     private Boolean visibleForStudent;
+
+    @ManyToMany(mappedBy = "sections")
+    private Set<Users> users = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
