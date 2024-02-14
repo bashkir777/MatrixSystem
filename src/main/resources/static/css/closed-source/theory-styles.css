@@ -341,5 +341,11 @@ svg{
 }
 
 .read-mark{
-    background-color: #07a207;
+    background-color: #006200;
+}
+.section>td{
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+.section>td:hover{
+    opacity: 0.8;
 }
