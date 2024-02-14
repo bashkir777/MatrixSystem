@@ -5,13 +5,12 @@ import com.example.matrixsystem.dto.SectionDTO;
 import com.example.matrixsystem.dto.SectionDTOForUpdating;
 import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.dto.UserDTO;
-import com.example.matrixsystem.spring_data.entities.Section;
+import com.example.matrixsystem.security.beans.UserInformation;
+import com.example.matrixsystem.spring_data.entities.*;
+import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
-import com.example.matrixsystem.spring_data.entities.Module;
-import com.example.matrixsystem.spring_data.entities.Task;
-import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,10 +24,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/management")
 public class ManagementController {
     private final DatabaseManager manager;
+    private final UserInformation userInformation;
 
     @Autowired
-    public ManagementController(DatabaseManager manager) {
+    public ManagementController(DatabaseManager manager, UserInformation userInformation) {
         this.manager = manager;
+        this.userInformation = userInformation;
     }
 
     @PostMapping("/add/task/common-pull")
@@ -49,13 +50,25 @@ public class ManagementController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
     }
 
-    private ResponseEntity<String> addUserLogic(UserDTO userDTO, Roles role) throws ErrorCreatingUserRecord{
+    private ResponseEntity<String> addUserLogic(UserDTO userDTO, Roles role)
+            throws ErrorCreatingUserRecord{
         Users user = Users.builder().login(userDTO.getLogin())
                 .role(role).password(userDTO.getPassword()).build();
         manager.addUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(role + " успешно добавлен");
     }
 
+    @PostMapping("/add/user-section/{id}")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> addUserSection(@PathVariable Integer id) throws NoSuchUserInDB, NoSuchSectionException, ErrorCreatingUserSectionRecord {
+
+        manager.addUserSection(
+                UserSection.builder().user(userInformation.getUser())
+                        .section(manager.getSectionById(id)).build() );
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body("отношение user-section успешно добавлено");
+    }
     @PostMapping("/add/task/custom-task")
     @RolesAllowed({"GOD", "TEACHER"})
     public ResponseEntity<String> addNewCustomTask(@RequestBody TaskForAddingDTO taskForAddingDTO) {

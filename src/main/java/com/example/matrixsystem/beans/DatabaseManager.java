@@ -24,17 +24,20 @@ public class DatabaseManager {
     private final UserTaskRepository userTaskRepository;
     private final UserInformation userInformation;
     private final SectionRepository sectionRepository;
+    private final UserSectionRepository userSectionRepository;
 
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
             , UserRepository userRepository, UserTaskRepository userTaskRepository
-            , UserInformation userInformation, SectionRepository sectionRepository) {
+            , UserInformation userInformation, SectionRepository sectionRepository
+            , UserSectionRepository userSectionRepository) {
         this.taskRepository = taskRepository;
         this.moduleRepository = moduleRepository;
         this.userRepository = userRepository;
         this.userTaskRepository = userTaskRepository;
         this.userInformation = userInformation;
         this.sectionRepository = sectionRepository;
+        this.userSectionRepository = userSectionRepository;
     }
     public List<Integer> getAllModuleTasksIds(Module module){
         return taskRepository.getTasksByModule(module).stream().map(Task::getId).toList();
@@ -232,6 +235,23 @@ public class DatabaseManager {
             return sectionRepository.getSectionsById(id);
         }catch (Exception e){
             throw new NoSuchSectionException();
+        }
+    }
+
+    public List<Section> getSectionsOfCurrentUser() throws NoSuchUserInDB {
+        List<Section> toReturn = new ArrayList<>();
+        List<UserSection> userSectionsRecords =
+                userSectionRepository.getUserSectionByUser(userInformation.getUser());
+        for(UserSection userSection: userSectionsRecords){
+            toReturn.add(userSection.getSection());
+        }
+        return toReturn;
+    }
+    public void addUserSection(UserSection userSection) throws ErrorCreatingUserSectionRecord{
+        try{
+            userSectionRepository.save(userSection);
+        }catch (Exception e){
+            throw new ErrorCreatingUserSectionRecord();
         }
     }
 }

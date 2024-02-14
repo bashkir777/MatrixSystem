@@ -49,10 +49,11 @@ public class MVCController {
     }
     @GetMapping("/theory")
     @HandleDataActionExceptions
-    public String theory(Model model) {
+    public String theory(Model model) throws NoSuchUserInDB {
         model.addAttribute("moduleList", manager.getAllModules());
         model.addAttribute("isGod", userInformation.getUserRole().equals(Roles.GOD));
         model.addAttribute("isStudent", userInformation.getUserRole().equals(Roles.STUDENT));
+        model.addAttribute("readSection", manager.getSectionsOfCurrentUser());
         return "theory";
     }
 
