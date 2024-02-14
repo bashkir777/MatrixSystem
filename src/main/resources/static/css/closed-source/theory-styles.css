@@ -63,7 +63,7 @@ tbody, thead, tr, td, th{
     background-color: rgba(0, 0, 0, 0.7);
 }
 .display-none{
-    display: none;
+    display: none!important;
 }
 
 .arrow{
@@ -282,7 +282,7 @@ input{
 svg{
     transition: background-color 0.4s ease;
 }
-#submit-section{
+#submit-section, #edit-section{
     user-select: none;
     display: inline-block;
     pointer-events: all;
@@ -296,11 +296,11 @@ svg{
     , background-color 0.4s ease, opacity 0.1s ease;
     background-color: #0d8d0d;
 }
-#submit-section:hover{
+#submit-section:hover, #edit-section:hover{
     background-color: #0f34a6;
     cursor: pointer;
 }
-#submit-section:active{
+#submit-section:active, #edit-section:active{
     opacity: 0.8;
 }
 #delete_warning>span{

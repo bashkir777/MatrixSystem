@@ -22,9 +22,16 @@
     <div id="input-wrapper">
         <input id="add-resource-name" type="text" placeholder="Название ресурса">
         <input id="add-resource-link" type="text" placeholder="Ссылка на ресурс">
-        <div id="submit-section">Добавить</div>
+        <div id="submit-section" class="display-none">Добавить</div>
+        <div id="edit-section" class="display-none">Изменить</div>
     </div>
-    <span id="close_add_section" class="cancel">
+    <span id="close_add_section" class="cancel display-none">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="20"
+             height="20">
+            <path d="M 0 0 L 25 25 M 0 25 L 25 0" stroke="white" fill="none" stroke-width="3"/>
+        </svg>
+    </span>
+    <span id="close_edit_section" class="cancel display-none">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="20"
              height="20">
             <path d="M 0 0 L 25 25 M 0 25 L 25 0" stroke="white" fill="none" stroke-width="3"/>
@@ -73,6 +80,8 @@
                             </span>
                             <span class="edit">
                                 <span class="display-none" th:text="${section.id}"></span>
+                                <span class="display-none" th:text="${section.name}"></span>
+                                <span class="display-none" th:text="${section.link}"></span>
                                 <svg width="40" height="35">
                                     <circle cx="20" cy="17.5" r="15" stroke="white" stroke-width="3" fill="none" />
                                     <path d="M 1 14 L 5 19 L 10 15" stroke="white" fill="none" stroke-width="3"/>

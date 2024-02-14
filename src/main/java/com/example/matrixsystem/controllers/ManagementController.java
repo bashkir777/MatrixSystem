@@ -2,6 +2,7 @@ package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
 import com.example.matrixsystem.dto.SectionDTO;
+import com.example.matrixsystem.dto.SectionDTOForUpdating;
 import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.dto.UserDTO;
 import com.example.matrixsystem.spring_data.entities.Section;
@@ -102,18 +103,14 @@ public class ManagementController {
         manager.addSection(section);
         return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно создана");
     }
-    @PostMapping("/update/section/{id}")
+    @PatchMapping("/update/section/{id}")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions
-    public ResponseEntity<String> updateSection(@PathVariable Integer id, @RequestBody SectionDTO sectionDTO) throws NoSuchModuleInDB
+    public ResponseEntity<String> updateSection(@PathVariable Integer id, @RequestBody SectionDTOForUpdating sectionDTO) throws NoSuchModuleInDB
             , ErrorCreatingSection, NoSuchSectionException {
-
-        //проверяем, что секция с таким id есть в БД, если нет то выкиниется ошибка, которая
-        //обработается аннотацией @HandleDataActionExceptions
-        manager.getSectionById(id);
-        // если секция есть в БД то обновляем ее
-        Section section = Section.builder().link(sectionDTO.getLink()).name(sectionDTO.getName())
-                .module(manager.getModuleById(sectionDTO.getModule())).id(id).build();
+        Section section = manager.getSectionById(id);
+        section.setName(sectionDTO.getName());
+        section.setLink(sectionDTO.getLink());
         manager.addSection(section);
         return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно обновлена");
     }

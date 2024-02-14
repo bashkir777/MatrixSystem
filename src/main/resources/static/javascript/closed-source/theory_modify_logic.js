@@ -4,13 +4,18 @@ let crossButtons = document.getElementsByClassName("cross");
 let plusButtons = document.getElementsByClassName("plus-wrapper");
 let newSectionForm = document.getElementById("new_section");
 let closeAddSection = document.getElementById("close_add_section");
+let closeEditSection = document.getElementById("close_edit_section");
 let smoke = document.getElementById("smoke");
 let submit = document.getElementById("submit-section");
+let edit = document.getElementById("edit-section");
 let addResourceName = document.getElementById("add-resource-name");
 let addResourceLink = document.getElementById("add-resource-link");
 let deleteWarning = document.getElementById("delete_warning");
-
 let redBorderTuned = false;
+
+let currentTaskModifyId = null;
+let currentTaskModifyName = null;
+let currentTaskModifyLink = null
 submit.addEventListener("mouseover", ()=>{
     newSectionForm.classList.add("blue-border");
 });
@@ -62,6 +67,52 @@ submit.addEventListener("click", ()=>{
 });
 let plus_clicked = false;
 let curPlusClicked = null;
+
+for(let editButton of editButtons){
+    editButton.addEventListener("click", ()=>{
+        currentTaskModifyId = editButton.querySelectorAll("span")[0].innerText;
+        currentTaskModifyName = editButton.querySelectorAll("span")[1].innerText;
+        currentTaskModifyLink = editButton.querySelectorAll("span")[2].innerText;
+        closeEditSection.classList.remove("display-none");
+        closeAddSection.classList.add("display-none");
+        newSectionForm.classList.remove("display-none");
+        newSectionForm.querySelectorAll("input")[0].value = currentTaskModifyName;
+        newSectionForm.querySelectorAll("input")[1].value = currentTaskModifyLink;
+        submit.classList.add("display-none");
+        edit.classList.remove("display-none");
+        smoke.classList.remove("display-none");
+    });
+}
+closeEditSection.addEventListener("click", ()=>{
+    smoke.classList.add("display-none");
+    newSectionForm.classList.add("display-none");
+});
+
+edit.addEventListener("click", ()=>{
+
+    let nemName = newSectionForm.querySelectorAll("input")[0].value;
+    let nemLink = newSectionForm.querySelectorAll("input")[1].value;
+    fetch(`/api/v1/management/update/section/${currentTaskModifyId}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body:JSON.stringify({
+            "name": nemName,
+            "link": nemLink
+        })
+    })
+        .then(response => response.text())
+        .then(data => {
+            closeEditSection.click();
+            location.reload();
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
+
+
+});
 for(let plus of plusButtons){
     plus.addEventListener("mouseover", ()=>{
         plus.classList.add("rotate-90");
@@ -73,6 +124,12 @@ for(let plus of plusButtons){
 
     });
     plus.addEventListener("click", () => {
+        newSectionForm.querySelectorAll("input")[0].value = "";
+        newSectionForm.querySelectorAll("input")[1].value = "";
+        closeEditSection.classList.add("display-none");
+        closeAddSection.classList.remove("display-none");
+        submit.classList.remove("display-none");
+        edit.classList.add("display-none");
         plus_clicked = true;
         smoke.classList.remove("display-none");
         plus.querySelector("svg").classList.add("plus-clicked");
@@ -80,7 +137,6 @@ for(let plus of plusButtons){
         let id = plus.querySelector('span').innerText;
         newSectionForm.classList.remove("display-none");
         newSectionForm.querySelector("#current_module").textContent = id;
-        console.log('Value of m.id:', id);
     });
 }
 
