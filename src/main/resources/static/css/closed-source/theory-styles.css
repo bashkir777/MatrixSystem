@@ -339,3 +339,7 @@ svg{
 .red-border{
     border: 3px solid red!important;
 }
+
+.read-mark{
+    background-color: #07a207;
+}

@@ -30,8 +30,8 @@ public class Section {
     @Column(columnDefinition = "boolean DEFAULT true")
     private Boolean visibleForStudent;
 
-    @ManyToMany(mappedBy = "sections")
-    private Set<Users> users = new HashSet<>();
+    @OneToMany(mappedBy = "section")
+    private Set<UserSection> userSections = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")

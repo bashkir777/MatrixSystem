@@ -67,7 +67,8 @@
                     </thead>
                     <tbody>
                     <tr th:each="section : ${m.sections}" class="section">
-                        <td th:if="${!isStudent or section.visibleForStudent==true}" style="position: relative">
+                        <td th:id="'link_'+${section.id}" th:class="${readSections.contains(section)} ? 'read-mark'"
+                            th:if="${!isStudent or section.visibleForStudent==true}" style="position: relative">
                             <a class="link" target="_blank" th:href="${section.link}">
                                 <span th:text="${section.name}"></span>
                                 <svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30"

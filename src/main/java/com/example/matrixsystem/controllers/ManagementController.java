@@ -58,16 +58,29 @@ public class ManagementController {
         return ResponseEntity.status(HttpStatus.CREATED).body(role + " успешно добавлен");
     }
 
-    @PostMapping("/add/user-section/{id}")
+    @PostMapping("/toggle/user-section/{id}")
     @HandleDataActionExceptions
-    public ResponseEntity<String> addUserSection(@PathVariable Integer id) throws NoSuchUserInDB, NoSuchSectionException, ErrorCreatingUserSectionRecord {
+    public ResponseEntity<String> addUserSection(@PathVariable Integer id) throws NoSuchUserInDB, NoSuchSectionException, ErrorCreatingUserSectionRecord, NoSuchUserSectionRecord, ErrorDeletingUserSection {
+        boolean hasRead = false;
+        for( Section section: manager.getSectionsOfCurrentUser()){
+            if (section.getId().equals(id)) {
+                hasRead = true;
+                break;
+            }
+        }
+        if(!hasRead){
+            manager.addUserSection(
+                    UserSection.builder().user(userInformation.getUser())
+                            .section(manager.getSectionById(id)).build());
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("отношение user-section успешно добавлено");
+        }else{
+            manager.deleteUserSection(manager
+                    .getUserSectionOfCurrentUserBySection(manager.getSectionById(id)));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body("отношение user-section успешно удалено");
+        }
 
-        manager.addUserSection(
-                UserSection.builder().user(userInformation.getUser())
-                        .section(manager.getSectionById(id)).build() );
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body("отношение user-section успешно добавлено");
     }
     @PostMapping("/add/task/custom-task")
     @RolesAllowed({"GOD", "TEACHER"})

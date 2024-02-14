@@ -29,13 +29,8 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_section",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "id")
-    )
-    private Set<Section> sections = new HashSet<>();
+    @OneToMany(mappedBy = "user")
+    private Set<UserSection> userSections = new HashSet<>();
 
     @OneToMany(mappedBy = "userReference", fetch = FetchType.EAGER)
     private Set<UserTask> userTask = new HashSet<>();

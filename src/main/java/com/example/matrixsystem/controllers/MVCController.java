@@ -53,7 +53,7 @@ public class MVCController {
         model.addAttribute("moduleList", manager.getAllModules());
         model.addAttribute("isGod", userInformation.getUserRole().equals(Roles.GOD));
         model.addAttribute("isStudent", userInformation.getUserRole().equals(Roles.STUDENT));
-        model.addAttribute("readSection", manager.getSectionsOfCurrentUser());
+        model.addAttribute("readSections", manager.getSectionsOfCurrentUser());
         return "theory";
     }
 

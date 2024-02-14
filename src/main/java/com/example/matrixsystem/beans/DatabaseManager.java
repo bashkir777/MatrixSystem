@@ -254,4 +254,20 @@ public class DatabaseManager {
             throw new ErrorCreatingUserSectionRecord();
         }
     }
+    public void deleteUserSection(UserSection userSection) throws ErrorDeletingUserSection{
+        try{
+            userSectionRepository.delete(userSection);
+        }catch (Exception e){
+            throw new ErrorDeletingUserSection();
+        }
+    }
+
+    public UserSection getUserSectionOfCurrentUserBySection(Section section) throws NoSuchUserSectionRecord{
+        try{
+            return userSectionRepository.getUserSectionBySectionAndUser(section, userInformation.getUser());
+        }catch (Exception e){
+            throw new NoSuchUserSectionRecord();
+        }
+
+    }
 }
