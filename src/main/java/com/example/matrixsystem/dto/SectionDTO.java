@@ -11,4 +11,5 @@ public class SectionDTO {
 
     private Integer module;
 
+    private Boolean visibleForStudent;
 }

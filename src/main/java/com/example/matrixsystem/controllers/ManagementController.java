@@ -99,7 +99,8 @@ public class ManagementController {
     public ResponseEntity<String> addNewSection(@RequestBody SectionDTO sectionDTO) throws NoSuchModuleInDB
             , ErrorCreatingSection {
         Section section = Section.builder().link(sectionDTO.getLink()).name(sectionDTO.getName())
-                .module(manager.getModuleById(sectionDTO.getModule())).build();
+                .module(manager.getModuleById(sectionDTO.getModule()))
+                .visibleForStudent(sectionDTO.getVisibleForStudent()).build();
         manager.addSection(section);
         return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно создана");
     }
@@ -111,6 +112,7 @@ public class ManagementController {
         Section section = manager.getSectionById(id);
         section.setName(sectionDTO.getName());
         section.setLink(sectionDTO.getLink());
+        section.setVisibleForStudent(sectionDTO.getVisibleForStudent());
         manager.addSection(section);
         return ResponseEntity.status(HttpStatus.CREATED).body("Секция успешно обновлена");
     }

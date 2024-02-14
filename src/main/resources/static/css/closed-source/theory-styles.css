@@ -214,14 +214,14 @@ tbody, thead, tr, td, th{
     display: none;
 }
 #new_section{
-    border: 3px solid #0d8d0d;
+    border: 3px solid #f5f5f5bf;
     position: fixed;
     background-color: black;
     z-index: 101;
     border-radius: 10%;
     width: 30%;
-    height: 50%;
-    top: 20%;
+    height: 60%;
+    top: 15%;
     left: 35%;
     transition: border-color 0.4s ease;
     padding-bottom: 2%;
@@ -267,7 +267,7 @@ tbody, thead, tr, td, th{
 .rotate-90{
     transform: rotate(-90deg);
 }
-input{
+#add-resource-name, #add-resource-link{
     pointer-events: all;
     outline: none;
     border: 3px solid white;
@@ -279,6 +279,13 @@ input{
     margin-top: 15%;
     transition: border-color 0.5s ease;
 }
+.checkbox-wrapper{
+    display: inline-block;
+    margin-top: 10%;
+    color: #f5f5f5bf;
+    font-size: 20px;
+    font-family: 'Helvetica', sans-serif;
+}
 svg{
     transition: background-color 0.4s ease;
 }
@@ -286,19 +293,24 @@ svg{
     user-select: none;
     display: inline-block;
     pointer-events: all;
-    color: #f5f5f5bf;
+    color: #171717;
     font-size: 25px;
     padding: 11px 70px;
     background-color: rgba(255, 255, 255, 0.05);
     border-radius: 25px;
     margin-top: 12%;
     transition: padding-left 1s ease, padding-right 1s ease
-    , background-color 0.4s ease, opacity 0.1s ease;
-    background-color: #0d8d0d;
+    , background-color 0.4s ease, opacity 0.1s ease, color 0.4s ease;
+    background-color: #f5f5f5bf;
 }
 #submit-section:hover, #edit-section:hover{
-    background-color: #0f34a6;
     cursor: pointer;
+}
+#submit-section:hover{
+    background-color: #07a207;
+}
+#edit-section:hover{
+    background-color:orange;
 }
 #submit-section:active, #edit-section:active{
     opacity: 0.8;

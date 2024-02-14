@@ -1,6 +1,8 @@
 let sections = document.getElementsByClassName("section");
 let navigationButtons = document.getElementsByClassName("navigation-button-wrapper");
-
+document.querySelectorAll('.section:not(:has(td))').forEach(function(element) {
+    element.remove();
+});
 
 for (let button of navigationButtons){
     button.addEventListener("click", () =>{

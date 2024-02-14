@@ -15,13 +15,27 @@ let redBorderTuned = false;
 
 let currentTaskModifyId = null;
 let currentTaskModifyName = null;
-let currentTaskModifyLink = null
-submit.addEventListener("mouseover", ()=>{
-    newSectionForm.classList.add("blue-border");
-});
-submit.addEventListener("mouseout", ()=>{
-    newSectionForm.classList.remove("blue-border");
-});
+let currentTaskModifyLink = null;
+
+
+function addRedBorderToNewSection(){
+    if(!redBorderTuned){
+        addResourceName.classList.add("red-border");
+        addResourceLink.classList.add("red-border");
+        newSectionForm.classList.add("red-border");
+        addResourceName.value="";
+        addResourceLink.value="";
+        redBorderTuned = true;
+        setTimeout( ()=>{
+            console.log("inside")
+            addResourceName.classList.remove("red-border");
+            addResourceLink.classList.remove("red-border");
+            newSectionForm.classList.remove("red-border");
+            redBorderTuned = false;
+        }, 2000);
+    }
+}
+
 submit.addEventListener("click", ()=>{
     let name = addResourceName.value;
     let link = addResourceLink.value;
@@ -48,21 +62,7 @@ submit.addEventListener("click", ()=>{
                 console.error('Ошибка:', error);
             });
     }else{
-        if(!redBorderTuned){
-            addResourceName.classList.add("red-border");
-            addResourceLink.classList.add("red-border");
-            newSectionForm.classList.add("red-border");
-            addResourceName.value="";
-            addResourceLink.value="";
-            redBorderTuned = true;
-            setTimeout( ()=>{
-                console.log("inside")
-                addResourceName.classList.remove("red-border");
-                addResourceLink.classList.remove("red-border");
-                newSectionForm.classList.remove("red-border");
-                redBorderTuned = false;
-            }, 2000);
-        }
+        addRedBorderToNewSection();
     }
 });
 let plus_clicked = false;
@@ -73,6 +73,9 @@ for(let editButton of editButtons){
         currentTaskModifyId = editButton.querySelectorAll("span")[0].innerText;
         currentTaskModifyName = editButton.querySelectorAll("span")[1].innerText;
         currentTaskModifyLink = editButton.querySelectorAll("span")[2].innerText;
+        let currentTaskModifyVisibleForStudent = editButton.querySelectorAll("span")[3].innerText;
+        let checkbox = newSectionForm.querySelectorAll("input")[2];
+        checkbox.checked = currentTaskModifyVisibleForStudent === "true";
         closeEditSection.classList.remove("display-none");
         closeAddSection.classList.add("display-none");
         newSectionForm.classList.remove("display-none");
@@ -89,29 +92,30 @@ closeEditSection.addEventListener("click", ()=>{
 });
 
 edit.addEventListener("click", ()=>{
-
-    let nemName = newSectionForm.querySelectorAll("input")[0].value;
-    let nemLink = newSectionForm.querySelectorAll("input")[1].value;
-    fetch(`/api/v1/management/update/section/${currentTaskModifyId}`, {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body:JSON.stringify({
-            "name": nemName,
-            "link": nemLink
+    let newName = newSectionForm.querySelectorAll("input")[0].value;
+    let newLink = newSectionForm.querySelectorAll("input")[1].value;
+    if(newName.length > 5 && newLink.length>5){
+        fetch(`/api/v1/management/update/section/${currentTaskModifyId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body:JSON.stringify({
+                "name": newName,
+                "link": newLink
+            })
         })
-    })
-        .then(response => response.text())
-        .then(data => {
-            closeEditSection.click();
-            location.reload();
-        })
-        .catch((error) => {
-            console.error('Ошибка:', error);
-        });
-
-
+            .then(response => response.text())
+            .then(data => {
+                closeEditSection.click();
+                location.reload();
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
+    }else{
+        addRedBorderToNewSection();
+    }
 });
 for(let plus of plusButtons){
     plus.addEventListener("mouseover", ()=>{
@@ -137,6 +141,8 @@ for(let plus of plusButtons){
         let id = plus.querySelector('span').innerText;
         newSectionForm.classList.remove("display-none");
         newSectionForm.querySelector("#current_module").textContent = id;
+        let checkbox = newSectionForm.querySelectorAll("input")[2];
+        checkbox.checked = true;
     });
 }
 
@@ -170,7 +176,6 @@ for (let button of crossButtons){
             })
                 .then(response => response.text())
                 .then(data => {
-                    console.log(data);
                     location.reload();
                 })
                 .catch((error) => {

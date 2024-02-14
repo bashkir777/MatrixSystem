@@ -24,6 +24,9 @@ public class Section {
     @Column(length = Integer.MAX_VALUE)
     private String link;
 
+    @Column(columnDefinition = "boolean DEFAULT true")
+    private Boolean visibleForStudent;
+
     @ManyToOne
     @JoinColumn(referencedColumnName = "id")
     @JsonBackReference

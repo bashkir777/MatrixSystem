@@ -9,4 +9,5 @@ public class SectionDTOForUpdating {
 
     private String link;
 
+    private Boolean visibleForStudent;
 }

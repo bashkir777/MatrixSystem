@@ -52,6 +52,7 @@ public class MVCController {
     public String theory(Model model) {
         model.addAttribute("moduleList", manager.getAllModules());
         model.addAttribute("isGod", userInformation.getUserRole().equals(Roles.GOD));
+        model.addAttribute("isStudent", userInformation.getUserRole().equals(Roles.STUDENT));
         return "theory";
     }
 
