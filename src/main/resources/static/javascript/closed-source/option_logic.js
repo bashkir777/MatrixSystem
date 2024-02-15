@@ -1,4 +1,5 @@
 let startButton = document.getElementById("start");
+let tasksWrapper = document.getElementById("tasks-wrapper");
 let timerRunning;
 
 
@@ -23,8 +24,34 @@ function generateOption(){
         });
 }
 
-function fillPage(option){
-    // функция, которая будет заполнять страницу заданиями из варианта
+function fillPage(){
+    let option = JSON.parse(localStorage.getItem("last_option"));
+    let num = 1;
+    for(let taskObj of option){
+        let task = document.createElement('div');
+        task.classList.add("task");
+        let taskQuestion = document.createElement('div');
+        taskQuestion.classList.add("task-text");
+        taskQuestion.innerText = taskObj.task;
+        let taskLabel = document.createElement('div');
+        taskLabel.innerText = "Задание №" + num;
+        taskQuestion.classList.add("task-label");
+        num ++;
+        task.appendChild(taskQuestion);
+        if(!taskObj.module.verifiable){
+            console.log("not verifiable")
+            let taskAnswer = document.createElement('div');
+            taskAnswer.classList.add("answer");
+            taskAnswer.textContent = taskObj.answer;
+            task.appendChild(taskAnswer);
+        }else{
+            let inputAnswer = document.createElement('input');
+            inputAnswer.classList.add("input-text");
+            task.appendChild(inputAnswer);
+        }
+        task.appendChild(taskLabel);
+        tasksWrapper.appendChild(task);
+    }
 }
 let lastAttempt = localStorage.getItem("time_left");
 
