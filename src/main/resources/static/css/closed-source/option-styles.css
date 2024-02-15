@@ -1,5 +1,5 @@
 body{
-    background-color: #121212;
+    background-color: black;
 }
 #timer{
     display: inline-flex;
@@ -21,6 +21,7 @@ body{
     height: 5%;
     top: 14%;
     left: 3%;
+    z-index: 50;
 }
 #start{
     display: inline-block;
@@ -33,9 +34,10 @@ body{
 }
 #start:hover{
     cursor: pointer;
+    opacity: 0.8;
 }
 #start:active{
-    opacity: 0.8;
+    opacity: 0.6;
 }
 #pause-svg{
     margin-top: 5px;
@@ -43,4 +45,10 @@ body{
 #start-svg{
     margin-top: 3px;
     margin-bottom: 2px;
+}
+.left-block{
+    top: 25%;
+}
+#particles-js{
+    background-color: black;
 }
