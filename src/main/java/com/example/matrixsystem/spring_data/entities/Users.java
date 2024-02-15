@@ -1,7 +1,6 @@
 package com.example.matrixsystem.spring_data.entities;
 
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
-import com.sun.istack.internal.NotNull;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,9 +20,9 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull
+    @Column(nullable = false)
     private String login;
-    @NotNull
+    @Column(nullable = false)
     private String password;
 
     @Enumerated(EnumType.STRING)
