@@ -4,5 +4,6 @@ COPY . .
 RUN mvn clean package
 FROM openjdk:17
 WORKDIR /app
+VOLUME ["/app/db"]
 COPY --from=build /app/target/matrix-system.jar .
 CMD ["java", "-jar", "matrix-system.jar"]
