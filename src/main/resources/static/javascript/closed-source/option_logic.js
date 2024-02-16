@@ -11,6 +11,7 @@ let answerText = document.getElementById("_answer");
 let answer = document.getElementById("answer");
 let showAnswer = document.getElementById("show_answer");
 let input = document.getElementById("input-answer");
+let score = document.getElementById("score");
 let answerIsShow = false;
 
 let listTasksToSubmit = [];
@@ -96,13 +97,15 @@ function fillPage(){
             button.classList.add("navigation-tab-selected");
             taskNum.innerText = num;
             taskText.innerText = taskObj.task;
-
             if(taskObj.module.verifiable){
                 input.value = listTasksToSubmit[currentTaskOrder-1].answer;
                 inputWrap.classList.remove("display-none");
                 answerWrapper.classList.add("display-none");
             }else{
                 inputWrap.classList.add("display-none");
+                score.classList.remove("display-none");
+                score.setAttribute("max", taskObj.module.maxPoints);
+                score.value = listTasksToSubmit[currentTaskOrder-1].score;
                 answerText.innerText = taskObj.answer;
                 answerWrapper.classList.remove("display-none");
             }
@@ -141,6 +144,10 @@ function generateOption(){
             console.error('Ошибка:', error);
         });
 }
+
+score.addEventListener("input", (event)=>{
+    listTasksToSubmit[currentTaskOrder-1].score = event.target.value;
+});
 
 let lastAttempt = localStorage.getItem("time_left");
 listTasksToSubmit = JSON.parse(localStorage.getItem("lastAnswers"));
