@@ -52,3 +52,11 @@ body{
 #particles-js{
     background-color: black;
 }
+.input-wrap{
+    text-align: right;
+    padding: 3%;
+}
+
+#answer_wrapper{
+    padding: 3%;
+}

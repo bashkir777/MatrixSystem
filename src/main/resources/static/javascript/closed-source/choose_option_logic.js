@@ -1,46 +1,51 @@
 let panel = document.getElementById("panel");
 let input = document.getElementById("input-option");
 let find = document.getElementById("find");
-
+let leftBlockText = document.getElementById("left-block-text");
 let tutor_panel = document.getElementById("tutor-option-panel");
 let tdList = document.getElementsByTagName("td");
 
 let animationRunning = false;
 let inversion = false;
-panel.addEventListener("mouseover", () => {
-    if (!animationRunning) {
-        if (!inversion) {
-            animationRunning = true;
-            panel.classList.add("rotate-m-45");
-            setTimeout(() => {
-                panel.classList.remove("rotate-m-45");
-                panel.classList.add("rotate-360");
-            }, 400);
-            setTimeout(() => {
-                panel.classList.remove("rotate-360");
-            }, 1500);
-            setTimeout(() => {
-                inversion = true;
-                animationRunning = false;
-            }, 2600);
+if(localStorage.getItem("time_left") === null){
+    panel.addEventListener("mouseover", () => {
+        if (!animationRunning) {
+            if (!inversion) {
+                animationRunning = true;
+                panel.classList.add("rotate-m-45");
+                setTimeout(() => {
+                    panel.classList.remove("rotate-m-45");
+                    panel.classList.add("rotate-360");
+                }, 400);
+                setTimeout(() => {
+                    panel.classList.remove("rotate-360");
+                }, 1500);
+                setTimeout(() => {
+                    inversion = true;
+                    animationRunning = false;
+                }, 2600);
 
-        } else {
-            animationRunning = true;
-            panel.classList.add("rotate-45");
-            setTimeout(() => {
-                panel.classList.remove("rotate-45");
-                panel.classList.add("rotate-m-360");
-            }, 400);
-            setTimeout(() => {
-                panel.classList.remove("rotate-m-360");
-            }, 1500);
-            setTimeout(() => {
-                inversion = false;
-                animationRunning = false;
-            }, 2600);
+            } else {
+                animationRunning = true;
+                panel.classList.add("rotate-45");
+                setTimeout(() => {
+                    panel.classList.remove("rotate-45");
+                    panel.classList.add("rotate-m-360");
+                }, 400);
+                setTimeout(() => {
+                    panel.classList.remove("rotate-m-360");
+                }, 1500);
+                setTimeout(() => {
+                    inversion = false;
+                    animationRunning = false;
+                }, 2600);
+            }
         }
-    }
-});
+    });
+}else{
+    leftBlockText.innerText = "Продолжить выполнение";
+}
+
 
 for (let i = 0; i < 9; i++) {
     tdList[i].addEventListener("click", () => {

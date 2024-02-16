@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/css/closed-source/module-styles.css">
     <script th:src="@{/javascript/closed-source/option_logic.js}" defer></script>
     <script src="/javascript/closed-source/whiteboard.js" defer></script>
-    <script src="/javascript/closed-source/module_template_logic.js" defer></script>
+<!--    <script src="/javascript/closed-source/module_template_logic.js" defer></script>-->
     <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/particles-styles.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/closed-source/option-styles.css}"/>
 </head>
@@ -39,8 +39,6 @@
             </button>
             <div class="navigation-block" >
                 <div id="navigation_buttons_wrapper" class="navigation-buttons-wrapper">
-<!--                <span th:id="'tab_'+${i}" th:each="i : ${#numbers.sequence(1, moduleCapacity)}"-->
-<!--                class="navigation-button" th:text="${i}"></span>-->
                 </div>
             </div>
             <button id="scroll_right">
@@ -52,14 +50,17 @@
 
         <div id="container" class="task-container">
             <div class="task">
-                <span class="label">Задание №<span id="task-num"></span>:</span>
+                <div class="label">Задание №<span id="task-num"></span>:</div>
                 <div id="task-text" class="task-text"></div>
+                <div id="input-wrap" class="input-wrap display-none">
+                    <input type="text" placeholder="Введите ответ" id="input-answer"/>
+                </div>
                 <div id="task-with-img" class="display-none" style="display: flex; margin-top: 10px">
                     <div class="placeholder"></div>
                 </div>
             </div>
-            <div class="answer-wrapper display-none">
-                <button class="display-none" id="show_answer">Показать ответ</button>
+            <div id="answer_wrapper" class="answer-wrapper display-none">
+                <button id="show_answer">Показать решение</button>
                 <div id="answer" class="answer display-none">
                     <hr>
                     Ответ: <span id="_answer"></span>

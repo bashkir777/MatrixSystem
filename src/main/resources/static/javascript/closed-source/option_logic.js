@@ -1,7 +1,66 @@
 let startButton = document.getElementById("start");
-let tasksWrapper = document.getElementById("tasks-wrapper");
+let navigationButtonsWrapper = document.getElementById("navigation_buttons_wrapper");
 let timerRunning;
+let arrowLeft = document.getElementById("arrow_left");
+let arrowRight = document.getElementById("arrow_right");
+let scrollLeft = document.getElementById("scroll_left");
+let scrollRight = document.getElementById("scroll_right");
+let inputWrap = document.getElementById("input-wrap");
+let answerWrapper = document.getElementById("answer_wrapper");
+let answerText = document.getElementById("_answer");
+let answer = document.getElementById("answer");
+let showAnswer = document.getElementById("show_answer");
+let input = document.getElementById("input-answer");
+let answerIsShow = false;
 
+let listTasksToSubmit = [];
+let currentTaskOrder = 1;
+let arrOfNavigationButtons = [];
+let taskNum = document.getElementById("task-num");
+let taskText = document.getElementById("task-text");
+if (arrowLeft !== null){
+    arrowLeft.addEventListener("mouseover", ()=>{
+        container.classList.add("rotate-1-left");
+    });
+    arrowLeft.addEventListener("mouseout", ()=>{
+        container.classList.remove("rotate-1-left");
+    });
+}
+arrowRight.addEventListener("click", ()=>{
+    if(currentTaskOrder !== arrOfNavigationButtons.length){
+        arrOfNavigationButtons[currentTaskOrder].click();
+    }
+});
+arrowLeft.addEventListener("click", () =>{
+    if(currentTaskOrder !== 1){
+        arrOfNavigationButtons[currentTaskOrder - 2].click();
+    }
+});
+
+if (arrowRight !== null){
+    arrowRight.addEventListener("mouseover", ()=>{
+        container.classList.add("rotate-1-right");
+    });
+    arrowRight.addEventListener("mouseout", ()=>{
+        container.classList.remove("rotate-1-right");
+    });
+}
+scrollLeft.addEventListener("click", () => {
+    navigationButtonsWrapper.scrollLeft -= 200;
+});
+scrollRight.addEventListener("click", function() {
+    navigationButtonsWrapper.scrollLeft += 200;
+});
+function wheelHandler(event) {
+    //если это тачпад ничего не делаем он и так хорошо работает
+    if(event.deltaX !== 0){
+        return;
+    }
+    event.preventDefault();
+    navigationButtonsWrapper.scrollLeft += event.deltaY * 2;
+}
+
+navigationButtonsWrapper.addEventListener("wheel", wheelHandler);
 
 const currentDate = new Date();
 currentDate.setHours(currentDate.getHours() + 3);
@@ -9,35 +68,61 @@ currentDate.setMinutes(currentDate.getMinutes() + 55);
 currentDate.setSeconds(currentDate.getSeconds() + 1);
 
 function fillPage(){
-    // let option = JSON.parse(localStorage.getItem("last_option"));
-    // let num = 1;
-    // for(let taskObj of option){
-    //     let task = document.createElement('div');
-    //     task.classList.add("task");
-    //     let taskQuestion = document.createElement('div');
-    //     taskQuestion.classList.add("task-text");
-    //     taskQuestion.innerText = taskObj.task;
-    //     let taskLabel = document.createElement('div');
-    //     taskLabel.innerText = "Задание №" + num;
-    //     taskQuestion.classList.add("task-label");
-    //     num ++;
-    //     task.appendChild(taskQuestion);
-    //     if(!taskObj.module.verifiable){
-    //         console.log("not verifiable")
-    //         let taskAnswer = document.createElement('div');
-    //         taskAnswer.classList.add("answer");
-    //         taskAnswer.textContent = taskObj.answer;
-    //         task.appendChild(taskAnswer);
-    //     }else{
-    //         let inputAnswer = document.createElement('input');
-    //         inputAnswer.classList.add("input-text");
-    //         task.appendChild(inputAnswer);
-    //     }
-    //     task.appendChild(taskLabel);
-    //     tasksWrapper.appendChild(task);
-    // }
+    let option = JSON.parse(localStorage.getItem("last_option"));
+    for(let taskObj of option){
+        listTasksToSubmit.push(
+            {
+                id: taskObj.id,
+                answer: null,
+                score: 0
+            }
+        );
+        let button = document.createElement('span');
+        arrOfNavigationButtons.push(button);
+        let num = arrOfNavigationButtons.length;
+        button.classList.add("navigation-button");
+        button.textContent = num;
+        button.id = "tab_"+num;
+        listTasksToSubmit[num-1].id = taskObj.id;
+        button.addEventListener("click", ()=>{
+            if(answerIsShow){
+                showAnswer.click();
+            }
+            listTasksToSubmit[currentTaskOrder-1].id = taskObj.id;
+            for(let b of arrOfNavigationButtons){
+                b.classList.remove("navigation-tab-selected");
+            }
+            currentTaskOrder = num;
+            button.classList.add("navigation-tab-selected");
+            taskNum.innerText = num;
+            taskText.innerText = taskObj.task;
+
+            if(taskObj.module.verifiable){
+                input.value = listTasksToSubmit[currentTaskOrder-1].answer;
+                inputWrap.classList.remove("display-none");
+                answerWrapper.classList.add("display-none");
+            }else{
+                inputWrap.classList.add("display-none");
+                answerText.innerText = taskObj.answer;
+                answerWrapper.classList.remove("display-none");
+            }
+            if(currentTaskOrder === arrOfNavigationButtons.length){
+                arrowRight.classList.add("display-none");
+            }else if(currentTaskOrder === 1){
+                arrowLeft.classList.add("display-none");
+            }else{
+                arrowLeft.classList.remove("display-none");
+                arrowRight.classList.remove("display-none");
+            }
+        });
+        navigationButtonsWrapper.appendChild(button);
+    }
+    arrOfNavigationButtons[0].click();
 }
 
+input.addEventListener("input", (event)=>{
+    listTasksToSubmit[currentTaskOrder-1].answer = event.target.value;
+});
 function generateOption(){
     fetch(`/api/v1/client/options/autogenerate`, {
         method: 'GET',
@@ -64,7 +149,6 @@ if(lastAttempt === null){
     localStorage.setItem("time_left", timeLeft);
     generateOption();
 }else{
-
     //если время на таймере истекло генерируем новый вариант
     if (localStorage.getItem("time_left") < 0) {
         const endTime = currentDate.getTime();
@@ -131,5 +215,15 @@ startButton.addEventListener("click", ()=>{
     }
 });
 
-
+showAnswer.addEventListener("click", ()=>{
+    if (!answerIsShow){
+        answerIsShow = true;
+        answer.classList.remove("display-none");
+        showAnswer.textContent = "Скрыть решение";
+    }else{
+        answerIsShow = false;
+        answer.classList.add("display-none");
+        showAnswer.textContent = "Показать решение";
+    }
+});
 
