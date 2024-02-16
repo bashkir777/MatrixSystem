@@ -59,4 +59,22 @@ body{
 
 #answer_wrapper{
     padding: 3%;
+    padding-bottom: 1%;
+}
+#label{
+    display: inline-block;
+    font-size: 20px;
+    color: #f5f5f5bf;
+    margin-right: 10px;
+}
+#score{
+    user-select: none;
+    pointer-events: all;
+    outline: none;
+    border: none;
+    padding-left: 5px;
+    width: 6vh;
+    height: 5vh;
+    font-size: 20px;
+    border-radius: 10px;
 }
