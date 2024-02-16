@@ -1,0 +1,28 @@
+iframe{
+    z-index: 103;
+    position: absolute;
+    top: 13%;
+    right:2%;
+    width: 50%;
+    height: 84%;
+    border-radius: 20px;
+    transition: width 2s ease;
+}
+
+#stretch{
+    position: absolute;
+    top: 80%;
+    right: 53%;
+    z-index: 103;
+    transition: transform 2s ease, right 2s ease;
+}
+#stretch:hover{
+    cursor: pointer;
+}
+.reverse{
+    transform: rotate(180deg);
+    right: 98%!important;
+}
+.stretched{
+    width: 95%;
+}

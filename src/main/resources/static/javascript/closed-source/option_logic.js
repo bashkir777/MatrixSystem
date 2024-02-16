@@ -226,4 +226,3 @@ showAnswer.addEventListener("click", ()=>{
         showAnswer.textContent = "Показать решение";
     }
 });
-
