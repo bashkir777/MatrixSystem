@@ -122,7 +122,9 @@ function fillPage(){
 
 input.addEventListener("input", (event)=>{
     listTasksToSubmit[currentTaskOrder-1].answer = event.target.value;
+    localStorage.setItem("lastAnswers", JSON.stringify(listTasksToSubmit));
 });
+
 function generateOption(){
     fetch(`/api/v1/client/options/autogenerate`, {
         method: 'GET',
@@ -140,10 +142,11 @@ function generateOption(){
         });
 }
 
-
 let lastAttempt = localStorage.getItem("time_left");
-
+listTasksToSubmit = JSON.parse(localStorage.getItem("lastAnswers"));
 if(lastAttempt === null){
+    listTasksToSubmit = [];
+    localStorage.setItem("lastAnswers", JSON.stringify(listTasksToSubmit))
     const endTime = currentDate.getTime();
     let timeLeft = endTime - new Date().getTime();
     localStorage.setItem("time_left", timeLeft);
