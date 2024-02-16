@@ -333,3 +333,12 @@ input[type='text']:focus{
 .opacity-1{
     opacity: 1;
 }
+iframe{
+    z-index: 103;
+    position: absolute;
+    top: 13%;
+    right:2%;
+    width: 50%;
+    height: 84%;
+    border-radius: 20px;
+}
