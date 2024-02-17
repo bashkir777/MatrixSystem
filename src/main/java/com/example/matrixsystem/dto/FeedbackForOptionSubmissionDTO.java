@@ -12,5 +12,4 @@ public class FeedbackForOptionSubmissionDTO {
     private int[] modulesDone;
     // последвательны список первичных баллов за все задания
     private int[] scores;
-
 }

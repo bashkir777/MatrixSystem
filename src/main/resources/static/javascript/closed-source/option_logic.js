@@ -78,13 +78,6 @@ currentDate.setSeconds(currentDate.getSeconds() + 1);
 function fillPage(){
     let option = JSON.parse(localStorage.getItem("last_option"));
     for(let taskObj of option){
-        listTasksToSubmit.push(
-            {
-                id: taskObj.id,
-                answer: null,
-                score: 0
-            }
-        );
         let button = document.createElement('span');
         arrOfNavigationButtons.push(button);
         let num = arrOfNavigationButtons.length;
@@ -145,6 +138,16 @@ function generateOption(){
         .then(response => response.json())
         .then(data => {
             localStorage.setItem("last_option", JSON.stringify(data));
+            for(let taskObj of data) {
+                listTasksToSubmit.push(
+                    {
+                        id: taskObj.id,
+                        answer: null,
+                        score: 0,
+                        module: taskObj.module.id
+                    }
+                );
+            }
             fillPage();
         })
         .catch((error) => {
@@ -203,6 +206,22 @@ yes.addEventListener("click", ()=>{
     feedbackWrapper.classList.remove("display-none");
     timerBlock.classList.add("display-none");
     // логика отправки
+    fetch(`/api/v1/math/submit/option`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            listTasksToSubmit
+        )
+    })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
     clearInterval(timerInterval);
     localStorage.removeItem("time_left");
     localStorage.removeItem("lastAnswers");

@@ -204,7 +204,7 @@ public class DatabaseManager {
             int randomIndex = random.nextInt(list.size());
             Task randomTask = list.get(randomIndex);
             Module randomTaskModule = randomTask.getModule();
-            TaskForOptionsDTO randomTaskDTO = TaskForOptionsDTO.builder()
+            TaskForOptionsDTO randomTaskDTO = TaskForOptionsDTO.builder().id(randomTask.getId())
                     .module(ModuleDTO.builder().id(randomTaskModule.getId())
                             .verifiable(randomTaskModule.getVerifiable()).maxPoints(module.getMaxPoints())
                             .build()).task(randomTask.getTask())
