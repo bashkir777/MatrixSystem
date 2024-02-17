@@ -87,12 +87,18 @@ function fillPage(){
         button.classList.add("navigation-button");
         button.textContent = num;
         button.id = "tab_"+num;
-        listTasksToSubmit[num-1].id = taskObj.id;
         button.addEventListener("click", ()=>{
             if(answerIsShow){
                 showAnswer.click();
             }
-            listTasksToSubmit[currentTaskOrder-1].id = taskObj.id;
+            if(button.classList.contains("green-border")){
+                container.classList.add("green-container");
+                container.classList.remove("red-container");
+            }
+            if(button.classList.contains("red-border")){
+                container.classList.remove("green-container");
+                container.classList.add("red-container");
+            }
             for(let b of arrOfNavigationButtons){
                 b.classList.remove("navigation-tab-selected");
             }
@@ -132,6 +138,7 @@ function fillPage(){
 
 input.addEventListener("input", (event)=>{
     listTasksToSubmit[currentTaskOrder-1].answer = event.target.value;
+    localStorage.removeItem("lastAnswers");
     localStorage.setItem("lastAnswers", JSON.stringify(listTasksToSubmit));
 });
 
@@ -165,6 +172,7 @@ function generateOption(){
 
 score.addEventListener("input", (event)=>{
     listTasksToSubmit[currentTaskOrder-1].score = event.target.value;
+    localStorage.removeItem("lastAnswers", JSON.stringify(listTasksToSubmit));
     localStorage.setItem("lastAnswers", JSON.stringify(listTasksToSubmit));
 });
 
@@ -220,6 +228,7 @@ yes.addEventListener("click", ()=>{
     sendWarning.classList.add("display-none");
     feedbackWrapper.classList.remove("display-none");
     timerBlock.classList.add("display-none");
+    score.readOnly = true;
     // логика отправки
     fetch(`/api/v1/math/submit/option`, {
         method: 'POST',
@@ -233,7 +242,14 @@ yes.addEventListener("click", ()=>{
         .then(response => response.json())
         .then(data => {
             resultText.innerText = data.score
-            console.log(data);
+            for(let i = 0; i < arrOfNavigationButtons.length; i++){
+                if(data.modulesDone.includes(i+1)){
+                    arrOfNavigationButtons[i].classList.add("green-border");
+                }else{
+                    arrOfNavigationButtons[i].classList.add("red-border");
+                }
+            }
+            arrOfNavigationButtons[0].click();
         })
         .catch((error) => {
             console.error('Ошибка:', error);
