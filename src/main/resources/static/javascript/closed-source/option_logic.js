@@ -12,6 +12,9 @@ let answer = document.getElementById("answer");
 let showAnswer = document.getElementById("show_answer");
 let input = document.getElementById("input-answer");
 let score = document.getElementById("score");
+let submitOption = document.getElementById("submit-option");
+let sendWarning = document.getElementById("send_warning");
+let no = document.getElementById("no");
 let answerIsShow = false;
 
 let listTasksToSubmit = [];
@@ -236,3 +239,13 @@ showAnswer.addEventListener("click", ()=>{
         showAnswer.textContent = "Показать решение";
     }
 });
+
+submitOption.addEventListener("click", ()=>{
+    sendWarning.classList.remove("display-none");
+    smoke.classList.remove("display-none");
+    no.addEventListener("click", ()=>{
+        sendWarning.classList.add("display-none");
+        smoke.classList.add("display-none");
+    });
+});
+
