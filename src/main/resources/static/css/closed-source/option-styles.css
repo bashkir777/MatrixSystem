@@ -136,3 +136,20 @@ body{
     background-color: #af0505;
     margin-left: 3%;
 }
+
+.feedback-wrapper{
+    text-align: center;
+    position: fixed;
+    border-radius: 20px;
+    color: #f5f5f5bf;
+    z-index: 202;
+    background-color: black;
+    width: 50%;
+    height: 40%;
+    top: 20%;
+    left: 25%;
+    font-size: 25px;
+    font-family: 'Helvetica', sans-serif;
+    padding-top: 2%;
+}
+

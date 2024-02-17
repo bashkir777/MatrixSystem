@@ -15,6 +15,10 @@ let score = document.getElementById("score");
 let submitOption = document.getElementById("submit-option");
 let sendWarning = document.getElementById("send_warning");
 let no = document.getElementById("no");
+let yes = document.getElementById("yes");
+let feedbackWrapper = document.getElementById("feedback-wrapper");
+let timerBlock = document.getElementById("timer-block");
+
 let answerIsShow = false;
 
 let listTasksToSubmit = [];
@@ -185,7 +189,25 @@ function transformToDoubleDigits(digit){
 }
 
 let timerInterval;
+submitOption.addEventListener("click", ()=>{
+    sendWarning.classList.remove("display-none");
+    smoke.classList.remove("display-none");
 
+});
+no.addEventListener("click", ()=>{
+    sendWarning.classList.add("display-none");
+    smoke.classList.add("display-none");
+});
+yes.addEventListener("click", ()=>{
+    sendWarning.classList.add("display-none");
+    feedbackWrapper.classList.remove("display-none");
+    timerBlock.classList.add("display-none");
+    // логика отправки
+    clearInterval(timerInterval);
+    localStorage.removeItem("time_left");
+    localStorage.removeItem("lastAnswers");
+    localStorage.removeItem("last_option");
+});
 let timeLeft = localStorage.getItem("time_left");
 function startTimer() {
     timerRunning = true;
@@ -200,6 +222,7 @@ function updateTimer() {
     localStorage.setItem("time_left", timeLeft);
     if (timeLeft <= 0) {
         clearInterval(timerInterval);
+        yes.click();
         document.getElementById('timer').innerHTML = 'Время вышло';
     } else {
         const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -239,13 +262,3 @@ showAnswer.addEventListener("click", ()=>{
         showAnswer.textContent = "Показать решение";
     }
 });
-
-submitOption.addEventListener("click", ()=>{
-    sendWarning.classList.remove("display-none");
-    smoke.classList.remove("display-none");
-    no.addEventListener("click", ()=>{
-        sendWarning.classList.add("display-none");
-        smoke.classList.add("display-none");
-    });
-});
-

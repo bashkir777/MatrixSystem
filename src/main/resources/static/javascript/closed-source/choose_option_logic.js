@@ -44,6 +44,8 @@ if(localStorage.getItem("time_left") === null){
     });
 }else{
     leftBlockText.innerText = "Продолжить выполнение";
+    tutor_panel.classList.add("display-none");
+    panel.classList.add("equalize");
 }
 
 

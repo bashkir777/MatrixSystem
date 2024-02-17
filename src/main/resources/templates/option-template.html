@@ -17,8 +17,22 @@
     <div id="yes">Да</div>
     <div id="no">Отмена</div>
 </div>
+<div id="feedback-wrapper" class="feedback-wrapper display-none">
+    <div class="feedback-head">
+        Ваш результат:
+    </div>
+    <div id="result">
+
+    </div>
+    <div class="task-result-wrapper">
+
+    </div>
+    <a href="/app/all-tasks">
+        Вернуться на главную страницу
+    </a>
+</div>
 <div th:insert="~{header :: header}"></div>
-<div class="timer-block">
+<div id="timer-block" class="timer-block">
     <div style="display: flex; align-items: center;">
         <div id="timer">
         </div>

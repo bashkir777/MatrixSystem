@@ -52,6 +52,9 @@ body{
     align-items: center;
     height: 100%
 }
+.display-none{
+    display: none;
+}
 
 .tutor-option-panel{
     user-select: none;
@@ -153,4 +156,8 @@ tr>td:active{
 }
 .red-border{
     border: 3px solid #cc0b0b !important;
+}
+
+.equalize{
+    left: 30%;
 }
