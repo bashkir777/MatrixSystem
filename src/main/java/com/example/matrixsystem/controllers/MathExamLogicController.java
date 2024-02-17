@@ -35,6 +35,7 @@ public class MathExamLogicController {
 
     private static final Map<Integer, Integer> translationScale = new HashMap<>();
     static {
+        translationScale.put(0, 0);
         translationScale.put(1, 6);
         translationScale.put(2, 11);
         translationScale.put(3, 17);

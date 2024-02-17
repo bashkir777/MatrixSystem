@@ -25,9 +25,12 @@
     <div class="task-result-wrapper">
 
     </div>
-    <a href="/app/all-tasks">
-        Вернуться на главную страницу
+    <a id="quit" href="/app/all-tasks">
+        Выйти
     </a>
+    <div id="watch-results">
+        Посмотреть результаты
+    </div>
 </div>
 <div th:insert="~{header :: header}"></div>
 <div id="timer-block" class="timer-block">
@@ -41,6 +44,8 @@
         </div>
     </div>
 </div>
+
+<a id="on-main" class="display-none" href="/app/all-tasks">Выйти</a>
 
 <div id="particles-js"></div>
 
@@ -77,11 +82,11 @@
                 </div>
             </div>
             <div id="answer_wrapper" class="answer-wrapper display-none">
-                <div style="text-align: center; margin-bottom: 30px">
+                <div id="self_score_input_wrapper" class="display-none" style="text-align: center; margin-bottom: 30px">
                     <div id="label">Оцените решение самостоятельно:</div>
                     <input type="number" min="0" value="0" id="score" class="display-none">
                 </div>
-                <button id="show_answer">Показать решение</button>
+                <button class="display-none" id="show_answer">Показать решение</button>
                 <div id="answer" class="answer display-none">
                     <hr>
                     Ответ: <span id="_answer"></span>
@@ -100,7 +105,6 @@
         </div>
     </div>
 </div>
-<!--uXjVNuEFRQU-->
 
 <iframe src="https://miro.com/app/live-embed/uXjVNuEFRQU=/?autoplay=true&moveToViewport=-23165,-5837,13803,7546"
         frameBorder="0" scrolling="no" allowFullScreen>

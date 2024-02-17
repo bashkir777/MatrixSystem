@@ -79,7 +79,7 @@ body{
     border-radius: 10px;
 }
 
-#submit-option{
+#submit-option, #on-main, #watch-results, #quit{
     position: absolute;
     background-color: #121212;
     padding: 1% 2%;
@@ -92,7 +92,7 @@ body{
     font-family: 'Helvetica', sans-serif;
     transition: color 0.4s ease, background-color 0.4s ease;
 }
-#submit-option:hover{
+#submit-option:hover, #on-main:hover, #quit:hover, #watch-results:hover{
     cursor: pointer;
     background-color: #f5f5f5bf;
     color: #000;
@@ -144,12 +144,24 @@ body{
     color: #f5f5f5bf;
     z-index: 202;
     background-color: black;
-    width: 50%;
-    height: 40%;
+    width: 40%;
+    height: 20%;
     top: 20%;
-    left: 25%;
+    left: 30%;
     font-size: 25px;
     font-family: 'Helvetica', sans-serif;
     padding-top: 2%;
 }
 
+
+#on-main{
+    left: 3%;
+}
+#watch-results{
+    top: 55%;
+    left: 20%;
+}
+#quit{
+    top: 55%;
+    left: 65%;
+}

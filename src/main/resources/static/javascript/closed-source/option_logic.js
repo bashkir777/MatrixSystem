@@ -16,11 +16,13 @@ let submitOption = document.getElementById("submit-option");
 let sendWarning = document.getElementById("send_warning");
 let no = document.getElementById("no");
 let yes = document.getElementById("yes");
+let onMain = document.getElementById("on-main");
 let feedbackWrapper = document.getElementById("feedback-wrapper");
 let timerBlock = document.getElementById("timer-block");
 let resultText = document.getElementById("result");
+let watchResults = document.getElementById("watch-results");
 let answerIsShow = false;
-
+let selfScoreInput = document.getElementById("self_score_input_wrapper");
 let listTasksToSubmit = [];
 let currentTaskOrder = 1;
 let arrOfNavigationButtons = [];
@@ -77,7 +79,7 @@ currentDate.setSeconds(currentDate.getSeconds() + 1);
 
 function fillPage(){
     let option = JSON.parse(localStorage.getItem("last_option"));
-    console.log(listTasksToSubmit);
+
     for(let taskObj of option){
         let button = document.createElement('span');
         arrOfNavigationButtons.push(button);
@@ -102,6 +104,8 @@ function fillPage(){
                 input.value = listTasksToSubmit[currentTaskOrder-1].answer;
                 inputWrap.classList.remove("display-none");
                 answerWrapper.classList.add("display-none");
+                selfScoreInput.classList.add("display-none");
+                showAnswer.classList.add("display-none");
             }else{
                 inputWrap.classList.add("display-none");
                 score.classList.remove("display-none");
@@ -109,6 +113,8 @@ function fillPage(){
                 score.value = listTasksToSubmit[currentTaskOrder-1].score;
                 answerText.innerText = taskObj.answer;
                 answerWrapper.classList.remove("display-none");
+                selfScoreInput.classList.remove("display-none");
+                showAnswer.classList.remove("display-none")
             }
             if(currentTaskOrder === arrOfNavigationButtons.length){
                 arrowRight.classList.add("display-none");
@@ -149,7 +155,7 @@ function generateOption(){
                     }
                 );
             }
-
+            localStorage.setItem("lastAnswers", JSON.stringify(listTasksToSubmit));
             fillPage();
         })
         .catch((error) => {
@@ -159,6 +165,7 @@ function generateOption(){
 
 score.addEventListener("input", (event)=>{
     listTasksToSubmit[currentTaskOrder-1].score = event.target.value;
+    localStorage.setItem("lastAnswers", JSON.stringify(listTasksToSubmit));
 });
 
 let lastAttempt = localStorage.getItem("time_left");
@@ -179,7 +186,7 @@ if(lastAttempt === null){
         generateOption();
     //чтобы продолжить выполнение берем option и таймер из localStorage
     } else {
-        fillPage(JSON.parse(localStorage.getItem("last_option")));
+        fillPage();
     }
 }
 
@@ -203,6 +210,12 @@ no.addEventListener("click", ()=>{
     sendWarning.classList.add("display-none");
     smoke.classList.add("display-none");
 });
+
+watchResults.addEventListener("click", ()=>{
+    feedbackWrapper.classList.add("display-none");
+    smoke.classList.add("display-none");
+});
+
 yes.addEventListener("click", ()=>{
     sendWarning.classList.add("display-none");
     feedbackWrapper.classList.remove("display-none");
@@ -225,6 +238,7 @@ yes.addEventListener("click", ()=>{
         .catch((error) => {
             console.error('Ошибка:', error);
         });
+    onMain.classList.remove("display-none");
     submitOption.classList.add("display-none");
     clearInterval(timerInterval);
     localStorage.removeItem("time_left");
