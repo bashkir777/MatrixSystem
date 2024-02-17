@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,18 +72,24 @@ public class MathExamLogicController {
     public ResponseEntity<FeedbackForOptionSubmissionDTO> submitOption(@RequestBody List<TaskForOptionSubmittingDTO> list)
             throws NoSuchModuleInDB, NoSuchTaskInDB {
         int result = 0;
+        List<Integer> modulesDone = new ArrayList<>();
         for(TaskForOptionSubmittingDTO answerObject: list){
             Module module = manager.getModuleById(answerObject.getModule());
             if(module.getVerifiable()){
                 Task task = manager.getTaskById(answerObject.getId());
                 if(task.getAnswer().equals(answerObject.getAnswer())){
                     result += module.getMaxPoints();
+                    modulesDone.add(module.getId());
                 }
             }else{
-                result += answerObject.getScore();
+                int score = answerObject.getScore();
+                if(score != 0){
+                    result += score;
+                    modulesDone.add(module.getId());
+                }
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(FeedbackForOptionSubmissionDTO.builder()
-                .score(translationScale.get(result)).scores(new int[]{}).modulesDone(new int[]{}).build());
+                .score(translationScale.get(result)).modulesDone(modulesDone).build());
     }
 }

@@ -18,7 +18,7 @@ let no = document.getElementById("no");
 let yes = document.getElementById("yes");
 let feedbackWrapper = document.getElementById("feedback-wrapper");
 let timerBlock = document.getElementById("timer-block");
-
+let resultText = document.getElementById("result");
 let answerIsShow = false;
 
 let listTasksToSubmit = [];
@@ -77,6 +77,7 @@ currentDate.setSeconds(currentDate.getSeconds() + 1);
 
 function fillPage(){
     let option = JSON.parse(localStorage.getItem("last_option"));
+    console.log(listTasksToSubmit);
     for(let taskObj of option){
         let button = document.createElement('span');
         arrOfNavigationButtons.push(button);
@@ -148,6 +149,7 @@ function generateOption(){
                     }
                 );
             }
+
             fillPage();
         })
         .catch((error) => {
@@ -215,13 +217,15 @@ yes.addEventListener("click", ()=>{
             listTasksToSubmit
         )
     })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
+            resultText.innerText = data.score
             console.log(data);
         })
         .catch((error) => {
             console.error('Ошибка:', error);
         });
+    submitOption.classList.add("display-none");
     clearInterval(timerInterval);
     localStorage.removeItem("time_left");
     localStorage.removeItem("lastAnswers");
