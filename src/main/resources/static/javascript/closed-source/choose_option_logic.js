@@ -4,6 +4,7 @@ let find = document.getElementById("find");
 let leftBlockText = document.getElementById("left-block-text");
 let tutor_panel = document.getElementById("tutor-option-panel");
 let tdList = document.getElementsByTagName("td");
+let commentWrapper = document.getElementById("comment-wrapper");
 
 let animationRunning = false;
 let inversion = false;
@@ -104,7 +105,11 @@ find.addEventListener("click", ()=>{
         .then(response => response.json())
         .then(data => {
             if(data.length === 0){
-                // добавить комментарий на не нахождение варианта
+                commentWrapper.classList.remove("display-none");
+                input.value = "";
+                setTimeout(()=>{
+                    commentWrapper.classList.add("display-none");
+                }, 2000);
                 return;
             }
             const currentDate = new Date();

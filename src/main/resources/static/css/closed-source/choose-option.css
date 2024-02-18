@@ -161,3 +161,37 @@ tr>td:active{
 .equalize{
     left: 30%;
 }
+.comment-block {
+    font-size: 17px;
+    position: relative;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.comment-block:after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    width: 60px;
+    height: 60px;
+    background-color: #f9f9f9;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
+    transform: rotate(-45deg);
+}
+.comment-text {
+    margin-bottom: 10px;
+    color: black;
+    font-size: 18px;
+    font-family: 'Helvetica', sans-serif;
+}
+#comment-wrapper{
+    pointer-events: none;
+    position: absolute;
+    top:20%;
+    right: 4%;
+    transform: rotate(-10deg);
+}
