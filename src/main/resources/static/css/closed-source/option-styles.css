@@ -171,3 +171,6 @@ body{
 .red-container{
     border: 3px solid #cc0b0b !important;
 }
+body{
+    user-select: none;
+}

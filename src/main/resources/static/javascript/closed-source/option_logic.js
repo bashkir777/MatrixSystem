@@ -28,6 +28,9 @@ let currentTaskOrder = 1;
 let arrOfNavigationButtons = [];
 let taskNum = document.getElementById("task-num");
 let taskText = document.getElementById("task-text");
+
+let showAnswersForFirstPart = false;
+
 if (arrowLeft !== null){
     arrowLeft.addEventListener("mouseover", ()=>{
         container.classList.add("rotate-1-left");
@@ -109,9 +112,15 @@ function fillPage(){
             if(taskObj.module.verifiable){
                 input.value = listTasksToSubmit[currentTaskOrder-1].answer;
                 inputWrap.classList.remove("display-none");
-                answerWrapper.classList.add("display-none");
                 selfScoreInput.classList.add("display-none");
-                showAnswer.classList.add("display-none");
+                if(!showAnswersForFirstPart){
+                    answerWrapper.classList.add("display-none");
+                    showAnswer.classList.add("display-none");
+                }else{
+                    answerWrapper.classList.remove("display-none");
+                    showAnswer.classList.remove("display-none");
+                    answerText.innerText = taskObj.answer;
+                }
             }else{
                 inputWrap.classList.add("display-none");
                 score.classList.remove("display-none");
@@ -229,6 +238,9 @@ yes.addEventListener("click", ()=>{
     feedbackWrapper.classList.remove("display-none");
     timerBlock.classList.add("display-none");
     score.readOnly = true;
+    input.readOnly = true;
+    showAnswersForFirstPart = true;
+    input.setAttribute("placeholder", "Ответ не дан")
     // логика отправки
     fetch(`/api/v1/math/submit/option`, {
         method: 'POST',

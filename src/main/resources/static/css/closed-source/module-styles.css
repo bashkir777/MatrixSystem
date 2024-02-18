@@ -342,3 +342,6 @@ iframe{
     height: 84%;
     border-radius: 20px;
 }
+body{
+    user-select: none;
+}
