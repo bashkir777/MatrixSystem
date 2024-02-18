@@ -4,6 +4,8 @@
 
     <a class="navigation" href="/app/options">Варинты ЕГЭ</a>
 
+    <a th:if="${role=='GOD' or role=='TEACHER'}" class="navigation" href="/app/create-option">Создать вариант</a>
+
     <a class="navigation" href="/app/theory">Теория</a>
 
   </div>

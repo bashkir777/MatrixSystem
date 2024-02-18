@@ -9,14 +9,14 @@
 </head>
 <body>
 <script defer th:src="@{/javascript/closed-source/theory_logic.js}"></script>
-<script th:if="${isGod}" defer th:src="@{/javascript/closed-source/theory_modify_logic.js}"></script>
+<script th:if="${role=='GOD'}" defer th:src="@{/javascript/closed-source/theory_modify_logic.js}"></script>
 <div th:insert="~{header :: header}"></div>
 
 <div id="particles-js"></div>
 
 <script th:src="@{/javascript/open-source/particles-lib/particles.js}"></script>
 <script th:src="@{/javascript/open-source/particles-lib/design-settings/calm_dark_design.js}"></script>
-<div th:if="${isGod}" id="new_section" class="display-none">
+<div th:if="${role=='GOD'}" id="new_section" class="display-none">
     <span class="display-none" id="current_module"></span>
 
     <div id="input-wrapper">
@@ -42,16 +42,16 @@
         </svg>
     </span>
 </div>
-<div th:if="${isGod}" id="delete_warning" class="display-none">
+<div th:if="${role=='GOD'}" id="delete_warning" class="display-none">
     <span>Вы уверены, что хотите удалить эту секцию?</span>
     <div id="yes">Да</div>
     <div id="no">Отмена</div>
 </div>
-<div th:if="${isGod}" id="smoke" class="smoke display-none"></div>
+<div th:if="${role=='GOD'}" id="smoke" class="smoke display-none"></div>
 <div class="wrapper">
     <div>
         <div th:each="m : ${moduleList}" class="context">
-            <span th:if="${isGod}" class="plus-wrapper">
+            <span th:if="${role=='GOD'}" class="plus-wrapper">
                 <span class ="display-none" th:text="${m.id}"></span>
                 <svg  class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30"
                       height="30">
@@ -68,7 +68,7 @@
                     <tbody>
                     <tr th:each="section : ${m.sections}" class="section">
                         <td th:id="'link_'+${section.id}" th:class="${readSections.contains(section)} ? 'read-mark'"
-                            th:if="${!isStudent or section.visibleForStudent==true}" style="position: relative">
+                            th:if="${role!='STUDENT' or section.visibleForStudent==true}" style="position: relative">
                             <a class="link" target="_blank" th:href="${section.link}">
                                 <span th:text="${section.name}"></span>
                                 <svg class="arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" width="30"
@@ -76,14 +76,14 @@
                                     <path d="M 1 1 L 15 19 L 29 1" stroke="#f5f5f5bf" fill="none" stroke-width="3"/>
                                 </svg>
                             </a>
-                            <span th:if="${isGod}" class="cross">
+                            <span th:if="${role=='GOD'}" class="cross">
                                 <span class="display-none"  th:text="${section.id}"></span>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25"
                                       height="25">
                                     <path d="M 0 0 L 25 25 M 0 25 L 25 0" stroke="white" fill="none" stroke-width="3"/>
                                 </svg>
                             </span>
-                            <span th:if="${isGod}" class="edit">
+                            <span th:if="${role=='GOD'}" class="edit">
                                 <span class="display-none" th:text="${section.id}"></span>
                                 <span class="display-none" th:text="${section.name}"></span>
                                 <span class="display-none" th:text="${section.link}"></span>
