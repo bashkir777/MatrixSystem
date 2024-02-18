@@ -38,4 +38,7 @@ public class Task {
 
     @OneToMany(mappedBy = "taskReference", fetch = FetchType.EAGER)
     private Set<UserTask> userTask = new HashSet<>();
+
+    @OneToMany(mappedBy = "task")
+    private Set<OptionTask> optionTasks = new HashSet<>();
 }

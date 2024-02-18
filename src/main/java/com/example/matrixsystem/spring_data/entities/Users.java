@@ -31,6 +31,9 @@ public class Users {
     @OneToMany(mappedBy = "user")
     private Set<UserSection> userSections = new HashSet<>();
 
+    @OneToMany(mappedBy = "creator")
+    private Set<Option> options = new HashSet<>();
+
     @OneToMany(mappedBy = "userReference", fetch = FetchType.EAGER)
     private Set<UserTask> userTask = new HashSet<>();
 }
