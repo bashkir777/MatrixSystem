@@ -83,5 +83,10 @@ public class MVCController {
         model.addAttribute("role", userInformation.getUserRole().name());
         return "option-template";
     }
-
+    @GetMapping("/create-option")
+    @HandleDataActionExceptions
+    public String createOption(Model model) {
+        model.addAttribute("role", userInformation.getUserRole().name());
+        return "create-option";
+    }
 }

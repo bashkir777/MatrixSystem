@@ -67,7 +67,7 @@ public class Initializer {
         jdbcTemplate.execute("insert into section(module_id, name, link) values (2, 'Конспект теории', 'https://miro.com/app/board/uXjVNuEFRQU=/?share_link_id=347896643047');");
         jdbcTemplate.execute("insert into section(module_id, name, link) values (2, 'Решение практических задач', 'https://miro.com/app/board/uXjVNuEFRQU=/?share_link_id=347896643047');");
 
-        jdbcTemplate.execute("insert into option(creator) values (1);");
+        jdbcTemplate.execute("insert into option() values ();");
         jdbcTemplate.execute("insert into option_task(option, task) values (1, 1);");
         jdbcTemplate.execute("insert into option_task(option, task) values (1, 2);");
         jdbcTemplate.execute("insert into option_task(option, task) values (1, 3);");

@@ -11,16 +11,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "option_task")
 public class OptionTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name="option")
+    @JoinColumn(name = "option")
     private Option option;
 
     @ManyToOne
-    @JoinColumn(name="task")
+    @JoinColumn(name = "task")
     private Task task;
 }

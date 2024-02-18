@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Онлайн школа - MATRIX</title>
+    <link rel="stylesheet" href="/css/closed-source/module-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/option-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/create-option-styles.css">
+    <script src="/javascript/closed-source/create_option_logic.js" defer></script>
+
+</head>
+<body>
+    <div th:insert="~{header :: header}"></div>
+
+    <div id="current-task">
+
+    </div>
+
+    <div class="app-wrapper">
+        <div class="left-block">
+            <div id="choose-task-wrapper">
+                <div style="display: flex; align-items: center;">
+                    <span class="label">Выбрать задание</span>
+                    <input placeholder="Номер задания" value="1" id="module-num" type="number">
+                    <span id="choose">Подтвердить</span>
+                </div>
+            </div>
+            <div class="navigation-block-wrapper">
+                <button id="scroll_left">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+                        <path d="M 26 1 L 1 15 L 26 30 L 26 1" fill="#f5f5f5bf" stroke-width="0"/>
+                    </svg>
+                </button>
+                <div class="navigation-block">
+                    <div id="navigation_buttons_wrapper" class="navigation-buttons-wrapper">
+                    </div>
+                </div>
+                <button id="scroll_right">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+                        <path d="M 5 1 L 30 15 L 5 30 L 5 1" fill="#f5f5f5bf" stroke-width="0"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="container" class="task-container">
+                <div class="task">
+                    <div class="label">Задание №<span id="task-num"></span>:</div>
+                    <div id="task-text" class="task-text"></div>
+                    <div id="input-wrap" class="input-wrap">
+                        <div class="add">Добавить</div>
+                    </div>
+                    <div id="task-with-img" class="display-none" style="display: flex; margin-top: 10px">
+                        <div class="placeholder"></div>
+                    </div>
+                </div>
+                <div id="answer_wrapper" class="answer-wrapper display-none">
+                    <button class="display-none" id="show_answer">Показать решение</button>
+                    <div id="answer" class="answer display-none">
+                        <hr>
+                        Ответ: <span id="_answer"></span>
+                    </div>
+                </div>
+                <div id="arrow_left" class="arrow-left">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+                        <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+                    </svg>
+                </div>
+                <div id="arrow_right" class="arrow-right">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+                        <path d="M 10 10 L 25 30 L 10 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

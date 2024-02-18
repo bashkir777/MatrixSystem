@@ -1,10 +1,12 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.dto.ModuleDTO;
 import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.dto.TaskForOptionsDTO;
 import com.example.matrixsystem.dto.TaskForSubmittingDTO;
 import com.example.matrixsystem.security.beans.UserInformation;
+import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.UserTask;
 import com.example.matrixsystem.spring_data.entities.Users;
@@ -16,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +42,21 @@ public class ClientInterfaceController {
     public List<Integer> allTasksIds(@PathVariable Integer id) throws NoSuchModuleInDB {
         return manager.getAllModuleTasksIds(manager.getModuleById(id));
     }
+    @GetMapping("/module/{id}/tasks")
+    @HandleDataActionExceptions
+    public List<TaskForOptionsDTO> allTasksOfModule(@PathVariable Integer id) throws NoSuchModuleInDB, NoSuchTaskInDB {
+        List<TaskForOptionsDTO> toReturn = new ArrayList<>();
 
+        List<Task> tasksOfModule = manager.getTasksByModule(manager.getModuleById(id));
+        for(Task task: tasksOfModule){
+            toReturn.add(TaskForOptionsDTO.builder().id(task.getId())
+                    .module(ModuleDTO.builder().id(task.getModule().getId())
+                            .verifiable(task.getModule().getVerifiable()).maxPoints(task.getModule().getMaxPoints())
+                            .build()).task(task.getTask())
+                    .answer(task.getAnswer()).img(task.getImg()).build());
+        }
+        return toReturn;
+    }
 
     @GetMapping("/task/{taskId}")
     @HandleDataActionExceptions
@@ -149,6 +166,12 @@ public class ClientInterfaceController {
     @HandleDataActionExceptions
     public List<TaskForOptionsDTO> getOption(@PathVariable Integer id) throws NoSuchOptionException {
         return manager.getOption(manager.getOptionById(id));
+    }
+
+    @GetMapping("/modules")
+    @HandleDataActionExceptions
+    public List<Integer> getModules(){
+        return manager.getAllModules().stream().map(Module::getId).toList();
     }
 
 }

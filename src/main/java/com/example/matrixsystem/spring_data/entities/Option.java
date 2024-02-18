@@ -1,12 +1,16 @@
 package com.example.matrixsystem.spring_data.entities;
 
-import com.example.matrixsystem.spring_data.entities.enums.Roles;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -20,10 +24,11 @@ public class Option {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "creator")
-    private Users creator;
+//    @ManyToOne
+//    @JoinColumn(name = "creator")
+//    @JsonBackReference
+//    private Users creator;
 
-    @OneToMany(mappedBy = "option")
-    private Set<OptionTask> optionTasks;
+    @OneToMany(mappedBy = "option", fetch = FetchType.EAGER)
+    private Set<OptionTask> optionTasks = new HashSet<>();
 }

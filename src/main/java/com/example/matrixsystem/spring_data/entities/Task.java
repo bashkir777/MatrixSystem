@@ -1,6 +1,5 @@
 package com.example.matrixsystem.spring_data.entities;
 
-import com.example.matrixsystem.spring_data.entities.enums.Part;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,6 +38,6 @@ public class Task {
     @OneToMany(mappedBy = "taskReference", fetch = FetchType.EAGER)
     private Set<UserTask> userTask = new HashSet<>();
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", fetch = FetchType.EAGER)
     private Set<OptionTask> optionTasks = new HashSet<>();
 }
