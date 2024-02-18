@@ -25,12 +25,15 @@ public class DatabaseManager {
     private final UserInformation userInformation;
     private final SectionRepository sectionRepository;
     private final UserSectionRepository userSectionRepository;
+    private final OptionTaskRepository optionTaskRepository;
+    private final OptionRepository optionRepository;
 
     @Autowired
     public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
             , UserRepository userRepository, UserTaskRepository userTaskRepository
             , UserInformation userInformation, SectionRepository sectionRepository
-            , UserSectionRepository userSectionRepository) {
+            , UserSectionRepository userSectionRepository, OptionTaskRepository optionTaskRepository
+            , OptionRepository optionRepository) {
         this.taskRepository = taskRepository;
         this.moduleRepository = moduleRepository;
         this.userRepository = userRepository;
@@ -38,6 +41,8 @@ public class DatabaseManager {
         this.userInformation = userInformation;
         this.sectionRepository = sectionRepository;
         this.userSectionRepository = userSectionRepository;
+        this.optionTaskRepository = optionTaskRepository;
+        this.optionRepository = optionRepository;
     }
     public List<Integer> getAllModuleTasksIds(Module module){
         return taskRepository.getTasksByModule(module).stream().map(Task::getId).toList();
@@ -211,6 +216,27 @@ public class DatabaseManager {
                     .answer(randomTask.getAnswer()).img(randomTask.getImg()).build();
 
             toReturn.add(randomTaskDTO);
+        }
+        return toReturn;
+    }
+    public Option getOptionById(Integer id) throws NoSuchOptionException{
+        try{
+            return optionRepository.getOptionById(id);
+        }catch (Exception e){
+            throw new NoSuchOptionException();
+        }
+    }
+
+    public List<TaskForOptionsDTO> getOption(Option option){
+        List<TaskForOptionsDTO> toReturn = new ArrayList<>();
+        for(OptionTask optionTask: optionTaskRepository.getOptionTaskByOption(option)){
+            Task task = optionTask.getTask();
+            TaskForOptionsDTO taskDTO = TaskForOptionsDTO.builder().id(task.getId())
+                    .module(ModuleDTO.builder().id(task.getModule().getId())
+                            .verifiable(task.getModule().getVerifiable()).maxPoints(task.getModule().getMaxPoints())
+                            .build()).task(task.getTask())
+                    .answer(task.getAnswer()).img(task.getImg()).build();
+            toReturn.add(taskDTO);
         }
         return toReturn;
     }

@@ -145,4 +145,10 @@ public class ClientInterfaceController {
         return manager.generateOption();
     }
 
+    @GetMapping("/options/prepared/{id}")
+    @HandleDataActionExceptions
+    public List<TaskForOptionsDTO> getOption(@PathVariable Integer id) throws NoSuchOptionException {
+        return manager.getOption(manager.getOptionById(id));
+    }
+
 }
