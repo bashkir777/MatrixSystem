@@ -8,6 +8,9 @@
     font-family: 'Helvetica', sans-serif;
     font-size: 20px;
 }
+.display-none{
+    display: none!important;
+}
 #choose{
     font-size: 18px;
     font-family: 'Helvetica', sans-serif;
@@ -44,9 +47,9 @@
 }
 #current-task{
     position: absolute;
-    left: 1%;
-    top:14%;
-    padding: 1% 2%;
+    left: 4%;
+    top:15%;
+    padding: 1%;
     border: 3px solid #f5f5f5bf;
     background-color: #07a207;
     color: #f5f5f5bf;
@@ -57,7 +60,7 @@
 #current-task:hover{
     cursor: default;
 }
-#add, #create{
+#add, #create, .leave{
     display: inline-block;
     font-size: 18px;
     font-family: 'Helvetica', sans-serif;
@@ -70,11 +73,11 @@
     transition: background-color 0.6s ease, color 0.6s ease, opacity 0.2s ease, padding-right 1s ease, padding-left 1s ease
     , padding-top 1s ease,padding-bottom 1s ease;
 }
-#add:hover, #create:hover{
+#add:hover, #create:hover, .leave:hover {
     background-color: rgba(255, 255, 255, 0.5)!important;
     color: #121212;
 }
-#add:active, #create:active{
+#add:active, #create:active, .leave:active {
     opacity: 0.8;
 }
 #create{
@@ -168,5 +171,50 @@ body{
     background-color: #121212;
 }
 .create-wrapper{
+    position: absolute;
+    text-align: left;
+    width: 30%;
+    bottom: 3%;
+    padding: 2%;
+    right: 2%;
     margin-top: 40px;
+}
+.smoke{
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+    z-index: 200;
+    width: 100%;
+    height: 100%;
+}
+#created-label, #failed-to-create-label{
+    text-align: right;
+    position: absolute;
+    top: 23%;
+    left: 20%;
+    z-index: 200;
+    background-color: #121212;
+    border-radius: 20px;
+    font-size: 20px!important;
+    font-family: 'Helvetica', sans-serif!important;
+    color: #f5f5f5bf;
+    padding: 3%;
+    padding-bottom: 2%;
+}
+.leave{
+    margin-top: 20px;
+    text-decoration: none;
+}
+#failed-to-create-label{
+    left: 30%;
+}
+.left-block{
+    background-color: rgba(255, 255, 255, 0.06);
+    width: 45%;
+    height: 80%;
+    padding: 1%;
+    overflow-y: auto;
+    border-radius: 30px;
+}
+#create{
+    padding: 6%;
 }

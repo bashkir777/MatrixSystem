@@ -13,6 +13,16 @@
 <body>
     <div th:insert="~{header :: header}"></div>
 
+    <div id="smoke" class="smoke display-none"></div>
+    <div id="created-label" class="display-none">
+        <div>Варинт успешно создан, ученики могут получить к нему доступ введя номер <span id="option-num"></span></div>
+        <a class="leave" href="/app/all-tasks">Выйти</a>
+    </div>
+    <div id="failed-to-create-label" class="display-none">
+        <div>Не удалось создать вариант, попробуйте позже</div>
+        <a class="leave" href="/app/all-tasks">Выйти</a>
+    </div>
+
     <div id="current-task">
 
     </div>
@@ -74,7 +84,7 @@
             </div>
             <div class="create-wrapper">
                 <div id="create">
-                    Создать варинт
+                    Создать вариант
                 </div>
             </div>
         </div>

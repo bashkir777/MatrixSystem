@@ -5,6 +5,14 @@ let taskText = document.getElementById("task-text");
 let scrollPanel = document.getElementById("scroll-panel");
 let currentTask = document.getElementById("current-task");
 let create = document.getElementById("create");
+let smoke = document.getElementById("smoke");
+let createdLabel = document.getElementById("created-label");
+let optionNum = document.getElementById("option-num");
+let arrowLeft = document.getElementById("arrow_left");
+let arrowRight = document.getElementById("arrow_right");
+let scrollLeft = document.getElementById("scroll_left");
+let scrollRight = document.getElementById("scroll_right");
+let failedToCreateLabel = document.getElementById("failed-to-create-label");
 let add = document.getElementById("add");
 let currentTaskId = null;
 let currentModuleId = null;
@@ -13,6 +21,43 @@ let arrOfNavigationButtons = [];
 let all_modules_ids = [];
 let currentModuleTaskList = [];
 let optionToCreate = [];
+let currentTaskOrder = null
+
+if (arrowLeft !== null){
+    arrowLeft.addEventListener("mouseover", ()=>{
+        container.classList.add("rotate-1-left");
+    });
+    arrowLeft.addEventListener("mouseout", ()=>{
+        container.classList.remove("rotate-1-left");
+    });
+}
+arrowRight.addEventListener("click", ()=>{
+    if(currentTaskOrder !== arrOfNavigationButtons.length){
+        arrOfNavigationButtons[currentTaskOrder].click();
+    }
+});
+arrowLeft.addEventListener("click", () =>{
+    if(currentTaskOrder !== 1){
+        arrOfNavigationButtons[currentTaskOrder - 2].click();
+    }
+});
+
+if (arrowRight !== null){
+    arrowRight.addEventListener("mouseover", ()=>{
+        container.classList.add("rotate-1-right");
+    });
+    arrowRight.addEventListener("mouseout", ()=>{
+        container.classList.remove("rotate-1-right");
+    });
+}
+scrollLeft.addEventListener("click", () => {
+    navigationButtonsWrapper.scrollLeft -= 200;
+});
+scrollRight.addEventListener("click", function() {
+    navigationButtonsWrapper.scrollLeft += 200;
+});
+
+
 
 fetch(`/api/v1/client/modules`, {
     method: 'GET',
@@ -65,6 +110,17 @@ choose.addEventListener("click", (event)=>{
                 button.id = "tab_"+num;
                 navigationButtonsWrapper.appendChild(button)
                 button.addEventListener("click", ()=>{
+                    currentTaskOrder = Number(button.textContent);
+                    if(currentTaskOrder === 1){
+                        arrowLeft.classList.add("display-none");
+                    }else{
+                        arrowLeft.classList.remove("display-none");
+                    }
+                    if(currentTaskOrder === arrOfNavigationButtons.length){
+                        arrowRight.classList.add("display-none");
+                    }else{
+                        arrowRight.classList.remove("display-none");
+                    }
                     currentTaskId = task.id;
                     taskNum.innerText = button.textContent;
                     for(let b of arrOfNavigationButtons){
@@ -160,7 +216,7 @@ create.addEventListener("click", ()=>{
     for (let entry of optionToCreate){
         if(entry.taskId === null){
             console.log("не все задания добавлены")
-            break;
+            return;
         }
     }
     fetch(`/api/v1/management/add/option`, {
@@ -172,11 +228,20 @@ create.addEventListener("click", ()=>{
             optionToCreate
         )
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
+        .then(response =>{
+            if(response.status === 201){
+                response.json().then(data => {
+                        console.log(data.optionId);
+                        smoke.classList.remove("display-none");
+                        createdLabel.classList.remove("display-none");
+                        optionNum.innerText = data.optionId;
+                    }
+                )
+            }else{
+                smoke.classList.remove("display-none");
+                failedToCreateLabel.classList.remove("display-none")
+            }
+
         })
-        .catch((error) => {
-            console.error('Ошибка:', error);
-        });
+
 });
