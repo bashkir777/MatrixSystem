@@ -104,10 +104,14 @@
 .module-num{
     display: inline-block;
     margin-bottom: 10px;
+    font-size: 20px;
+    font-family: 'Helvetica', sans-serif;
 }
 .text{
     display: block;
     margin-bottom: 10px;
+    font-size: 20px;
+    font-family: 'Helvetica', sans-serif;
 }
 .scroll-panel{
     height: 100%;
@@ -120,4 +124,40 @@
 }
 .text-align-right{
     text-align: right;
+}
+
+.comment-block {
+    position: relative;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-family: 'Helvetica', sans-serif;
+}
+
+.comment-block:after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    width: 60px;
+    height: 60px;
+    background-color: #f9f9f9;
+    clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
+}
+
+
+.comment-text {
+    margin-bottom: 10px;
+}
+#position-wrapper{
+    position: absolute;
+    top: 40%;
+    left: 10%;
+}
+.task-container{
+    font-size: 18px!important;
+    font-family: 'Helvetica', sans-serif!important;
 }

@@ -65,9 +65,9 @@ choose.addEventListener("click", (event)=>{
                 navigationButtonsWrapper.appendChild(button)
                 button.addEventListener("click", ()=>{
                     currentTaskId = task.id;
-                    taskNum.innerText = arrOfNavigationButtons.length;
+                    taskNum.innerText = button.textContent;
                     for(let b of arrOfNavigationButtons){
-                        button.classList.remove("navigation-tab-selected");
+                        b.classList.remove("navigation-tab-selected");
                     }
                     button.classList.add("navigation-tab-selected");
                     taskText.innerText = task.task;
@@ -81,10 +81,26 @@ choose.addEventListener("click", (event)=>{
         });
 });
 choose.click();
-
+let comment = document.getElementById("comment-wrapper");
+let moduleNumComment = document.getElementById("module-num-comment");
+let commentShowing = false;
 add.addEventListener("click", () => {
     for (let entry of optionToCreate) {
         if (entry.id === Number(currentModuleId)) {
+
+            if(entry.taskId !== null){
+                if(!commentShowing){
+                    commentShowing = true;
+                    comment.classList.remove("display-none");
+                    moduleNumComment.innerText = currentModuleId;
+                    setTimeout(()=>{
+                        commentShowing = false;
+                        comment.classList.add("display-none");
+                    },4000)
+                }
+                break;
+            }
+
             entry.taskId = currentTaskId;
 
             for(let task of currentModuleTaskList){
@@ -134,6 +150,7 @@ add.addEventListener("click", () => {
                     }
                 }
             }
+            console.log(optionToCreate)
             break;
         }
     }
