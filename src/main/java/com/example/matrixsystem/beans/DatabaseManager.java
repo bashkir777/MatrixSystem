@@ -296,4 +296,16 @@ public class DatabaseManager {
         }
 
     }
+    public void addOption(Option option) throws ErrorCreatingOption {
+        try{
+            optionRepository.save(option);
+        }catch (Exception e){
+            throw new ErrorCreatingOption();
+        }
+
+    }
+    public void addTaskToOption(Option option, Task task){
+        optionTaskRepository.save(OptionTask.builder()
+                .option(option).task(task).build());
+    }
 }

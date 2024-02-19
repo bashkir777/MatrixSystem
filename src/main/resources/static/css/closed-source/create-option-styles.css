@@ -1,8 +1,8 @@
 #choose-task-wrapper{
     display: inline-block;
     margin-bottom: 30px;
-    padding: 2%;
-    background-color: #121212;
+    padding: 2% 3%;
+    background-color: rgba(255, 255, 255, 0.04);
     border-radius: 20px;
     color: #f5f5f5bf;
     font-family: 'Helvetica', sans-serif;
@@ -57,7 +57,7 @@
 #current-task:hover{
     cursor: default;
 }
-#add{
+#add, #create{
     display: inline-block;
     font-size: 18px;
     font-family: 'Helvetica', sans-serif;
@@ -70,12 +70,15 @@
     transition: background-color 0.6s ease, color 0.6s ease, opacity 0.2s ease, padding-right 1s ease, padding-left 1s ease
     , padding-top 1s ease,padding-bottom 1s ease;
 }
-#add:hover{
+#add:hover, #create:hover{
     background-color: rgba(255, 255, 255, 0.5)!important;
     color: #121212;
 }
-#add:active{
+#add:active, #create:active{
     opacity: 0.8;
+}
+#create{
+    padding: 2% 4%;
 }
 .right-block{
     cursor: pointer;
@@ -160,4 +163,10 @@
 .task-container{
     font-size: 18px!important;
     font-family: 'Helvetica', sans-serif!important;
+}
+body{
+    background-color: #121212;
+}
+.create-wrapper{
+    margin-top: 40px;
 }

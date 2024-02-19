@@ -4,6 +4,7 @@ let taskNum = document.getElementById("task-num");
 let taskText = document.getElementById("task-text");
 let scrollPanel = document.getElementById("scroll-panel");
 let currentTask = document.getElementById("current-task");
+let create = document.getElementById("create");
 let add = document.getElementById("add");
 let currentTaskId = null;
 let currentModuleId = null;
@@ -150,8 +151,32 @@ add.addEventListener("click", () => {
                     }
                 }
             }
-            console.log(optionToCreate)
             break;
         }
     }
+});
+
+create.addEventListener("click", ()=>{
+    for (let entry of optionToCreate){
+        if(entry.taskId === null){
+            console.log("не все задания добавлены")
+            break;
+        }
+    }
+    fetch(`/api/v1/management/add/option`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            optionToCreate
+        )
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
 });

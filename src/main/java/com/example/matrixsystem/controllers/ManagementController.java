@@ -1,10 +1,7 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
-import com.example.matrixsystem.dto.SectionDTO;
-import com.example.matrixsystem.dto.SectionDTOForUpdating;
-import com.example.matrixsystem.dto.TaskForAddingDTO;
-import com.example.matrixsystem.dto.UserDTO;
+import com.example.matrixsystem.dto.*;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.*;
 import com.example.matrixsystem.spring_data.entities.Module;
@@ -17,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // этот контроллер содержит методы, посредством которых осуществляется весь менеджмент
 // добавление студентов, учителей, заданий и тп.
@@ -89,6 +88,18 @@ public class ManagementController {
         // !!!здесь будет логика для добавления кастомного задания
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
+    }
+    @PostMapping("/add/option")
+    @RolesAllowed({"GOD", "TEACHER"})
+    @HandleDataActionExceptions
+    public ResponseEntity<OptionIdDTO> addNewCustomTask(@RequestBody List<ModuleTaskDTO> optionDTO)
+            throws ErrorCreatingOption, NoSuchTaskInDB {
+        Option option = Option.builder().build();
+        manager.addOption(option);
+        for(ModuleTaskDTO dto: optionDTO){
+            manager.addTaskToOption(option, manager.getTaskById(dto.getTaskId()));
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(OptionIdDTO.builder().optionId(option.getId()).build());
     }
 
     @PostMapping("/add/user/student")
