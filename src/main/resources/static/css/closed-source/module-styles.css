@@ -270,7 +270,7 @@ body{
     user-select: none;
 }
 
-#send{
+#send, .delete{
     display: inline-block;
     font-size: 18px;
     font-family: 'Helvetica', sans-serif;
@@ -283,11 +283,11 @@ body{
     transition: background-color 0.6s ease, color 0.6s ease, opacity 0.2s ease, padding-right 1s ease, padding-left 1s ease
     , padding-top 1s ease,padding-bottom 1s ease;
 }
-#send:hover{
+#send:hover, .delete:hover{
     background-color: rgba(255, 255, 255, 0.5)!important;
     color: #121212;
 }
-#send:active{
+#send:active, .delete:active{
     opacity: 0.8;
 }
 #current-task{
