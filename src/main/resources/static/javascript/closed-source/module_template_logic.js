@@ -15,6 +15,7 @@ inputAnswer = document.getElementById("answer-input");
 let warningComment = document.getElementById("warning_comment");
 let wrongAnswerComment = document.getElementById("wrong_answer_comment");
 let taskNum = document.getElementById("task-num");
+let moduleNum = document.getElementById("current-task");
 let warning = false;
 let currentTaskId;
 let prevNavigationButton;
@@ -154,6 +155,23 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
         taskNum.innerText = currentTaskNum;
         selectTask(currentTaskId);
         prevNavigationButton = navigationButtons[0];
+    })
+    .catch((error) => {
+        console.error('Ошибка:', error);
+    });
+
+document.getElementById("num").innerText = getModuleNumFromUrl();
+moduleNum.setAttribute("href", "/app/theory#task_"+getModuleNumFromUrl());
+let moduleName;
+fetch(`/api/v1/client/module/${getModuleNumFromUrl()}/name`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+})
+    .then(response => response.text())
+    .then(data => {
+        moduleName = data;
     })
     .catch((error) => {
         console.error('Ошибка:', error);
@@ -366,3 +384,9 @@ function wheelHandler(event) {
 navigationButtonsWrapper.addEventListener("wheel", wheelHandler);
 
 setTimeout(()=>{navigationButtons[0].click(); markTasks();},500);
+moduleNum.addEventListener("mouseover", ()=>{
+    document.getElementById("name").innerText = moduleName;
+})
+moduleNum.addEventListener("mouseout", ()=>{
+    document.getElementById("name").innerText = "";
+})

@@ -15,7 +15,10 @@
 <body>
 <div th:insert="~{header :: header}"></div>
 <div id="particles-js"></div>
-
+<a id="current-task">
+    <span id="num"></span>
+    <span id="name"></span>
+</a>
 <script th:src="@{/javascript/open-source/particles-lib/particles.js}"></script>
 <script th:src="@{/javascript/open-source/particles-lib/design-settings/calm_dark_design.js}"></script>
 <div class="app-wrapper">

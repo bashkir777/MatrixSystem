@@ -174,4 +174,9 @@ public class ClientInterfaceController {
         return manager.getAllModules().stream().map(Module::getId).toList();
     }
 
+    @GetMapping("/module/{id}/name")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> getModuleName(@PathVariable Integer id) throws NoSuchModuleInDB {
+        return ResponseEntity.status(HttpStatus.OK).body(manager.getModuleById(id).getName());
+    }
 }

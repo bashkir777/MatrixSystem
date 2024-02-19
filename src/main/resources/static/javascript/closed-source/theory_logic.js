@@ -17,6 +17,12 @@ for (let button of navigationButtons) {
     });
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    if(window.location.href.split("#").length === 2) {
+        setTimeout(()=>{window.scrollBy(0, -200);}, 200);
+    }
+});
+
 for (let link of links) {
     link.addEventListener("contextmenu", (event) => {
         event.preventDefault();
