@@ -11,8 +11,7 @@ let answerText = document.getElementById("_answer");
 let navigationButtons = document.getElementsByClassName("navigation-button");
 let container = document.getElementById("container");
 let answer = document.getElementById("answer");
-let taskWithImage = document.getElementById("task-with-img");
-let taskWithoutImage = document.getElementById("task-without-img");
+inputAnswer = document.getElementById("answer-input");
 let warningComment = document.getElementById("warning_comment");
 let wrongAnswerComment = document.getElementById("wrong_answer_comment");
 let taskNum = document.getElementById("task-num");
@@ -49,16 +48,6 @@ function clearButtonBorderAndContainer(button, container){
     container.classList.remove("red-border");
 }
 
-function returnCurrentInputElement(){
-    let inputAnswer;
-    if(taskWithImage.classList.contains("display-none")){
-        inputAnswer = document.getElementsByTagName("input")[1];
-    }else{
-        inputAnswer = document.getElementsByTagName("input")[0];
-    }
-    return inputAnswer
-}
-
 function markButtonBasedOnStatus(button, status){
     clearButton(getCurrentButton());
     if(status === "DONE"){
@@ -88,10 +77,10 @@ function markContainerBasedOnStatus(status){
 
 function displayInputAndSubmitElementsBasedOnStatus(status){
     if(status === "DONE" || status === "FAILED"){
-        returnCurrentInputElement().classList.add("display-none");
+        inputAnswer.classList.add("display-none");
         send.classList.add("display-none");
     }else{
-        returnCurrentInputElement().classList.remove("display-none");
+        inputAnswer.classList.remove("display-none");
         send.classList.remove("display-none");
     }
 }
@@ -121,7 +110,7 @@ function selectTask(id){
             console.error('Ошибка:', error);
         });
 
-    returnCurrentInputElement().value="";
+    inputAnswer.value="";
 
     // получаем и используем содержимое задания
     fetch(`/api/v1/client/task/${id}`, {
@@ -294,7 +283,7 @@ arrowLeft.addEventListener("click", ()=>{
 send.addEventListener("click", () => {
     // объявляем тут, так как поле может различаться от задания с изображением к заданию без него
     // выбираем input в зависимости от того какой тип задания выбран в данный момент
-    let inputAnswer = returnCurrentInputElement();
+
     fetch(`/api/v1/client/task/submit`, {
         method: 'POST',
         headers: {
