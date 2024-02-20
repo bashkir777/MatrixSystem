@@ -212,7 +212,7 @@ public class DatabaseManager {
             TaskForOptionsDTO randomTaskDTO = TaskForOptionsDTO.builder().id(randomTask.getId())
                     .module(ModuleDTO.builder().id(randomTaskModule.getId())
                             .verifiable(randomTaskModule.getVerifiable()).maxPoints(module.getMaxPoints())
-                            .build()).task(randomTask.getTask())
+                            .build()).task(randomTask.getTask()).solution(randomTask.getSolution())
                     .answer(randomTask.getAnswer()).img(randomTask.getImg()).build();
 
             toReturn.add(randomTaskDTO);
@@ -234,7 +234,7 @@ public class DatabaseManager {
             TaskForOptionsDTO taskDTO = TaskForOptionsDTO.builder().id(task.getId())
                     .module(ModuleDTO.builder().id(task.getModule().getId())
                             .verifiable(task.getModule().getVerifiable()).maxPoints(task.getModule().getMaxPoints())
-                            .build()).task(task.getTask())
+                            .build()).task(task.getTask()).solution(task.getSolution())
                     .answer(task.getAnswer()).img(task.getImg()).build();
             toReturn.add(taskDTO);
         }

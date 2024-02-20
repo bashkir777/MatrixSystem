@@ -8,6 +8,7 @@ let scrollRight = document.getElementById("scroll_right");
 let inputWrap = document.getElementById("input-wrap");
 let answerWrapper = document.getElementById("answer_wrapper");
 let answerText = document.getElementById("_answer");
+let fullAnswer = document.getElementById("full-answer");
 let answer = document.getElementById("answer");
 let showAnswer = document.getElementById("show_answer");
 let input = document.getElementById("input-answer");
@@ -120,6 +121,7 @@ function fillPage(){
                     answerWrapper.classList.remove("display-none");
                     showAnswer.classList.remove("display-none");
                     answerText.innerText = taskObj.answer;
+                    fullAnswer.innerText = taskObj.solution;
                 }
             }else{
                 inputWrap.classList.add("display-none");
@@ -127,6 +129,7 @@ function fillPage(){
                 score.setAttribute("max", taskObj.module.maxPoints);
                 score.value = listTasksToSubmit[currentTaskOrder-1].score;
                 answerText.innerText = taskObj.answer;
+                fullAnswer.innerText = taskObj.solution;
                 answerWrapper.classList.remove("display-none");
                 selfScoreInput.classList.remove("display-none");
                 showAnswer.classList.remove("display-none")
