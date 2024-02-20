@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 // этот контроллер содержит методы, посредством которых осуществляется весь менеджмент
@@ -42,23 +43,28 @@ public class ManagementController {
     @HandleDataActionExceptions
     public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestParam("task") String task,
                                                             @RequestParam("answer") String answer,
-                                                            @RequestParam("solution") String solution,
+                                                            @RequestParam(value = "solution", required = false) String solution,
                                                             @RequestParam("module") Integer module,
-                                                            @RequestPart("image") MultipartFile image)
+                                                            @RequestPart(value = "image", required = false) MultipartFile image)
             throws NoSuchModuleInDB, ErrorCreatingTaskRecord, IOException {
-
-        String fileName = UUID.randomUUID() + ".png";
-        String uploadDir = "db/images/math/";
-        Path filePath = Paths.get(uploadDir, fileName);
-        Files.write(filePath, image.getBytes());
+        Task.TaskBuilder builder = Task.builder();
+        if (image != null) {
+            String fileName = UUID.randomUUID() + "." + Objects.requireNonNull(image.getContentType()).split("/")[1];
+            String uploadDir = "db/images/math/";
+            Path filePath = Paths.get(uploadDir, fileName);
+            Files.write(filePath, image.getBytes());
+            builder.img(filePath.toString());
+        }
+        if(solution != null){
+            builder.solution(solution);
+        }
 
         Module moduleObj;
 
         moduleObj = manager.getModuleById(module);
 
-        Task taskObj = Task.builder().task(task)
-                .answer(answer).img(filePath.toString())
-                .solution(solution)
+        Task taskObj = builder.task(task)
+                .answer(answer)
                 .module(moduleObj).build();
 
         manager.addTask(taskObj);

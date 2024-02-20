@@ -1,5 +1,5 @@
 iframe{
-    z-index: 103;
+    z-index: 111;
     position: absolute;
     top: 13%;
     right:2%;
@@ -12,8 +12,8 @@ iframe{
 #stretch{
     position: absolute;
     top: 80%;
-    right: 53%;
-    z-index: 103;
+    right: 52%;
+    z-index: 111;
     transition: transform 2s ease, right 2s ease;
 }
 #stretch:hover{
