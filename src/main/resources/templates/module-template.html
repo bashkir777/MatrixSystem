@@ -17,6 +17,20 @@
 <body>
 <div th:insert="~{header :: header}"></div>
 
+<div th:if="${role == 'GOD'}" id="created-label" class="display-none">
+    <span>Задание успешно добавлено</span>
+    <div class="cover">
+        <a class="leave" th:href="@{/app/all-tasks/module/{moduleId}(moduleId=${moduleId})}">Окей</a>
+    </div>
+</div>
+<div th:if="${role == 'GOD'}" id="failed-to-create-label" class="display-none">
+    <span>Не удалось создать задание, попробуйте позже</span>
+    <div class="cover">
+    <a class="leave" th:href="@{/app/all-tasks/module/{moduleId}(moduleId=${moduleId})}">Окей (</a>
+    </div>
+</div>
+
+
 <div th:if="${role == 'GOD'}" id="smoke" class="smoke display-none"></div>
 <span th:if="${role == 'GOD'}" id="cross" class="cross display-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25"

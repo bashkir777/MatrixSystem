@@ -7,7 +7,8 @@ let condition = document.getElementById("task-condition-form");
 let fullAnswer = document.getElementById("task-full-answer-form");
 let shortAnswer = document.getElementById("task-answer-form");
 let imgForm = document.getElementById("task-img-form");
-
+let createdLabel = document.getElementById("created-label");
+let failedToCreateLabel = document.getElementById("failed-to-create-label");
 
 addTask.addEventListener("click", ()=>{
     smoke.classList.remove("display-none");
@@ -43,13 +44,16 @@ addTaskButton.addEventListener("click", ()=>{
         )
     })
         .then(response =>{
+            taskForm.classList.add("display-none");
+            cross.classList.add("display-none");
+            addTaskButton.classList.add("display-none");
             if(response.status === 201){
                 response.text().then(data => {
-                            console.log(data);
+                        createdLabel.classList.remove("display-none");
                     }
                 )
             }else{
-                console.log("Не удалось создать задание");
+                failedToCreateLabel.classList.remove("display-none");
             }
         });
 });
