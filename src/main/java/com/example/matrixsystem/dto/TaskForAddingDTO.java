@@ -11,7 +11,9 @@ public class TaskForAddingDTO {
 
     private String answer;
 
-    private String img;
+    private byte[] img;
+
+    private String solution;
 
     private Integer module;
 }

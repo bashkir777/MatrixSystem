@@ -31,9 +31,11 @@ public class Task {
     @JoinColumn(name = "module", referencedColumnName = "id")
     private Module module;
 
-    @Column(name = "img", length = Integer.MAX_VALUE)
-    private String img;
+    @Lob
+    private byte[] img;
 
+    @Column(name = "solution", length = Integer.MAX_VALUE)
+    private String solution;
 
     @OneToMany(mappedBy = "taskReference", fetch = FetchType.EAGER)
     private Set<UserTask> userTask = new HashSet<>();

@@ -13,7 +13,9 @@ public class TaskForOptionsDTO {
 
     private String answer;
 
-    private String img;
+    private byte[] img;
+
+    private String solution;
 
     private ModuleDTO module;
 }

@@ -36,12 +36,14 @@ public class ManagementController {
     @HandleDataActionExceptions
     public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestBody TaskForAddingDTO taskForAddingDTO) throws NoSuchModuleInDB,
             ErrorCreatingTaskRecord{
+
         Module module;
 
         module = manager.getModuleById(taskForAddingDTO.getModule());
 
         Task task = Task.builder().task(taskForAddingDTO.getTask())
                 .img(taskForAddingDTO.getImg()).answer(taskForAddingDTO.getAnswer())
+                .solution(taskForAddingDTO.getSolution())
                 .module(module).build();
 
         manager.addTask(task);

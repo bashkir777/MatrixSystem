@@ -42,6 +42,15 @@ public class ClientInterfaceController {
     public List<Integer> allTasksIds(@PathVariable Integer id) throws NoSuchModuleInDB {
         return manager.getAllModuleTasksIds(manager.getModuleById(id));
     }
+
+    @GetMapping("/module/object/{id}")
+    @HandleDataActionExceptions
+    public ResponseEntity<ModuleDTO> getModule(@PathVariable Integer id) throws NoSuchModuleInDB {
+        Module module = manager.getModuleById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(ModuleDTO.builder()
+                .id(module.getId()).maxPoints(module.getMaxPoints()).verifiable(module.getVerifiable()).build());
+    }
+
     @GetMapping("/module/{id}/tasks")
     @HandleDataActionExceptions
     public List<TaskForOptionsDTO> allTasksOfModule(@PathVariable Integer id) throws NoSuchModuleInDB, NoSuchTaskInDB {

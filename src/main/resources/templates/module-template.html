@@ -2,18 +2,54 @@
 
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/closed-source/header-styles.css">
 
-  <script src="/javascript/closed-source/module_template_logic.js" defer></script>
-  <title th:text="'Задание ' + ${moduleId} + ' ЕГЭ'"></title>
-  <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/particles-styles.css}" />
-  <link rel="stylesheet" href="/css/closed-source/module-styles.css">
-  <script th:src="@{/javascript/closed-source/miro-integration.js}" defer></script>
-  <link rel="stylesheet" type="text/css" th:href="@{/css/closed-source/miro-integration-styles.css}"/>
+    <script src="/javascript/closed-source/module_template_logic.js" defer></script>
+    <title th:text="'Задание ' + ${moduleId} + ' ЕГЭ'"></title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/particles-styles.css}"/>
+    <link rel="stylesheet" href="/css/closed-source/module-styles.css">
+    <script th:src="@{/javascript/closed-source/miro-integration.js}" defer></script>
+    <script th:if="${role == 'GOD'}" th:src="@{/javascript/closed-source/add_task_to_module_logic.js}" defer></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/closed-source/miro-integration-styles.css}"/>
+    <link th:if="${role == 'GOD'}" rel="stylesheet" type="text/css" th:href="@{/css/closed-source/add-task-module-styles.css}"/>
 </head>
 <body>
 <div th:insert="~{header :: header}"></div>
+
+<div th:if="${role == 'GOD'}" id="smoke" class="smoke display-none"></div>
+<span th:if="${role == 'GOD'}" id="cross" class="cross display-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25"
+                                     height="25">
+                                    <path d="M 0 0 L 25 25 M 0 25 L 25 0" stroke="white" fill="none" stroke-width="3"/>
+                                </svg>
+                            </span>
+
+<div th:if="${role=='GOD'}" id="add-task-button" class="display-none">
+    Создать задание
+</div>
+
+<div th:if="${role == 'GOD'}" id="task-form" class="display-none">
+    <textarea  placeholder="Ввведите условие задания" id="task-condition-form"  rows="4" cols="50"></textarea>
+    <br>
+    <textarea placeholder="Введите развернутое решение на задание" id="task-full-answer-form" rows="4" cols="50"></textarea>
+    <br>
+    <input type="text" placeholder="Введите краткий ответ на задание" id="task-answer-form">
+    <br>
+    <div class="add-img-label">Добавьте избражение (если нужно)</div>
+    <label for="task-img-form" class="custom-file-upload">
+        <i class="fa fa-cloud-upload"></i> Загрузить файл
+    </label>
+    <input type="file" placeholder="Прикрепите изображение (если нужно)" accept=".jpg, .jpeg, .png" id="task-img-form"/>
+</div>
+
+<span th:if="${role=='GOD'}" id="add-task" class="plus-wrapper">
+                <svg class="plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30"
+                     height="30">
+                    <path d="M 0 15 L 30 15 M 15 0 L 15 30" stroke="white" fill="none" stroke-width="3"/>
+                </svg>
+</span>
+
 <div id="particles-js"></div>
 <a id="current-task">
     <span id="num"></span>
@@ -22,55 +58,55 @@
 <script th:src="@{/javascript/open-source/particles-lib/particles.js}"></script>
 <script th:src="@{/javascript/open-source/particles-lib/design-settings/calm_dark_design.js}"></script>
 <div class="app-wrapper">
-  <div class="left-block">
-    <div class="navigation-block-wrapper">
-      <button id="scroll_left">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
-          <path d="M 26 1 L 1 15 L 26 30 L 26 1" fill="#f5f5f5bf" stroke-width="0"/>
-        </svg>
-      </button>
-      <div class="navigation-block" >
-        <div id="navigation_buttons_wrapper" class="navigation-buttons-wrapper">
+    <div class="left-block">
+        <div class="navigation-block-wrapper">
+            <button id="scroll_left">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+                    <path d="M 26 1 L 1 15 L 26 30 L 26 1" fill="#f5f5f5bf" stroke-width="0"/>
+                </svg>
+            </button>
+            <div class="navigation-block">
+                <div id="navigation_buttons_wrapper" class="navigation-buttons-wrapper">
           <span th:id="'tab_'+${i}" th:each="i : ${#numbers.sequence(1, moduleCapacity)}"
                 class="navigation-button" th:text="${i}"></span>
+                </div>
+            </div>
+            <button id="scroll_right">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
+                    <path d="M 5 1 L 30 15 L 5 30 L 5 1" fill="#f5f5f5bf" stroke-width="0"/>
+                </svg>
+            </button>
         </div>
-      </div>
-      <button id="scroll_right">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 31" width="31" height="31">
-          <path d="M 5 1 L 30 15 L 5 30 L 5 1" fill="#f5f5f5bf" stroke-width="0"/>
-        </svg>
-      </button>
-    </div>
 
-    <div id="container" class="task-container">
-      <div class="task">
-        <span class="label">Задание №<span id="task-num"></span>:</span>
-        <div id="task-text" class="task-text"></div>
-        <div id="task-img" class="display-none"></div>
-        <div class="wrapper-2">
-          <input id="answer-input" placeholder="Введите ответ" type="text">
-          <div id="send" class="send">Отправить</div>
+        <div id="container" class="task-container">
+            <div class="task">
+                <span class="label">Задание №<span id="task-num"></span>:</span>
+                <div id="task-text" class="task-text"></div>
+                <div id="task-img" class="display-none"></div>
+                <div class="wrapper-2">
+                    <input id="answer-input" placeholder="Введите ответ" type="text">
+                    <div id="send" class="send">Отправить</div>
+                </div>
+            </div>
+            <div class="answer-wrapper">
+                <button id="show_answer">Показать ответ</button>
+                <div id="answer" class="answer display-none">
+                    <hr>
+                    Ответ: <span id="_answer"></span>
+                </div>
+            </div>
+            <div id="arrow_left" class="arrow-left">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+                    <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+                </svg>
+            </div>
+            <div id="arrow_right" class="arrow-right">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+                    <path d="M 10 10 L 25 30 L 10 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+                </svg>
+            </div>
         </div>
-      </div>
-      <div class="answer-wrapper">
-        <button id="show_answer">Показать ответ</button>
-        <div id="answer" class="answer display-none">
-          <hr>
-          Ответ: <span id="_answer"></span>
-        </div>
-      </div>
-      <div id="arrow_left" class="arrow-left">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
-          <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
-        </svg>
-      </div>
-      <div id="arrow_right" class="arrow-right">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
-          <path d="M 10 10 L 25 30 L 10 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
-        </svg>
-      </div>
     </div>
-  </div>
 
 </div>
 
@@ -79,17 +115,18 @@
 </iframe>
 
 <div id="stretch">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
-    <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
-  </svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
+        <path d="M 15 10 L 01 30 L 15 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
+    </svg>
 </div>
 
 <div id="wrong_answer_comment" class="comment-block opacity-0">
-  <p class="comment-text">Пока что неправильно( , не сдавайся попробуй еще раз</p>
+    <p class="comment-text">Пока что неправильно( , не сдавайся попробуй еще раз</p>
 </div>
 
 <div id="warning_comment" class="comment-block opacity-0">
-  <p class="comment-text">Если ты посмотришь ответ, то задание навсегда пометится красненьким, оно тебе надо? Если да, то нажми еще раз</p>
+    <p class="comment-text">Если ты посмотришь ответ, то задание навсегда пометится красненьким, оно тебе надо? Если да,
+        то нажми еще раз</p>
 </div>
 
 </body>
