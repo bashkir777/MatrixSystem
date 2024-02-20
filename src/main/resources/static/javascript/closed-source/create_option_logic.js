@@ -212,10 +212,19 @@ add.addEventListener("click", () => {
     }
 });
 
+let notYetIsShow = false;
 create.addEventListener("click", ()=>{
     for (let entry of optionToCreate){
         if(entry.taskId === null){
-            console.log("не все задания добавлены")
+            if(!notYetIsShow){
+                notYetIsShow = true;
+                let wrapper = document.getElementById("position-wrapper-2");
+                wrapper.classList.remove("display-none");
+                setTimeout(()=>{
+                    wrapper.classList.add("display-none");
+                    notYetIsShow = false;
+                }, 3000)
+            }
             return;
         }
     }

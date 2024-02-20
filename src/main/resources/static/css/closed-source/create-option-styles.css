@@ -218,3 +218,10 @@ body{
 #create{
     padding: 6%;
 }
+#position-wrapper-2{
+    position: absolute;
+    top: 60%;
+    left: 10%;
+    font-size: 18px!important;
+    font-family: 'Helvetica', sans-serif!important;
+}
