@@ -14,8 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 // этот контроллер содержит методы, посредством которых осуществляется весь менеджмент
 // добавление студентов, учителей, заданий и тп.
@@ -34,19 +40,28 @@ public class ManagementController {
     @PostMapping("/add/task/common-pull")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions
-    public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestBody TaskForAddingDTO taskForAddingDTO) throws NoSuchModuleInDB,
-            ErrorCreatingTaskRecord{
+    public ResponseEntity<String> addNewTaskToTheCommonPull(@RequestParam("task") String task,
+                                                            @RequestParam("answer") String answer,
+                                                            @RequestParam("solution") String solution,
+                                                            @RequestParam("module") Integer module,
+                                                            @RequestPart("image") MultipartFile image)
+            throws NoSuchModuleInDB, ErrorCreatingTaskRecord, IOException {
 
-        Module module;
+        String fileName = UUID.randomUUID() + ".png";
+        String uploadDir = "db/images/math/";
+        Path filePath = Paths.get(uploadDir, fileName);
+        Files.write(filePath, image.getBytes());
 
-        module = manager.getModuleById(taskForAddingDTO.getModule());
+        Module moduleObj;
 
-        Task task = Task.builder().task(taskForAddingDTO.getTask())
-                .img(taskForAddingDTO.getImg()).answer(taskForAddingDTO.getAnswer())
-                .solution(taskForAddingDTO.getSolution())
-                .module(module).build();
+        moduleObj = manager.getModuleById(module);
 
-        manager.addTask(task);
+        Task taskObj = Task.builder().task(task)
+                .answer(answer).img(filePath.toString())
+                .solution(solution)
+                .module(moduleObj).build();
+
+        manager.addTask(taskObj);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
     }

@@ -7,6 +7,7 @@ let condition = document.getElementById("task-condition-form");
 let fullAnswer = document.getElementById("task-full-answer-form");
 let shortAnswer = document.getElementById("task-answer-form");
 let imgForm = document.getElementById("task-img-form");
+let taskImg = document.getElementById("task-img");
 let createdLabel = document.getElementById("created-label");
 let failedToCreateLabel = document.getElementById("failed-to-create-label");
 
@@ -28,20 +29,23 @@ function getModuleNumFromUrl() {
 }
 
 addTaskButton.addEventListener("click", ()=>{
+
+
+    const formData = new FormData();
+    if(imgForm.files.length === 0){
+        formData.append('image', null);
+    }else{
+        formData.append('image', imgForm.files[0]);
+    }
+
+    formData.append('task', condition.value);
+    formData.append('answer', shortAnswer.value);
+    formData.append('solution', fullAnswer.value);
+    formData.append('module', getModuleNumFromUrl());
+
     fetch(`/api/v1/management/add/task/common-pull`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(
-            {
-                task: condition.value,
-                answer: shortAnswer.value,
-                solution: fullAnswer.value,
-                img: imgForm.value,
-                module: getModuleNumFromUrl()
-            }
-        )
+        body: formData,
     })
         .then(response =>{
             taskForm.classList.add("display-none");

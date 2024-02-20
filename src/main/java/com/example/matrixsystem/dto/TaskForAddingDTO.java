@@ -2,6 +2,7 @@ package com.example.matrixsystem.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -11,7 +12,7 @@ public class TaskForAddingDTO {
 
     private String answer;
 
-    private byte[] img;
+    private MultipartFile image;
 
     private String solution;
 

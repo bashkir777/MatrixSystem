@@ -30,9 +30,8 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "module", referencedColumnName = "id")
     private Module module;
-
-    @Lob
-    private byte[] img;
+    @Column(name = "img", length = Integer.MAX_VALUE)
+    private String img;
 
     @Column(name = "solution", length = Integer.MAX_VALUE)
     private String solution;

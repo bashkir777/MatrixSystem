@@ -13,7 +13,7 @@ public class TaskForOptionsDTO {
 
     private String answer;
 
-    private byte[] img;
+    private String img;
 
     private String solution;
 

@@ -9,6 +9,7 @@ let navigationButtonsWrapper = document.getElementById("navigation_buttons_wrapp
 let taskText = document.getElementById("task-text");
 let answerText = document.getElementById("_answer");
 let solution = document.getElementById("full-answer");
+let imageContainer = document.getElementById("image-container");
 
 let navigationButtons = document.getElementsByClassName("navigation-button");
 let container = document.getElementById("container");
@@ -126,6 +127,14 @@ function selectTask(id){
         .then(data => {
             currentTaskId = id;
             taskText.innerText = data.task;
+            imageContainer.classList.add("display-none");
+            console.log(data.img)
+            if(data.img !== null){
+                let imgSrc = data.img.replace(/\\/g, '/');
+                imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
+                imageContainer.classList.remove("display-none");
+            }
+
         })
         .catch((error) => {
             console.error('Ошибка:', error);
