@@ -1,10 +1,7 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
-import com.example.matrixsystem.dto.ModuleDTO;
-import com.example.matrixsystem.dto.TaskForAddingDTO;
-import com.example.matrixsystem.dto.TaskForOptionsDTO;
-import com.example.matrixsystem.dto.TaskForSubmittingDTO;
+import com.example.matrixsystem.dto.*;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
@@ -136,7 +133,7 @@ public class ClientInterfaceController {
 
     @GetMapping("/task/{id}/answer")
     @HandleDataActionExceptions
-    public ResponseEntity<String> getAnswer(@PathVariable Integer id) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord, ErrorDeletingUserTaskRecord {
+    public ResponseEntity<TaskAnswerDTO> getAnswer(@PathVariable Integer id) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord, ErrorDeletingUserTaskRecord {
         Task task = manager.getTaskById(id);
         UserTask userTask;
         Users user = userInformation.getUser();
@@ -146,7 +143,8 @@ public class ClientInterfaceController {
             userTask = manager.getCurrentUserTaskByTask(task);
         }catch (NoSuchUserTaskRelation e){
             manager.addUserTaskRelation(user, task, UserTaskRelationTypes.FAILED);
-            return ResponseEntity.status(HttpStatus.OK).body(task.getAnswer());
+            return ResponseEntity.status(HttpStatus.OK).body(TaskAnswerDTO.builder().answer(task.getAnswer())
+                    .solution(task.getSolution()).build());
         }
 
         UserTaskRelationTypes relation = userTask.getRelationType();
@@ -154,7 +152,8 @@ public class ClientInterfaceController {
             manager.deleteUserTask(userTask);
             manager.addUserTaskRelation(user, task, UserTaskRelationTypes.FAILED);
         }
-        return ResponseEntity.status(HttpStatus.OK).body(task.getAnswer());
+        return ResponseEntity.status(HttpStatus.OK).body(TaskAnswerDTO.builder().answer(task.getAnswer())
+                .solution(task.getSolution()).build());
     }
     @GetMapping("/module/{id}/done")
     @HandleDataActionExceptions

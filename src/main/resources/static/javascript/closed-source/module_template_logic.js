@@ -8,10 +8,12 @@ let scrollRight = document.getElementById("scroll_right");
 let navigationButtonsWrapper = document.getElementById("navigation_buttons_wrapper");
 let taskText = document.getElementById("task-text");
 let answerText = document.getElementById("_answer");
+let solution = document.getElementById("full-answer");
+
 let navigationButtons = document.getElementsByClassName("navigation-button");
 let container = document.getElementById("container");
 let answer = document.getElementById("answer");
-inputAnswer = document.getElementById("answer-input");
+let inputAnswer = document.getElementById("answer-input");
 let warningComment = document.getElementById("warning_comment");
 let wrongAnswerComment = document.getElementById("wrong_answer_comment");
 let taskNum = document.getElementById("task-num");
@@ -124,7 +126,6 @@ function selectTask(id){
         .then(data => {
             currentTaskId = id;
             taskText.innerText = data.task;
-            //answerText.innerText = data.answer;
         })
         .catch((error) => {
             console.error('Ошибка:', error);
@@ -240,11 +241,11 @@ showAnswer.addEventListener("click", ()=>{
                 'Content-Type': 'application/json'
             },
         })
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
                 answer.classList.remove("display-none");
-                answerText.innerText = data;
-
+                answerText.innerText = data.answer;
+                solution.innerText = data.solution;
                 fetch(`/api/v1/client/task/${currentTaskId}/status`,{
                     method: 'GET',
                     headers: {

@@ -108,3 +108,6 @@ textarea{
     cursor: pointer;
     opacity: 0.8;
 }
+#answer-input{
+    margin-bottom: 0;
+}
