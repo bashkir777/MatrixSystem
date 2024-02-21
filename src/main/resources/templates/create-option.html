@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Онлайн школа - MATRIX</title>
-    <link rel="stylesheet" href="/css/closed-source/module-styles.css">
+
     <link rel="stylesheet" href="/css/closed-source/option-styles.css">
     <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/module-styles.css">
     <link rel="stylesheet" href="/css/closed-source/create-option-styles.css">
     <script src="/javascript/closed-source/create_option_logic.js" defer></script>
 
@@ -23,17 +24,15 @@
         <a class="leave" href="/app/all-tasks">Выйти</a>
     </div>
 
-    <div id="current-task">
-
-    </div>
-
     <div class="app-wrapper">
         <div class="left-block">
             <div id="choose-task-wrapper">
-                <div style="display: flex; align-items: center;">
+                <div style="display: flex; align-items: center; justify-content: center">
                     <span class="label">Выбрать задание</span>
                     <input placeholder="Номер задания" value="1" id="module-num" type="number">
-                    <span id="choose">Подтвердить</span>
+                    <span id="create">
+                        Создать вариант
+                    </span>
                 </div>
             </div>
             <div class="navigation-block-wrapper">
@@ -57,11 +56,11 @@
                 <div class="task">
                     <div class="label">Задание №<span id="task-num"></span>:</div>
                     <div id="task-text" class="task-text"></div>
+                    <div style="text-align: center">
+                        <img style="width: 300px; height: 200px; border-radius: 5px;" id="image-container" class="display-none"/>
+                    </div>
                     <div id="input-wrap" class="input-wrap">
                         <div id="add">Добавить</div>
-                    </div>
-                    <div id="task-with-img" class="display-none" style="display: flex; margin-top: 10px">
-                        <div class="placeholder"></div>
                     </div>
                 </div>
                 <div id="answer_wrapper" class="answer-wrapper display-none">
@@ -80,11 +79,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 51" width="24" height="51">
                         <path d="M 10 10 L 25 30 L 10 50" fill="none" stroke="#f5f5f5bf" stroke-width="3"/>
                     </svg>
-                </div>
-            </div>
-            <div class="create-wrapper">
-                <div id="create">
-                    Создать вариант
                 </div>
             </div>
         </div>

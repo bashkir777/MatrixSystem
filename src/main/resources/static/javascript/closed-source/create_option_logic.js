@@ -1,9 +1,8 @@
 let moduleNumInput = document.getElementById("module-num")
-let choose = document.getElementById("choose");
 let taskNum = document.getElementById("task-num");
 let taskText = document.getElementById("task-text");
 let scrollPanel = document.getElementById("scroll-panel");
-let currentTask = document.getElementById("current-task");
+
 let create = document.getElementById("create");
 let smoke = document.getElementById("smoke");
 let createdLabel = document.getElementById("created-label");
@@ -13,6 +12,7 @@ let arrowRight = document.getElementById("arrow_right");
 let scrollLeft = document.getElementById("scroll_left");
 let scrollRight = document.getElementById("scroll_right");
 let failedToCreateLabel = document.getElementById("failed-to-create-label");
+let imageContainer = document.getElementById("image-container");
 let add = document.getElementById("add");
 let currentTaskId = null;
 let currentModuleId = null;
@@ -57,8 +57,6 @@ scrollRight.addEventListener("click", function() {
     navigationButtonsWrapper.scrollLeft += 200;
 });
 
-
-
 fetch(`/api/v1/client/modules`, {
     method: 'GET',
     headers: {
@@ -83,7 +81,7 @@ fetch(`/api/v1/client/modules`, {
         console.error('Ошибка:', error);
     });
 
-choose.addEventListener("click", (event)=>{
+const inputNumHandler = ()=>{
     let module = moduleNumInput.value;
     fetch(`/api/v1/client/module/${module}/tasks`, {
         method: 'GET',
@@ -94,7 +92,6 @@ choose.addEventListener("click", (event)=>{
         .then(response => response.json())
         .then(data => {
             currentModuleId = module;
-            currentTask.innerText = module;
             currentModuleTaskList = data;
             let num = 1;
             arrOfNavigationButtons = [];
@@ -122,6 +119,12 @@ choose.addEventListener("click", (event)=>{
                         arrowRight.classList.remove("display-none");
                     }
                     currentTaskId = task.id;
+                    imageContainer.classList.add("display-none");
+                    if(task.img !== null){
+                        let imgSrc = task.img.replace(/\\/g, '/');
+                        imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
+                        imageContainer.classList.remove("display-none");
+                    }
                     taskNum.innerText = button.textContent;
                     for(let b of arrOfNavigationButtons){
                         b.classList.remove("navigation-tab-selected");
@@ -136,8 +139,12 @@ choose.addEventListener("click", (event)=>{
         .catch((error) => {
             console.error('Ошибка:', error);
         });
-});
-choose.click();
+};
+
+moduleNumInput.addEventListener("input", inputNumHandler);
+moduleNumInput.value = 1;
+inputNumHandler();
+
 let comment = document.getElementById("comment-wrapper");
 let moduleNumComment = document.getElementById("module-num-comment");
 let commentShowing = false;
