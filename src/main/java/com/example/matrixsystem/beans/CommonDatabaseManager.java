@@ -17,7 +17,7 @@ import java.util.*;
 
 @Service
 @SessionScope
-public class DatabaseManager {
+public class CommonDatabaseManager {
     private final TaskRepository taskRepository;
     private final ModuleRepository moduleRepository;
     private final UserRepository userRepository;
@@ -29,7 +29,7 @@ public class DatabaseManager {
     private final OptionRepository optionRepository;
 
     @Autowired
-    public DatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
+    public CommonDatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
             , UserRepository userRepository, UserTaskRepository userTaskRepository
             , UserInformation userInformation, SectionRepository sectionRepository
             , UserSectionRepository userSectionRepository, OptionTaskRepository optionTaskRepository

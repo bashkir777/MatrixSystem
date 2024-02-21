@@ -18,7 +18,7 @@ body{
     color: #f5f5f5bf;
     font-family: 'Helvetica', sans-serif;
     position: fixed;
-    right: 29%;
+    right: 25%;
     top: 15%;
     width: 50%;
     height: 80%;
@@ -47,7 +47,7 @@ tr>td{
     user-select: none;
     font-size: 20px;
     cursor: pointer;
-    padding: 30px 50px;
+    padding: 30px 60px;
     background-color: rgba(255,255,255, 0.06);
     transition: transform 0.1s ease, opacity 0.3s ease, padding-right 1s ease, padding-left 1s ease
     , padding-top 1s ease,padding-bottom 1s ease;

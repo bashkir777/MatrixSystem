@@ -1,6 +1,6 @@
 package com.example.matrixsystem.controllers;
 
-import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.beans.CommonDatabaseManager;
 
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
@@ -22,10 +22,10 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/app")
 public class MVCController {
 
-    private final DatabaseManager manager;
+    private final CommonDatabaseManager manager;
     private final UserInformation userInformation;
     @Autowired
-    public MVCController(DatabaseManager manager, UserInformation userInformation) {
+    public MVCController(CommonDatabaseManager manager, UserInformation userInformation) {
         this.manager = manager;
         this.userInformation = userInformation;
     }

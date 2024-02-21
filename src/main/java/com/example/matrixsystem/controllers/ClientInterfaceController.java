@@ -1,6 +1,6 @@
 package com.example.matrixsystem.controllers;
 
-import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.beans.CommonDatabaseManager;
 import com.example.matrixsystem.dto.*;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.Module;
@@ -27,10 +27,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/client")
 public class ClientInterfaceController {
-    private final DatabaseManager manager;
+    private final CommonDatabaseManager manager;
     private final UserInformation userInformation;
     @Autowired
-    public ClientInterfaceController(DatabaseManager manager, UserInformation userInformation) {
+    public ClientInterfaceController(CommonDatabaseManager manager, UserInformation userInformation) {
         this.manager = manager;
         this.userInformation = userInformation;
     }

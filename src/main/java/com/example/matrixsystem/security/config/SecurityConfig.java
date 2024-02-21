@@ -1,6 +1,6 @@
 package com.example.matrixsystem.security.config;
 
-import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.beans.CommonDatabaseManager;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import com.example.matrixsystem.spring_data.entities.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +26,10 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private DatabaseManager databaseManager;
+    private CommonDatabaseManager commonDatabaseManager;
     @Autowired
-    public void setUserRepository(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
+    public void setUserRepository(CommonDatabaseManager commonDatabaseManager) {
+        this.commonDatabaseManager = commonDatabaseManager;
     }
 
     @Bean
@@ -57,7 +57,7 @@ public class SecurityConfig {
             public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
                 Users user;
                 try{
-                    user = databaseManager.getUserByLogin(login);
+                    user = commonDatabaseManager.getUserByLogin(login);
                 }catch (NoSuchUserInDB e){
                     throw new UsernameNotFoundException(e.getMessage());
                 }

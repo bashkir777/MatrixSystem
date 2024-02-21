@@ -1,6 +1,6 @@
 package com.example.matrixsystem.controllers;
 
-import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.beans.CommonDatabaseManager;
 import com.example.matrixsystem.dto.*;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.*;
@@ -29,11 +29,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/management")
 public class ManagementController {
-    private final DatabaseManager manager;
+    private final CommonDatabaseManager manager;
     private final UserInformation userInformation;
 
     @Autowired
-    public ManagementController(DatabaseManager manager, UserInformation userInformation) {
+    public ManagementController(CommonDatabaseManager manager, UserInformation userInformation) {
         this.manager = manager;
         this.userInformation = userInformation;
     }

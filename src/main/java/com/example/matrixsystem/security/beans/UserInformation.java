@@ -1,6 +1,6 @@
 package com.example.matrixsystem.security.beans;
 
-import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.beans.CommonDatabaseManager;
 import com.example.matrixsystem.spring_data.entities.Users;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
@@ -15,10 +15,10 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 public class UserInformation {
 
-    private final DatabaseManager manager;
+    private final CommonDatabaseManager manager;
 
     @Autowired
-    public UserInformation(DatabaseManager manager){
+    public UserInformation(CommonDatabaseManager manager){
         this.manager = manager;
     }
 

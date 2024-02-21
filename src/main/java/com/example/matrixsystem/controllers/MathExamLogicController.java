@@ -1,6 +1,6 @@
 package com.example.matrixsystem.controllers;
 
-import com.example.matrixsystem.beans.DatabaseManager;
+import com.example.matrixsystem.beans.CommonDatabaseManager;
 import com.example.matrixsystem.dto.FeedbackForOptionSubmissionDTO;
 import com.example.matrixsystem.dto.TaskForOptionSubmittingDTO;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
@@ -27,9 +27,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/math")
 public class MathExamLogicController {
-    private final DatabaseManager manager;
+    private final CommonDatabaseManager manager;
     @Autowired
-    public MathExamLogicController(DatabaseManager manager){
+    public MathExamLogicController(CommonDatabaseManager manager){
         this.manager = manager;
     }
 
