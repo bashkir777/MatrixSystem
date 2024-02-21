@@ -9,4 +9,5 @@ public class ModuleDTO {
     private Integer id;
     private Boolean verifiable;
     private Integer maxPoints;
+    private String name;
 }

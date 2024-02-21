@@ -314,3 +314,6 @@ body{
 #current-task:hover{
     cursor: pointer;
 }
+.display-none-important{
+    display: none!important;
+}

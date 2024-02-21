@@ -7,6 +7,7 @@ import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.UserTask;
 import com.example.matrixsystem.spring_data.entities.Users;
+import com.example.matrixsystem.spring_data.entities.enums.Part;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
@@ -119,21 +120,35 @@ public class ClientInterfaceController {
 
         Users user = userInformation.getUser();
         UserTaskRelationTypes result;
-        // Сверяем ответ задания из базы данных и ответ из dto
-        // Добавляем связь user-task в соответствии с результатом проверки
-        if(taskInDB.getAnswer().equals(dto.getAnswer())){
+        // если вторая часть, то просто отмечаем выполненным
+        if(taskInDB.getModule().getPart().equals(Part.SECOND)){
             result = UserTaskRelationTypes.DONE;
             manager.addUserTaskRelation(user, taskInDB, result);
-        }else{
-            result = UserTaskRelationTypes.TRIED;
-            manager.addUserTaskRelation(user, taskInDB, result);
+        }else {
+            // Сверяем ответ задания из базы данных и ответ из dto
+            // Добавляем связь user-task в соответствии с результатом проверки
+            if(taskInDB.getAnswer().equals(dto.getAnswer())){
+                result = UserTaskRelationTypes.DONE;
+                manager.addUserTaskRelation(user, taskInDB, result);
+            }else{
+                result = UserTaskRelationTypes.TRIED;
+                manager.addUserTaskRelation(user, taskInDB, result);
+            }
         }
+
         return ResponseEntity.status(HttpStatus.OK).body(result.name());
     }
-
+    @GetMapping("/module/{id}/info")
+    @HandleDataActionExceptions
+    public ResponseEntity<ModuleDTO> getModuleInfo(@PathVariable  Integer id) throws NoSuchModuleInDB {
+        Module module = manager.getModuleById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(ModuleDTO.builder().verifiable(module.getVerifiable())
+                .maxPoints(module.getMaxPoints()).id(module.getId()).name(module.getName()).build());
+    }
     @GetMapping("/task/{id}/answer")
     @HandleDataActionExceptions
-    public ResponseEntity<TaskAnswerDTO> getAnswer(@PathVariable Integer id) throws NoSuchTaskInDB, NoSuchUserInDB, ErrorCreatingUserTaskRecord, ErrorDeletingUserTaskRecord {
+    public ResponseEntity<TaskAnswerDTO> getAnswer(@PathVariable Integer id) throws NoSuchTaskInDB
+            , NoSuchUserInDB, ErrorCreatingUserTaskRecord, ErrorDeletingUserTaskRecord {
         Task task = manager.getTaskById(id);
         UserTask userTask;
         Users user = userInformation.getUser();
@@ -182,9 +197,4 @@ public class ClientInterfaceController {
         return manager.getAllModules().stream().map(Module::getId).toList();
     }
 
-    @GetMapping("/module/{id}/name")
-    @HandleDataActionExceptions
-    public ResponseEntity<String> getModuleName(@PathVariable Integer id) throws NoSuchModuleInDB {
-        return ResponseEntity.status(HttpStatus.OK).body(manager.getModuleById(id).getName());
-    }
 }

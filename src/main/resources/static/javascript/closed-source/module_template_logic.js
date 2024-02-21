@@ -24,26 +24,28 @@ let currentTaskId;
 let prevNavigationButton;
 let arrOfTaskIds;
 let currentTaskNum;
+
 function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }
 
-function getCurrentButton(){
+function getCurrentButton() {
     return navigationButtons[getCurrentTaskOrdinalNumberById(currentTaskId) - 1];
 }
 
-function clearButton(button){
+function clearButton(button) {
     button.classList.remove("green-border");
     button.classList.remove("yellow-border");
     button.classList.remove("red-border");
 }
-function clearContainer(){
+
+function clearContainer() {
     container.classList.remove("green-border");
     container.classList.remove("yellow-border");
     container.classList.remove("red-border");
 }
 
-function clearButtonBorderAndContainer(button, container){
+function clearButtonBorderAndContainer(button, container) {
     button.classList.remove("green-border");
     button.classList.remove("yellow-border");
     button.classList.remove("red-border");
@@ -52,44 +54,45 @@ function clearButtonBorderAndContainer(button, container){
     container.classList.remove("red-border");
 }
 
-function markButtonBasedOnStatus(button, status){
+function markButtonBasedOnStatus(button, status) {
     clearButton(getCurrentButton());
-    if(status === "DONE"){
+    if (status === "DONE") {
         button.classList.add("green-border");
-    }else if (status === "TRIED"){
+    } else if (status === "TRIED") {
         button.classList.add("yellow-border");
-    }else if (status === "FAILED"){
+    } else if (status === "FAILED") {
         button.classList.add("red-border");
         warning = false;
-    }else{
+    } else {
         clearButton(button);
         clearContainer();
     }
 }
-function markContainerBasedOnStatus(status){
+
+function markContainerBasedOnStatus(status) {
     clearContainer();
-    if(status === "DONE"){
+    if (status === "DONE") {
         container.classList.add("green-border");
-    }else if (status === "TRIED"){
+    } else if (status === "TRIED") {
         container.classList.add("yellow-border");
-    }else if (status === "FAILED"){
+    } else if (status === "FAILED") {
         container.classList.add("red-border");
-    }else{
+    } else {
         clearContainer();
     }
 }
 
-function displayInputAndSubmitElementsBasedOnStatus(status){
-    if(status === "DONE" || status === "FAILED"){
+function displayInputAndSubmitElementsBasedOnStatus(status) {
+    if (status === "DONE" || status === "FAILED") {
         inputAnswer.classList.add("display-none");
         send.classList.add("display-none");
-    }else{
+    } else {
         inputAnswer.classList.remove("display-none");
         send.classList.remove("display-none");
     }
 }
 
-function selectTask(id){
+function selectTask(id) {
     currentTaskId = id;
 
     if (answerIsShow) showAnswer.click();
@@ -102,7 +105,7 @@ function selectTask(id){
     })
         .then(response => response.text())
         .then(data => {
-            if(data === "FAILED" && !answerIsShow){
+            if (data === "FAILED" && !answerIsShow) {
                 showAnswer.click();
             }
             markButtonBasedOnStatus(getCurrentButton(), data);
@@ -114,7 +117,7 @@ function selectTask(id){
             console.error('Ошибка:', error);
         });
 
-    inputAnswer.value="";
+    inputAnswer.value = "";
 
     // получаем и используем содержимое задания
     fetch(`/api/v1/client/task/${id}`, {
@@ -129,7 +132,7 @@ function selectTask(id){
             taskText.innerText = data.task;
             imageContainer.classList.add("display-none");
             console.log(data.img)
-            if(data.img !== null){
+            if (data.img !== null) {
                 let imgSrc = data.img.replace(/\\/g, '/');
                 imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
                 imageContainer.classList.remove("display-none");
@@ -142,14 +145,15 @@ function selectTask(id){
 
 }
 
-function getCurrentTaskOrdinalNumberById(id){
-    for (let i = 0; i < arrOfTaskIds.length; i++){
-        if (arrOfTaskIds[i] === id){
+function getCurrentTaskOrdinalNumberById(id) {
+    for (let i = 0; i < arrOfTaskIds.length; i++) {
+        if (arrOfTaskIds[i] === id) {
             return i + 1;
         }
     }
     return null;
 }
+
 // инициализируем массив с id всех заданий модуля
 fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
     method: 'GET',
@@ -170,26 +174,34 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
         console.error('Ошибка:', error);
     });
 
-document.getElementById("num").innerText = getModuleNumFromUrl();
-moduleNum.setAttribute("href", "/app/theory#task_"+getModuleNumFromUrl());
 let moduleName;
-fetch(`/api/v1/client/module/${getModuleNumFromUrl()}/name`, {
+let taskVerifiable;
+fetch(`/api/v1/client/module/${getModuleNumFromUrl()}/info`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json'
     },
 })
-    .then(response => response.text())
+    .then(response => response.json())
     .then(data => {
-        moduleName = data;
+        console.log(data);
+        taskVerifiable = data.verifiable;
+        if (!data.verifiable) {
+            send.innerText = "Пометить решенным"
+            inputAnswer.classList.add("display-none-important");
+        }
+        moduleName = data.name;
     })
     .catch((error) => {
         console.error('Ошибка:', error);
     });
 
 
-function markTasks(){
-    console.log(`/api/v1/client/module/${getModuleNumFromUrl()}/tasks/statuses`);
+document.getElementById("num").innerText = getModuleNumFromUrl();
+moduleNum.setAttribute("href", "/app/theory#task_" + getModuleNumFromUrl());
+
+
+function markTasks() {
     fetch(`/api/v1/client/module/${getModuleNumFromUrl()}/tasks/statuses`, {
         method: 'GET',
         headers: {
@@ -198,7 +210,7 @@ function markTasks(){
     })
         .then(response => response.json())
         .then(data => {
-            for(let i = 0; i < arrOfTaskIds.length; i ++){
+            for (let i = 0; i < arrOfTaskIds.length; i++) {
                 let status = data[arrOfTaskIds[i]];
                 markButtonBasedOnStatus(navigationButtons[i], status);
 
@@ -210,11 +222,10 @@ function markTasks(){
 }
 
 
+showAnswer.addEventListener("click", () => {
+    if (!answerIsShow) {
 
-showAnswer.addEventListener("click", ()=>{
-    if (!answerIsShow){
-
-        if(!warning){
+        if (!warning) {
             let xhr = new XMLHttpRequest();
             xhr.open('GET', `/api/v1/client/task/${currentTaskId}/status`, false); // false означает синхронный запрос
             xhr.setRequestHeader('Content-Type', 'application/json');
@@ -223,11 +234,11 @@ showAnswer.addEventListener("click", ()=>{
                 xhr.send();
                 if (xhr.status === 200) {
                     let data = xhr.responseText;
-                    if(data === "TRIED" || data === "NONE"){
+                    if (data === "TRIED" || data === "NONE") {
                         warning = true;
                         warningComment.classList.remove("display-none");
                         warningComment.classList.add("opacity-1");
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             warningComment.classList.remove("opacity-1");
                             warningComment.classList.add("opacity-0");
                         }, 5000);
@@ -242,7 +253,6 @@ showAnswer.addEventListener("click", ()=>{
         }
 
 
-
         answerIsShow = true;
         fetch(`/api/v1/client/task/${currentTaskId}/answer`, {
             method: 'GET',
@@ -255,7 +265,7 @@ showAnswer.addEventListener("click", ()=>{
                 answer.classList.remove("display-none");
                 answerText.innerText = data.answer;
                 solution.innerText = data.solution;
-                fetch(`/api/v1/client/task/${currentTaskId}/status`,{
+                fetch(`/api/v1/client/task/${currentTaskId}/status`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -274,38 +284,38 @@ showAnswer.addEventListener("click", ()=>{
                 console.error('Ошибка:', error);
             });
         showAnswer.textContent = "Скрыть ответ";
-    }else{
+    } else {
         answerIsShow = false;
         answer.classList.add("display-none");
         showAnswer.textContent = "Показать ответ";
     }
 });
-if (arrowLeft !== null){
-    arrowLeft.addEventListener("mouseover", ()=>{
+if (arrowLeft !== null) {
+    arrowLeft.addEventListener("mouseover", () => {
         container.classList.add("rotate-1-left");
     });
-    arrowLeft.addEventListener("mouseout", ()=>{
+    arrowLeft.addEventListener("mouseout", () => {
         container.classList.remove("rotate-1-left");
     });
 }
-if (arrowRight !== null){
-    arrowRight.addEventListener("mouseover", ()=>{
+if (arrowRight !== null) {
+    arrowRight.addEventListener("mouseover", () => {
         container.classList.add("rotate-1-right");
     });
-    arrowRight.addEventListener("mouseout", ()=>{
+    arrowRight.addEventListener("mouseout", () => {
         container.classList.remove("rotate-1-right");
     });
 }
-arrowRight.addEventListener("click", ()=>{
+arrowRight.addEventListener("click", () => {
     let ordinalNumber = getCurrentTaskOrdinalNumberById(currentTaskId);
     navigationButtons[ordinalNumber].click();
-    navigationButtonsWrapper.scrollLeft = (45 * (ordinalNumber-1));
+    navigationButtonsWrapper.scrollLeft = (45 * (ordinalNumber - 1));
 });
 
-arrowLeft.addEventListener("click", ()=>{
+arrowLeft.addEventListener("click", () => {
     let ordinalNumber = getCurrentTaskOrdinalNumberById(currentTaskId);
     navigationButtons[ordinalNumber - 2].click();
-    navigationButtonsWrapper.scrollLeft = (45 * (ordinalNumber-1));
+    navigationButtonsWrapper.scrollLeft = (45 * (ordinalNumber - 1));
 });
 
 send.addEventListener("click", () => {
@@ -327,15 +337,15 @@ send.addEventListener("click", () => {
             let currentButton = getCurrentButton();
             clearContainer();
             clearButton(currentButton);
-            if(data === "DONE"){
+            if (data === "DONE") {
                 currentButton.classList.add("green-border");
                 container.classList.add("green-border");
-            }else {
+            } else {
                 currentButton.classList.add("yellow-border");
                 container.classList.add("yellow-border");
                 wrongAnswerComment.classList.remove("display-none");
                 wrongAnswerComment.classList.add("opacity-1");
-                setTimeout(()=>{
+                setTimeout(() => {
                     wrongAnswerComment.classList.remove("opacity-1");
                     wrongAnswerComment.classList.add("opacity-0");
                 }, 5000);
@@ -348,11 +358,11 @@ send.addEventListener("click", () => {
 scrollLeft.addEventListener("click", () => {
     navigationButtonsWrapper.scrollLeft -= 200;
 });
-scrollRight.addEventListener("click", function() {
+scrollRight.addEventListener("click", function () {
     navigationButtonsWrapper.scrollLeft += 200;
 });
 
-for (let i = 0; i < navigationButtons.length; i++){
+for (let i = 0; i < navigationButtons.length; i++) {
     navigationButtons[i].addEventListener("click",
         () => {
             currentTaskId = arrOfTaskIds[i];
@@ -360,19 +370,19 @@ for (let i = 0; i < navigationButtons.length; i++){
             taskNum.innerText = currentTaskNum;
             // если это первое по порядку задание то гасим левую стрелку
             // иначе включаем
-            if(currentTaskId === arrOfTaskIds[0]){
+            if (currentTaskId === arrOfTaskIds[0]) {
                 arrowLeft.classList.add("display-none");
-            }else{
+            } else {
                 arrowLeft.classList.remove("display-none");
             }
             // если это последнее по порядку задание то гасим правую стрелку
             // иначе включаем
-            if(currentTaskId === arrOfTaskIds[navigationButtons.length-1]){
+            if (currentTaskId === arrOfTaskIds[navigationButtons.length - 1]) {
                 arrowRight.classList.add("display-none");
-            }else{
+            } else {
                 arrowRight.classList.remove("display-none");
             }
-            if (prevNavigationButton !== undefined){
+            if (prevNavigationButton !== undefined) {
                 prevNavigationButton.classList.remove("navigation-tab-selected");
             }
             navigationButtons[i].classList.add("navigation-tab-selected");
@@ -384,7 +394,7 @@ for (let i = 0; i < navigationButtons.length; i++){
 
 function wheelHandler(event) {
     //если это тачпад ничего не делаем он и так хорошо работает
-    if(event.deltaX !== 0){
+    if (event.deltaX !== 0) {
         return;
     }
     event.preventDefault();
@@ -393,10 +403,13 @@ function wheelHandler(event) {
 
 navigationButtonsWrapper.addEventListener("wheel", wheelHandler);
 
-setTimeout(()=>{navigationButtons[0].click(); markTasks();},500);
-moduleNum.addEventListener("mouseover", ()=>{
+setTimeout(() => {
+    navigationButtons[0].click();
+    markTasks();
+}, 500);
+moduleNum.addEventListener("mouseover", () => {
     document.getElementById("name").innerText = moduleName;
 })
-moduleNum.addEventListener("mouseout", ()=>{
+moduleNum.addEventListener("mouseout", () => {
     document.getElementById("name").innerText = "";
 })
