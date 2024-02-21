@@ -174,3 +174,6 @@ body{
 body{
     user-select: none;
 }
+.left-block{
+    height: 68%!important;
+}

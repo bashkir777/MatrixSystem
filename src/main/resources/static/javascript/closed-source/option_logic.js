@@ -29,6 +29,7 @@ let currentTaskOrder = 1;
 let arrOfNavigationButtons = [];
 let taskNum = document.getElementById("task-num");
 let taskText = document.getElementById("task-text");
+let imageContainer = document.getElementById("image-container");
 
 let showAnswersForFirstPart = false;
 
@@ -110,6 +111,14 @@ function fillPage(){
             button.classList.add("navigation-tab-selected");
             taskNum.innerText = num;
             taskText.innerText = taskObj.task;
+
+            imageContainer.classList.add("display-none");
+            if(taskObj.img !== null){
+                let imgSrc = taskObj.img.replace(/\\/g, '/');
+                imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
+                imageContainer.classList.remove("display-none");
+            }
+
             if(taskObj.module.verifiable){
                 input.value = listTasksToSubmit[currentTaskOrder-1].answer;
                 inputWrap.classList.remove("display-none");
