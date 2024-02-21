@@ -183,6 +183,17 @@ add.addEventListener("click", () => {
                     text.innerText = task.task;
                     taskProxy.appendChild(text);
 
+                    if(task.img !== null){
+                        let taskImg = document.createElement('img');
+                        let wrapper = document.createElement('div');
+                        wrapper.classList.add("text-align-center");
+                        let imgSrc = task.img.replace(/\\/g, '/');
+                        taskImg.src = location.protocol + "//" + location.host + "/" + imgSrc;
+                        taskImg.classList.add("styles-for-proxy-img");
+                        wrapper.appendChild(taskImg);
+                        taskProxy.appendChild(wrapper);
+                    }
+
                     let div = document.createElement('div');
                     div.classList.add("text-align-right");
                     let deleteButton = document.createElement('div');
