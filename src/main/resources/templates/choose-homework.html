@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Найти домашнюю работу по номеру</title>
+    <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/choose-homework-styles.css">
+    <script src="/javascript/closed-source/choose_homework_logic.js" defer></script>
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+<div id="tutor-option-panel" class="tutor-option-panel">
+    <div id="label">
+        Домашняя работа от преподавателя
+    </div>
+    <br>
+    <div class="input-wrapper">
+        <input id="input-option" type="text">
+        <div id="find">
+            Найти
+        </div>
+    </div>
+
+    <div class="interaction-wrapper">
+        <table class="numpad">
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td colspan="2">Стереть</td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+<div class="display-none" id="comment-wrapper">
+    <div class="comment-block">
+        <p class="comment-text">Не удалось найти домашнюю работу с таким номером</p>
+    </div>
+</div>
+</body>
+</html>

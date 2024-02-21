@@ -103,10 +103,10 @@ public class MVCController {
         model.addAttribute("role", userInformation.getUserRole().name());
         return "create-homework";
     }
-    @GetMapping("/homework")
+    @GetMapping("/choose-homework")
     @HandleDataActionExceptions
     public String homework(Model model) {
         model.addAttribute("role", userInformation.getUserRole().name());
-        return "homework";
+        return "choose-homework";
     }
 }
