@@ -12,15 +12,13 @@
     border: 2px solid #f5f5f5bf;
     padding: 5px 20px;
     border-radius: 10px;
-    transition: opacity 0.5s, padding-left 0.5s, padding-right 0.5s;
+    transition: opacity 0.3s ease;
 }
 .navigation:hover{
     opacity: 0.8;
-    padding-left: 40px;
-    padding-right: 40px;
 }
 .navigation:active{
-    opacity: 0.8;
+    opacity: 0.6;
 }
 .navigation:visited{
 }

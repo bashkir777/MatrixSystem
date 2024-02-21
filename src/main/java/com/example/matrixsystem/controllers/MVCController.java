@@ -2,6 +2,7 @@ package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.DatabaseManager;
 
+import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.Module;
@@ -66,6 +67,7 @@ public class MVCController {
     }
 
     @GetMapping("/management")
+    @RolesAllowed({"GOD", "TEACHER", "MANAGER"})
     public String addInformation(Model model) {
         model.addAttribute("role", userInformation.getUserRole().name());
         return "management";
@@ -86,7 +88,25 @@ public class MVCController {
     @GetMapping("/create-option")
     @HandleDataActionExceptions
     public String createOption(Model model) {
+        if(userInformation.getUserRole().equals(Roles.STUDENT)){
+            return "redirect:all-tasks";
+        }
         model.addAttribute("role", userInformation.getUserRole().name());
         return "create-option";
+    }
+    @GetMapping("/create-homework")
+    @HandleDataActionExceptions
+    public String createHomework(Model model) {
+        if(userInformation.getUserRole().equals(Roles.STUDENT)){
+            return "redirect:all-tasks";
+        }
+        model.addAttribute("role", userInformation.getUserRole().name());
+        return "create-homework";
+    }
+    @GetMapping("/homework")
+    @HandleDataActionExceptions
+    public String homework(Model model) {
+        model.addAttribute("role", userInformation.getUserRole().name());
+        return "homework";
     }
 }
