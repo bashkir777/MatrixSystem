@@ -44,6 +44,8 @@ body{
     background-color: #262626;
     margin-top: 20px;
     text-align: left;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 20px;
 }
 
 .arrow-left, .arrow-right{
