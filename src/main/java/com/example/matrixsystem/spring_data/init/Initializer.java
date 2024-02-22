@@ -95,5 +95,7 @@ public class Initializer {
         jdbcTemplate.execute("insert into homework_custom_task(homework, custom_task) values (1, 1);");
         jdbcTemplate.execute("insert into homework_custom_task(homework, custom_task) values (1, 2);");
         jdbcTemplate.execute("insert into homework_custom_task(homework, custom_task) values (1, 3);");
+
+        jdbcTemplate.execute("insert into user_custom_task(user_reference, task_reference, relation_type) values (1, 1, 'DONE');");
     }
 }

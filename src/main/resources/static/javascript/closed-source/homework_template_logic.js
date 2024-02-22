@@ -17,6 +17,67 @@ let currentTaskOrder;
 function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }
+
+
+
+function clearButton(button) {
+    button.classList.remove("green-border");
+    button.classList.remove("yellow-border");
+    button.classList.remove("red-border");
+}
+
+function clearContainer() {
+    container.classList.remove("green-border");
+    container.classList.remove("yellow-border");
+    container.classList.remove("red-border");
+}
+
+function clearButtonBorderAndContainer(button, container) {
+    button.classList.remove("green-border");
+    button.classList.remove("yellow-border");
+    button.classList.remove("red-border");
+    container.classList.remove("green-border");
+    container.classList.remove("yellow-border");
+    container.classList.remove("red-border");
+}
+
+function markButtonBasedOnStatus(button, status) {
+    if (status === "DONE") {
+        button.classList.add("green-border");
+    } else if (status === "TRIED") {
+        button.classList.add("yellow-border");
+    } else if (status === "FAILED") {
+        button.classList.add("red-border");
+    } else {
+        clearButton(button);
+    }
+}
+
+function markContainerBasedOnStatus(status) {
+    clearContainer();
+    if (status === "DONE") {
+        container.classList.add("green-border");
+    } else if (status === "TRIED") {
+        container.classList.add("yellow-border");
+    } else if (status === "FAILED") {
+        container.classList.add("red-border");
+    } else {
+        clearContainer();
+    }
+}
+
+function displayInputAndSubmitElementsBasedOnStatus(status) {
+    if (status === "DONE" || status === "FAILED") {
+        inputAnswer.classList.add("display-none");
+        send.classList.add("display-none");
+    } else {
+        inputAnswer.classList.remove("display-none");
+        send.classList.remove("display-none");
+    }
+}
+
+
+
 fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
     method: 'GET',
     headers: {
@@ -55,7 +116,13 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                     imageContainer.classList.remove("display-none");
                 }
 
-            })
+            });
+
+        }
+        for (let i =0; i<navigationButtons.length; i++){
+            let button = navigationButtons[i];
+            console.log(button)
+            markButtonBasedOnStatus(button, data[i].status);
         }
         navigationButtons[0].click();
     })
