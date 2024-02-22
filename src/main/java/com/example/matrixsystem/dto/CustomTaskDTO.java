@@ -11,4 +11,5 @@ public class CustomTaskDTO {
     private String answer;
     private String solution;
     private String img;
+    private String status;
 }

@@ -47,6 +47,7 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                 currentTaskId = data[i].id;
                 taskNum.innerText = currentTaskOrder;
                 taskText.innerText = data[i].task;
+                console.log(data[i].status);
                 imageContainer.classList.add("display-none");
                 if (data[i].img !== null) {
                     let imgSrc = data[i].img.replace(/\\/g, '/');
