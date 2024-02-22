@@ -88,6 +88,12 @@ public class Initializer {
         jdbcTemplate.execute("insert into option_task(option, task) values (1, 18);");
         jdbcTemplate.execute("insert into option_task(option, task) values (1, 19);");
 
-
+        jdbcTemplate.execute("insert into custom_task(task, solution, answer) values ('Первое кастомное задание','Развернутое решение', '1');");
+        jdbcTemplate.execute("insert into custom_task(task, solution, answer) values ('Второе кастомное задание','Развернутое решение', '1');");
+        jdbcTemplate.execute("insert into custom_task(task, solution, answer) values ('Третье кастомное задание','Развернутое решение', '1');");
+        jdbcTemplate.execute("insert into homework() values ();");
+        jdbcTemplate.execute("insert into homework_custom_task(homework, custom_task) values (1, 1);");
+        jdbcTemplate.execute("insert into homework_custom_task(homework, custom_task) values (1, 2);");
+        jdbcTemplate.execute("insert into homework_custom_task(homework, custom_task) values (1, 3);");
     }
 }

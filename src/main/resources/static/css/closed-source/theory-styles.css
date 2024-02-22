@@ -217,7 +217,7 @@ tbody, thead, tr, td, th{
     border: 3px solid #f5f5f5bf;
     position: fixed;
     background-color: black;
-    z-index: 101;
+    z-index: 205;
     border-radius: 10%;
     width: 30%;
     height: 60%;

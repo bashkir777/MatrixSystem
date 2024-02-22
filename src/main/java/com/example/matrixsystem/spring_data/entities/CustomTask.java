@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -41,5 +43,5 @@ public class CustomTask {
     private Set<UserCustomTask> userCustomTasks = new HashSet<>();
 
     @OneToMany(mappedBy = "customTask", fetch = FetchType.EAGER)
-    private Set<HomeworkCustomTask> homeworkCustomTasks = new HashSet<>();
+    private List<HomeworkCustomTask> homeworkCustomTasks = new ArrayList<>();
 }

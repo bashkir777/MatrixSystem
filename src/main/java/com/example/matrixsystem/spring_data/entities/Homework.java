@@ -6,7 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,5 +26,5 @@ public class Homework {
     private Integer creator;
 
     @OneToMany(mappedBy = "homework", fetch = FetchType.EAGER)
-    private Set<HomeworkCustomTask> homeworkCustomTasks = new HashSet<>();
+    private List<HomeworkCustomTask> homeworkCustomTasks = new ArrayList<>();
 }

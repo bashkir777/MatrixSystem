@@ -2,11 +2,14 @@ package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.CommonDatabaseManager;
 
+import com.example.matrixsystem.beans.CustomDatabaseManager;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
+import com.example.matrixsystem.spring_data.entities.Homework;
 import com.example.matrixsystem.spring_data.entities.Module;
 import com.example.matrixsystem.spring_data.entities.enums.Roles;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchHomeworkException;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchModuleInDB;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +26,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class MVCController {
 
     private final CommonDatabaseManager manager;
+    private final CustomDatabaseManager customDatabaseManager;
     private final UserInformation userInformation;
     @Autowired
-    public MVCController(CommonDatabaseManager manager, UserInformation userInformation) {
+    public MVCController(CommonDatabaseManager manager, UserInformation userInformation
+            , CustomDatabaseManager customDatabaseManager) {
         this.manager = manager;
         this.userInformation = userInformation;
+        this.customDatabaseManager = customDatabaseManager;
     }
 
     @GetMapping("/all-tasks")
@@ -108,5 +114,15 @@ public class MVCController {
     public String homework(Model model) {
         model.addAttribute("role", userInformation.getUserRole().name());
         return "choose-homework";
+    }
+    @GetMapping("/homework/{id}")
+    @HandleDataActionExceptions
+    public String homework(Model model, @PathVariable Integer id) throws NoSuchHomeworkException {
+        model.addAttribute("role", userInformation.getUserRole().name());
+        Homework homework = customDatabaseManager.getHomeworkById(id);
+        model.addAttribute("homeworkCapacity", customDatabaseManager
+                .getAllCustomTasksOfHomework(homework).size());
+
+        return "homework";
     }
 }
