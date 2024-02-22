@@ -2,12 +2,15 @@ package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.CustomDatabaseManager;
 import com.example.matrixsystem.dto.CustomTaskDTO;
+import com.example.matrixsystem.dto.SubmitCustomTaskDTO;
 import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
+import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.CustomTask;
 import com.example.matrixsystem.spring_data.entities.UserCustomTask;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchCustomTaskException;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchHomeworkException;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,22 +45,61 @@ public class CustomManagementController {
     public List<CustomTaskDTO> getHomework(@PathVariable Integer id) throws NoSuchHomeworkException, NoSuchUserInDB {
         List<CustomTaskDTO> customTaskDTOS = new ArrayList<>();
         List<CustomTask> customTaskList = manager.getAllCustomTasksOfHomework(manager.getHomeworkById(id));
-        List<UserCustomTask> userCustomTasks = manager.getUserCustomTaskListOfCurrentUser();
         customTaskList.forEach(t->
-
-        {
-            CustomTaskDTO.CustomTaskDTOBuilder builder = CustomTaskDTO.builder().task(t.getTask())
-                    .solution(t.getSolution()).answer(t.getAnswer())
-                    .img(t.getImg()).id(t.getId());
-            builder.status(UserTaskRelationTypes.NONE.name());
-            for(UserCustomTask userCustomTask : userCustomTasks){
-                if(t.equals(userCustomTask.getTaskReference())){
-                    builder.status(userCustomTask.getRelationType().name());
-                }
+            {
+                CustomTaskDTO.CustomTaskDTOBuilder builder = CustomTaskDTO.builder().task(t.getTask())
+                        .solution(t.getSolution()).answer(t.getAnswer())
+                        .img(t.getImg()).id(t.getId()).verifiable(t.getVerifiable());
+                customTaskDTOS.add(builder.build());
             }
-            customTaskDTOS.add(builder.build());
-        }
         );
         return customTaskDTOS;
+    }
+    @PostMapping("/submit/custom-task")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> submitTask(@RequestBody SubmitCustomTaskDTO submitCustomTaskDTO)
+            throws NoSuchCustomTaskException, NoSuchUserInDB {
+        UserTaskRelationTypes answer;
+
+        for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
+            if(userCustomTask.getTaskReference()
+                    .equals(manager.getCustomTaskById(submitCustomTaskDTO.getId()))){
+                if(userCustomTask.getRelationType().equals(UserTaskRelationTypes.DONE)){
+                    return ResponseEntity.status(HttpStatus.OK).body("Вы уже сделали это задание");
+                }else{
+                    manager.deleteUserCustomTask(userCustomTask);
+                }
+            }
+        }
+
+        CustomTask customTask = manager.getCustomTaskById(submitCustomTaskDTO.getId());
+
+        if(!customTask.getVerifiable()){
+            manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.DONE);
+            answer = UserTaskRelationTypes.DONE;
+        }
+
+        if(customTask.getAnswer().equals(submitCustomTaskDTO.getAnswer())){
+            manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.DONE);
+            answer = UserTaskRelationTypes.DONE;
+        }else{
+            manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.TRIED);
+            answer = UserTaskRelationTypes.TRIED;
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(answer.name());
+    }
+    @GetMapping("custom-task/status/{id}")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> getCustomTaskStatus(@PathVariable Integer id) throws NoSuchCustomTaskException, NoSuchUserInDB {
+        for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
+            if(userCustomTask.getTaskReference()
+                    .equals(manager.getCustomTaskById(id))){
+
+                return ResponseEntity.status(HttpStatus.OK).body(userCustomTask.getRelationType().name());
+
+            }
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(UserTaskRelationTypes.NONE.name());
     }
 }

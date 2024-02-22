@@ -30,7 +30,7 @@ public class CustomTask {
     @Column(name = "answer", length = Integer.MAX_VALUE)
     private String answer;
 
-    @Column(name = "verifiable")
+    @Column(columnDefinition = "boolean DEFAULT true")
     private Boolean verifiable;
 
     @Column(name = "img", length = Integer.MAX_VALUE)

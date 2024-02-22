@@ -12,4 +12,5 @@ public class CustomTaskDTO {
     private String solution;
     private String img;
     private String status;
+    private Boolean verifiable;
 }

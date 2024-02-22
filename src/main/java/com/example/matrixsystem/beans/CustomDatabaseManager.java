@@ -2,6 +2,8 @@ package com.example.matrixsystem.beans;
 
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.*;
+import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
+import com.example.matrixsystem.spring_data.exceptions.NoSuchCustomTaskException;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchHomeworkException;
 import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
 import com.example.matrixsystem.spring_data.interfaces.CustomTaskRepository;
@@ -9,6 +11,7 @@ import com.example.matrixsystem.spring_data.interfaces.HomeworkCustomTaskReposit
 import com.example.matrixsystem.spring_data.interfaces.HomeworkRepository;
 import com.example.matrixsystem.spring_data.interfaces.UserCustomTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -57,5 +60,23 @@ public class CustomDatabaseManager {
             throw new NoSuchHomeworkException();
         }
     }
+    public CustomTask getCustomTaskById(Integer id) throws NoSuchCustomTaskException{
+        try{
+            return customTaskRepository.getReferenceById(id);
+        }catch (Exception e){
+            throw new NoSuchCustomTaskException();
+        }
+    }
 
+    public void addUserCustomTaskRelation(CustomTask customTask, UserTaskRelationTypes relation) throws NoSuchUserInDB {
+
+        userCustomTaskRepository.save(UserCustomTask.builder()
+                .userReference(userInformation.getUser())
+                .relationType(relation).taskReference(customTask).build());
+
+    }
+
+    public void deleteUserCustomTask(UserCustomTask userCustomTask){
+        userCustomTaskRepository.delete(userCustomTask);
+    }
 }

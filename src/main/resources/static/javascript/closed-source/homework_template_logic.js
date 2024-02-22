@@ -12,6 +12,7 @@ let imageContainer = document.getElementById("image-container");
 let taskText = document.getElementById("task-text");
 let answerText = document.getElementById("_answer");
 let send = document.getElementById("send");
+let inputAnswer = document.getElementById("answer-input");
 let currentTaskId;
 let currentTaskOrder;
 function getModuleNumFromUrl() {
@@ -24,6 +25,7 @@ function clearButton(button) {
     button.classList.remove("green-border");
     button.classList.remove("yellow-border");
     button.classList.remove("red-border");
+    button.classList.remove("navigation-tab-selected");
 }
 
 function clearContainer() {
@@ -108,14 +110,37 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                 currentTaskId = data[i].id;
                 taskNum.innerText = currentTaskOrder;
                 taskText.innerText = data[i].task;
-                console.log(data[i].status);
                 imageContainer.classList.add("display-none");
+                inputAnswer.value="";
                 if (data[i].img !== null) {
                     let imgSrc = data[i].img.replace(/\\/g, '/');
                     imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
                     imageContainer.classList.remove("display-none");
                 }
-
+                fetch(`/api/v1/management/custom-task/status/${data[i].id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => response.text())
+                    .then(status => {
+                        clearContainer()
+                        clearButton(navigationButtons[currentTaskOrder-1])
+                        markButtonBasedOnStatus(navigationButtons[currentTaskOrder-1], status);
+                        navigationButtons[currentTaskOrder-1].classList.add("navigation-tab-selected")
+                        markContainerBasedOnStatus(status);
+                        if(status === "DONE" || status === "FAILED" ){
+                            inputAnswer.classList.add("display-none");
+                            send.classList.add("display-none");
+                        }else{
+                            inputAnswer.classList.remove("display-none");
+                            send.classList.remove("display-none");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Ошибка:', error);
+                    });
             });
 
         }
@@ -130,6 +155,40 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
     console.error('Ошибка:', error);
 });
 
+send.addEventListener("click", ()=>{
+    fetch(`/api/v1/management/submit/custom-task`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+            {
+                id: currentTaskId,
+                answer: inputAnswer.value
+            }
+        )
+    })
+        .then(response => response.text())
+        .then(data => {
+            if(data==="DONE"){
+                inputAnswer.classList.add("display-none");
+                send.classList.add("display-none");
+            }
+            for( let task of homework){
+                if(task.id === currentTaskId){
+                    task.status = data;
+                }
+            }
+            clearContainer()
+            clearButton(navigationButtons[currentTaskOrder-1])
+            markButtonBasedOnStatus(navigationButtons[currentTaskOrder-1], data);
+            navigationButtons[currentTaskOrder-1].classList.add("navigation-tab-selected")
+            markContainerBasedOnStatus(data);
+        })
+        .catch((error) => {
+            console.error('Ошибка:', error);
+        });
+});
 
 
 if (arrowLeft !== null){
