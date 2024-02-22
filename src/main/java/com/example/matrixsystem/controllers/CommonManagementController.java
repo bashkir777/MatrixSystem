@@ -28,12 +28,12 @@ import java.util.UUID;
 // добавление студентов, учителей, заданий и тп.
 @RestController
 @RequestMapping("/api/v1/management")
-public class ManagementController {
+public class CommonManagementController {
     private final CommonDatabaseManager manager;
     private final UserInformation userInformation;
 
     @Autowired
-    public ManagementController(CommonDatabaseManager manager, UserInformation userInformation) {
+    public CommonManagementController(CommonDatabaseManager manager, UserInformation userInformation) {
         this.manager = manager;
         this.userInformation = userInformation;
     }
@@ -104,14 +104,7 @@ public class ManagementController {
         }
 
     }
-    @PostMapping("/add/task/custom-task")
-    @RolesAllowed({"GOD", "TEACHER"})
-    public ResponseEntity<String> addNewCustomTask(@RequestBody TaskForAddingDTO taskForAddingDTO) {
 
-        // !!!здесь будет логика для добавления кастомного задания
-
-        return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
-    }
     @PostMapping("/add/option")
     @RolesAllowed({"GOD", "TEACHER"})
     @HandleDataActionExceptions
