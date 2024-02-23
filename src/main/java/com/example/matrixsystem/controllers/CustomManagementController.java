@@ -3,6 +3,7 @@ package com.example.matrixsystem.controllers;
 import com.example.matrixsystem.beans.CustomDatabaseManager;
 import com.example.matrixsystem.dto.CustomTaskDTO;
 import com.example.matrixsystem.dto.SubmitCustomTaskDTO;
+import com.example.matrixsystem.dto.TaskAnswerDTO;
 import com.example.matrixsystem.dto.TaskForAddingDTO;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
@@ -101,5 +102,28 @@ public class CustomManagementController {
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(UserTaskRelationTypes.NONE.name());
+    }
+
+    @GetMapping("custom-task/{id}/answer")
+    @HandleDataActionExceptions
+    public ResponseEntity<TaskAnswerDTO> getCustomTaskAnswer(@PathVariable Integer id) throws NoSuchCustomTaskException,
+            NoSuchUserInDB {
+        CustomTask task = manager.getCustomTaskById(id);
+
+        for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
+            if(userCustomTask.getTaskReference()
+                    .equals(manager.getCustomTaskById(id))){
+                if(userCustomTask.getRelationType().equals(UserTaskRelationTypes.DONE)){
+                    return ResponseEntity.status(HttpStatus.OK).body(TaskAnswerDTO.builder()
+                            .answer(task.getAnswer()).solution(task.getSolution()).build());
+                }else{
+                    manager.deleteUserCustomTask(userCustomTask);
+                }
+            }
+        }
+        manager.addUserCustomTaskRelation(task, UserTaskRelationTypes.FAILED);
+        return ResponseEntity.status(HttpStatus.OK).body(TaskAnswerDTO.builder()
+                .answer(task.getAnswer()).solution(task.getSolution()).build());
+
     }
 }

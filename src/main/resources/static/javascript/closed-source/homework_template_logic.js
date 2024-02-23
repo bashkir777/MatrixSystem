@@ -1,10 +1,14 @@
 let homework;
 let navigationButtons = document.getElementsByClassName("navigation-button");
+let warningComment = document.getElementById("warning_comment");
+let showAnswer = document.getElementById("show_answer");
+let answer = document.getElementById("answer");
 let container = document.getElementById("container");
 let arrowLeft = document.getElementById("arrow_left");
 let arrowRight = document.getElementById("arrow_right");
 let scrollLeft = document.getElementById("scroll_left");
 let scrollRight = document.getElementById("scroll_right");
+let wrongAnswerComment = document.getElementById("wrong_answer_comment");
 let navigationButtonsWrapper = document.getElementById("navigation_buttons_wrapper");
 let taskNum = document.getElementById("task-num");
 let solution = document.getElementById("full-answer");
@@ -15,6 +19,10 @@ let send = document.getElementById("send");
 let inputAnswer = document.getElementById("answer-input");
 let currentTaskId;
 let currentTaskOrder;
+
+let answerIsShow = false;
+let warning = false;
+
 function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }
@@ -92,6 +100,7 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
         for (let i =0; i<navigationButtons.length; i++){
             let button = navigationButtons[i];
             button.addEventListener("click", ()=>{
+                if(answerIsShow) showAnswer.click();
                 currentTaskOrder = i+1;
                 if (currentTaskOrder === 1) {
                     arrowLeft.classList.add("display-none");
@@ -154,7 +163,7 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
     .catch((error) => {
     console.error('Ошибка:', error);
 });
-
+let wrongCommentShow = false;
 send.addEventListener("click", ()=>{
     fetch(`/api/v1/management/submit/custom-task`, {
         method: 'POST',
@@ -173,6 +182,17 @@ send.addEventListener("click", ()=>{
             if(data==="DONE"){
                 inputAnswer.classList.add("display-none");
                 send.classList.add("display-none");
+            }
+
+            if(data === "TRIED"){
+                if(!wrongCommentShow){
+                    wrongCommentShow = true;
+                    wrongAnswerComment.classList.remove("display-none");
+                    setTimeout(()=>{
+                        wrongAnswerComment.classList.add("display-none");
+                        wrongCommentShow = false;
+                    }, 3000);
+                }
             }
             for( let task of homework){
                 if(task.id === currentTaskId){
@@ -224,3 +244,76 @@ scrollLeft.addEventListener("click", () => {
 scrollRight.addEventListener("click", function() {
     navigationButtonsWrapper.scrollLeft += 200;
 });
+
+
+showAnswer.addEventListener("click", () => {
+    if (!answerIsShow) {
+        if (!warning) {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', `/api/v1/management/custom-task/status/${currentTaskId}`, false); // false означает синхронный запрос
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            try {
+                xhr.send();
+                if (xhr.status === 200) {
+                    let data = xhr.responseText;
+                    if (data === "TRIED" || data === "NONE") {
+                        warning = true;
+                        warningComment.classList.remove("display-none");
+                        warningComment.classList.add("opacity-1");
+                        setTimeout(() => {
+                            warningComment.classList.remove("opacity-1");
+                            warningComment.classList.add("opacity-0");
+                        }, 5000);
+                        return;
+                    }
+                } else {
+                    console.error('Ошибка:', xhr.status);
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        }
+        answerIsShow = true;
+        fetch(`/api/v1/management/custom-task/${currentTaskId}/answer`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                answer.classList.remove("display-none");
+                answerText.innerText = data.answer;
+                solution.innerText = data.solution;
+                fetch(`/api/v1/management/custom-task/status/${currentTaskId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => response.text())
+                    .then(data => {
+                        clearContainer()
+                        clearButton(navigationButtons[currentTaskOrder-1])
+                        markButtonBasedOnStatus(navigationButtons[currentTaskOrder-1], data);
+                        navigationButtons[currentTaskOrder-1].classList.add("navigation-tab-selected")
+                        markContainerBasedOnStatus(data);
+                        if(data === "FAILED"){
+                            inputAnswer.classList.add("display-none");
+                            send.classList.add("display-none");
+                        }
+
+                    }).catch((error) => {
+                    console.error('Ошибка:', error);
+                });
+            })
+            .catch((error) => {
+                console.error('Ошибка:', error);
+            });
+        showAnswer.textContent = "Скрыть ответ";
+    } else {
+        answerIsShow = false;
+        answer.classList.add("display-none");
+        showAnswer.textContent = "Показать ответ";
+    }
+});
+
