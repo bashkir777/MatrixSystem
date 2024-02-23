@@ -6,18 +6,25 @@ import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.CustomTask;
+import com.example.matrixsystem.spring_data.entities.Module;
+import com.example.matrixsystem.spring_data.entities.Task;
 import com.example.matrixsystem.spring_data.entities.UserCustomTask;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchCustomTaskException;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchHomeworkException;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
+import com.example.matrixsystem.spring_data.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/management")
@@ -100,7 +107,8 @@ public class CustomManagementController {
     }
     @GetMapping("custom-task/status/{id}")
     @HandleDataActionExceptions
-    public ResponseEntity<String> getCustomTaskStatus(@PathVariable Integer id) throws NoSuchCustomTaskException, NoSuchUserInDB {
+    public ResponseEntity<String> getCustomTaskStatus(@PathVariable Integer id) throws NoSuchCustomTaskException
+            , NoSuchUserInDB {
         for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
             if(userCustomTask.getTaskReference()
                     .equals(manager.getCustomTaskById(id))){
@@ -134,4 +142,50 @@ public class CustomManagementController {
                 .answer(task.getAnswer()).solution(task.getSolution()).build());
 
     }
+    @GetMapping("custom-task/{id}")
+    @HandleDataActionExceptions
+    public ResponseEntity<CustomTaskDTO> getCustomTask(@PathVariable Integer id) throws NoSuchCustomTaskException,
+            NoSuchUserInDB {
+        CustomTask task = manager.getCustomTaskById(id);
+
+        manager.addUserCustomTaskRelation(task, UserTaskRelationTypes.FAILED);
+        return ResponseEntity.status(HttpStatus.OK).body(CustomTaskDTO.builder()
+                .answer(task.getAnswer()).solution(task.getSolution()).task(task.getTask())
+                .verifiable(task.getVerifiable()).img(task.getImg()).build());
+    }
+
+    @PostMapping("/add/task/custom-pull")
+    @RolesAllowed({"GOD", "TEACHER"})
+    @HandleDataActionExceptions
+    public ResponseEntity<Integer> addNewTaskToTheCustomPull(@RequestParam("task") String task,
+                                                            @RequestParam(value = "answer", required = false) String answer,
+                                                            @RequestParam("verifiable") Boolean verifiable,
+                                                            @RequestParam(value = "solution", required = false) String solution,
+                                                            @RequestPart(value = "image", required = false) MultipartFile image)
+            throws IOException, ErrorCreatingCustomTask {
+        CustomTask.CustomTaskBuilder builder = CustomTask.builder();
+        if(verifiable != null){
+            builder.verifiable(verifiable);
+        }
+        if (image != null) {
+            String fileName = UUID.randomUUID() + "." + Objects.requireNonNull(image.getContentType()).split("/")[1];
+            String uploadDir = "db/images/";
+            Path filePath = Paths.get(uploadDir, fileName);
+            Files.write(filePath, image.getBytes());
+            builder.img(filePath.toString());
+        }
+        if(solution != null){
+            builder.solution(solution);
+        }
+
+        CustomTask taskObj = builder.task(task)
+                .answer(answer).build();
+
+
+        manager.addCustomTask(taskObj);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(taskObj.getId());
+    }
+
+
 }

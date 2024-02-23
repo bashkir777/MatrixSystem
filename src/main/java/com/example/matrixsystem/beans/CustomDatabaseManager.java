@@ -1,11 +1,10 @@
 package com.example.matrixsystem.beans;
 
+import com.example.matrixsystem.dto.AddCustomTaskDTO;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.entities.*;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchCustomTaskException;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchHomeworkException;
-import com.example.matrixsystem.spring_data.exceptions.NoSuchUserInDB;
+import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.spring_data.interfaces.CustomTaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.HomeworkCustomTaskRepository;
 import com.example.matrixsystem.spring_data.interfaces.HomeworkRepository;
@@ -78,5 +77,12 @@ public class CustomDatabaseManager {
 
     public void deleteUserCustomTask(UserCustomTask userCustomTask){
         userCustomTaskRepository.delete(userCustomTask);
+    }
+    public void addCustomTask(CustomTask task) throws ErrorCreatingCustomTask {
+        try {
+            customTaskRepository.save(task);
+        } catch (Exception e) {
+            throw new ErrorCreatingCustomTask();
+        }
     }
 }
