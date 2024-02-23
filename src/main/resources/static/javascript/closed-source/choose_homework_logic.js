@@ -2,6 +2,7 @@ let input = document.getElementById("input-option");
 let find = document.getElementById("find");
 let tdList = document.getElementsByTagName("td");
 let commentWrapper = document.getElementById("comment-wrapper");
+let tutor_panel = document.getElementById("tutor-option-panel");
 
 for (let i = 0; i < 9; i++) {
     tdList[i].addEventListener("click", () => {
@@ -30,11 +31,47 @@ input.addEventListener("input", function (event) {
             setTimeout(() => {
                 tutor_panel.classList.remove("red-border");
                 red_border_showing = false;
-            }, 1000);
+            }, 2000);
         }
+    }else{
+        find.setAttribute("href", `homework/${input.value}`)
     }
 });
 
-find.addEventListener("click", () => {
-    console.log(input.value);
+let commentShow = false;
+find.addEventListener("click", (e) => {
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', `/api/v1/management/homework/info/${input.value}`, false); // false означает синхронный запрос
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    try {
+        xhr.send();
+        if (xhr.status === 200) {
+            let data = JSON.parse(xhr.responseText);
+
+            if(data.task_counter === 0){
+                e.preventDefault();
+                if(!commentShow){
+                    commentShow = true;
+                    commentWrapper.classList.remove("display-none");
+                    setTimeout(()=>{
+                        commentWrapper.classList.add("display-none");
+                        commentShow = false;
+                    }, 3000)
+                }
+                if (!red_border_showing) {
+                    tutor_panel.classList.add("red-border");
+                    setTimeout(() => {
+                        tutor_panel.classList.remove("red-border");
+                        red_border_showing = false;
+                    }, 3000);
+                }
+
+            }
+        } else {
+            console.error('Ошибка:', xhr.status);
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
 });

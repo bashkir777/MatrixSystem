@@ -1,10 +1,7 @@
 package com.example.matrixsystem.controllers;
 
 import com.example.matrixsystem.beans.CustomDatabaseManager;
-import com.example.matrixsystem.dto.CustomTaskDTO;
-import com.example.matrixsystem.dto.SubmitCustomTaskDTO;
-import com.example.matrixsystem.dto.TaskAnswerDTO;
-import com.example.matrixsystem.dto.TaskForAddingDTO;
+import com.example.matrixsystem.dto.*;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
@@ -40,6 +37,17 @@ public class CustomManagementController {
         // !!!здесь будет логика для добавления кастомного задания
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
+    }
+
+    @GetMapping("/homework/info/{id}")
+    public HomeworkInfoDTO getHomeworkInfo(@PathVariable Integer id){
+        HomeworkInfoDTO.HomeworkInfoDTOBuilder builder = HomeworkInfoDTO.builder();
+        try{
+            builder.task_counter(manager.getHomeworkById(id).getHomeworkCustomTasks().size());
+        }catch (Exception e){
+            builder.task_counter(0);
+        }
+        return builder.build();
     }
 
     @GetMapping("/homework/{id}")
