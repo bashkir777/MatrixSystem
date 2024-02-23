@@ -1,10 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Создать домашнюю работу</title>
+    <title>Онлайн школа - MATRIX</title>
+
+    <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/module-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/create-option-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/edit-module-styles.css">
+    <link rel="stylesheet" href="/css/closed-source/create-homework-styles.css">
 </head>
 <body>
+<div th:insert="~{header :: header}"></div>
 
+<div id="smoke" class="smoke display-none"></div>
+<div id="created-label" class="display-none">
+    <div>Домашняя работа успешно создана, ученики могут получить к ней доступ введя номер <span id="option-num"></span></div>
+    <a class="leave" href="/app/all-tasks">Выйти</a>
+</div>
+<div id="failed-to-create-label" class="display-none">
+    <div>Не удалось создать домашнюю работу, попробуйте позже</div>
+    <a class="leave" href="/app/all-tasks">Выйти</a>
+</div>
+
+<div class="app-wrapper">
+    <div class="left-block">
+        <div id="task-form">
+            <textarea  placeholder="Ввведите условие задания" id="task-condition-form"  rows="4" cols="50"></textarea>
+            <br>
+            <textarea placeholder="Введите развернутое решение на задание" id="task-full-answer-form" rows="4" cols="50"></textarea>
+            <br>
+            <input type="text" placeholder="Введите краткий ответ на задание" id="task-answer-form">
+            <br>
+            <div class="add-img-label">Добавьте избражение (если нужно)</div>
+            <label for="task-img-form" class="custom-file-upload">
+                <i class="fa fa-cloud-upload"></i> Загрузить файл
+            </label>
+            <input type="file" placeholder="Прикрепите изображение (если нужно)" accept=".jpg, .jpeg, .png" id="task-img-form"/>
+            <div id="add-task" class="custom-file-upload">Добавить задание</div>
+        </div>
+    </div>
+    <div class="right-block">
+        <div id="scroll-panel" class="scroll-panel">
+
+        </div>
+    </div>
+</div>
 </body>
 </html>

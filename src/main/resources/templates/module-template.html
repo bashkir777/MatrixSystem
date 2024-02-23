@@ -12,7 +12,7 @@
     <script th:src="@{/javascript/closed-source/miro-integration.js}" defer></script>
     <script th:if="${role == 'GOD'}" th:src="@{/javascript/closed-source/edit_module_logic.js}" defer></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/closed-source/miro-integration-styles.css}"/>
-    <link th:if="${role == 'GOD'}" rel="stylesheet" type="text/css" th:href="@{/css/closed-source/add-task-module-styles.css}"/>
+    <link th:if="${role == 'GOD'}" rel="stylesheet" type="text/css" th:href="@{/css/closed-source/edit-module-styles.css}"/>
 </head>
 <body>
 <div th:insert="~{header :: header}"></div>
