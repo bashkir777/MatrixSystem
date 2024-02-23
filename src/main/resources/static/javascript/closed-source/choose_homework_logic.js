@@ -7,14 +7,17 @@ let tutor_panel = document.getElementById("tutor-option-panel");
 for (let i = 0; i < 9; i++) {
     tdList[i].addEventListener("click", () => {
         input.value = input.value + (i + 1);
+        find.setAttribute("href", `homework/${input.value}`)
     });
 }
 tdList[9].addEventListener("click", () => {
     input.value = input.value + "0";
+    find.setAttribute("href", `homework/${input.value}`)
 });
 tdList[10].addEventListener("click", () => {
     if (input.value.length >= 1) {
         input.value = input.value.substring(0, input.value.length - 1);
+        find.setAttribute("href", `homework/${input.value}`)
     }
 });
 
@@ -38,9 +41,29 @@ input.addEventListener("input", function (event) {
     }
 });
 
+const homeworkNotFound = () => {
+    if(!commentShow){
+        commentShow = true;
+        commentWrapper.classList.remove("display-none");
+        setTimeout(()=>{
+            commentWrapper.classList.add("display-none");
+            commentShow = false;
+        }, 3000)
+    }
+    if (!red_border_showing) {
+        tutor_panel.classList.add("red-border");
+        setTimeout(() => {
+            tutor_panel.classList.remove("red-border");
+            red_border_showing = false;
+        }, 3000);
+    }
+}
 let commentShow = false;
 find.addEventListener("click", (e) => {
-
+    if(input.value === ""){
+        e.preventDefault();
+        homeworkNotFound();
+    }
     let xhr = new XMLHttpRequest();
     xhr.open('GET', `/api/v1/management/homework/info/${input.value}`, false); // false означает синхронный запрос
     xhr.setRequestHeader('Content-Type', 'application/json');
@@ -51,22 +74,7 @@ find.addEventListener("click", (e) => {
 
             if(data.task_counter === 0){
                 e.preventDefault();
-                if(!commentShow){
-                    commentShow = true;
-                    commentWrapper.classList.remove("display-none");
-                    setTimeout(()=>{
-                        commentWrapper.classList.add("display-none");
-                        commentShow = false;
-                    }, 3000)
-                }
-                if (!red_border_showing) {
-                    tutor_panel.classList.add("red-border");
-                    setTimeout(() => {
-                        tutor_panel.classList.remove("red-border");
-                        red_border_showing = false;
-                    }, 3000);
-                }
-
+                homeworkNotFound();
             }
         } else {
             console.error('Ошибка:', xhr.status);
