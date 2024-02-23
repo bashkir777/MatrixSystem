@@ -10,6 +10,8 @@ let imgForm = document.getElementById("task-img-form");
 let taskImg = document.getElementById("task-img");
 let createdLabel = document.getElementById("created-label");
 let failedToCreateLabel = document.getElementById("failed-to-create-label");
+let deleteTask = document.getElementById("delete_task");
+let failedToDeleteLabel = document.getElementById("failed_to_delete_comment");
 
 addTask.addEventListener("click", ()=>{
     smoke.classList.remove("display-none");
@@ -60,4 +62,22 @@ addTaskButton.addEventListener("click", ()=>{
                 failedToCreateLabel.classList.remove("display-none");
             }
         });
+});
+let failedToDeleteLabelShowing = false;
+deleteTask.addEventListener("click", ()=>{
+    fetch(`/api/v1/management/delete/task/${currentTaskId}`, {
+        method: 'DELETE'
+    })
+        .then(response => {if(response.status === 204){
+            location.reload()
+    }else{
+            if(!failedToDeleteLabelShowing){
+                failedToDeleteLabelShowing = true;
+                failedToDeleteLabel.classList.remove("display-none");
+                setTimeout(()=>{
+                    failedToDeleteLabel.classList.add("display-none");
+                    failedToDeleteLabelShowing = false;
+                }, 3000)
+            }
+        }});
 });

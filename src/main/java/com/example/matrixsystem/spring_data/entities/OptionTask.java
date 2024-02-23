@@ -18,10 +18,10 @@ public class OptionTask {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "option")
+    @JoinColumn(name = "option_id")
     private Option option;
 
     @ManyToOne
-    @JoinColumn(name = "task")
+    @JoinColumn(name = "task_id")
     private Task task;
 }

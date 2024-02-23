@@ -9,6 +9,7 @@ import com.example.matrixsystem.spring_data.entities.enums.Roles;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import com.example.matrixsystem.spring_data.exceptions.*;
 import com.example.matrixsystem.spring_data.interfaces.*;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
@@ -44,16 +45,17 @@ public class CommonDatabaseManager {
         this.optionTaskRepository = optionTaskRepository;
         this.optionRepository = optionRepository;
     }
-    public List<Integer> getAllModuleTasksIds(Module module){
+
+    public List<Integer> getAllModuleTasksIds(Module module) {
         return taskRepository.getTasksByModule(module).stream().map(Task::getId).toList();
     }
 
-    public HashMap<Integer, Integer> getModuleTaskCounterMap(){
+    public HashMap<Integer, Integer> getModuleTaskCounterMap() {
         HashMap<Integer, Integer> toReturn = new HashMap<>();
 
         List<Module> modules = moduleRepository.findAll();
 
-        for (Module module: modules){
+        for (Module module : modules) {
             toReturn.put(module.getId(), taskRepository.getTasksByModule(module).size());
         }
         return toReturn;
@@ -61,19 +63,21 @@ public class CommonDatabaseManager {
 
     public Task getTaskById(Integer id) throws NoSuchTaskInDB {
         Optional<Task> optional = taskRepository.findById(id);
-        if (optional.isPresent()){
+        if (optional.isPresent()) {
             return optional.get();
-        }else{
+        } else {
             throw new NoSuchTaskInDB();
         }
     }
-    public Integer getModuleCapacity(Module module){
-        return  taskRepository.getTasksByModule(module).size();
+
+    public Integer getModuleCapacity(Module module) {
+        return taskRepository.getTasksByModule(module).size();
     }
+
     public void addTask(Task task) throws ErrorCreatingTaskRecord {
         try {
             taskRepository.save(task);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorCreatingTaskRecord();
         }
     }
@@ -84,21 +88,22 @@ public class CommonDatabaseManager {
         throw new NoSuchModuleInDB();
     }
 
-    public Roles getUserRoleByLogin(String login){
+    public Roles getUserRoleByLogin(String login) {
         return userRepository.findByLogin(login).getRole();
     }
 
-    public Users getUserByLogin(String login) throws NoSuchUserInDB{
+    public Users getUserByLogin(String login) throws NoSuchUserInDB {
         Users user = userRepository.findByLogin(login);
-        if(user == null){
+        if (user == null) {
             throw new NoSuchUserInDB();
         }
         return user;
     }
+
     public void addUser(Users user) throws ErrorCreatingUserRecord {
         try {
             userRepository.save(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorCreatingUserRecord();
         }
     }
@@ -108,38 +113,63 @@ public class CommonDatabaseManager {
             UserTask userTask = UserTask.builder().taskReference(task)
                     .userReference(user).relationType(relationType).build();
             this.userTaskRepository.save(userTask);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorCreatingUserTaskRecord();
         }
     }
 
-    public List<UserTask> getUserTasksByUserReference(Users user) throws NoSuchUserTaskRelation{
-        try{
+    public List<UserTask> getUserTasksByUserReference(Users user) throws NoSuchUserTaskRelation {
+        try {
             return userTaskRepository.getUserTasksByUserReference(user);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NoSuchUserTaskRelation();
         }
     }
 
-    public List<Task> getTasksByModule(Module module) throws NoSuchTaskInDB{
-        try{
+    public List<Task> getTasksByModule(Module module) throws NoSuchTaskInDB {
+        try {
             return taskRepository.getTasksByModule(module);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NoSuchTaskInDB();
         }
     }
 
-    public void deleteUserTask(UserTask userTask) throws ErrorDeletingUserTaskRecord{
-        userTaskRepository.delete(userTask);
+    public void deleteUserTask(UserTask userTask) throws ErrorDeletingUserTaskRecord {
+        try {
+            userTaskRepository.delete(userTask);
+        } catch (Exception e) {
+            throw new ErrorDeletingUserTaskRecord();
+        }
+
+    }
+
+    @Transactional
+    public void deleteTask(Task task) throws ErrorDeletingTask {
+        try {
+
+            List<OptionTask> listOption = optionTaskRepository.getOptionTaskByTask(task);
+
+            if(listOption.size() != 0){
+                Option optionLink = listOption.get(0).getOption();
+                optionTaskRepository.deleteAllByOption(optionLink);
+                optionRepository.delete(optionLink);
+            }
+            userTaskRepository.deleteAllByTaskReference(task);
+            taskRepository.delete(task);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ErrorDeletingTask();
+        }
     }
 
     public UserTask getCurrentUserTaskByTask(Task task) throws NoSuchUserInDB, NoSuchUserTaskRelation {
         List<UserTask> userTaskList = getUserTasksByUserReference(userInformation.getUser());
 
-        for(UserTask userTask: userTaskList){
+        for (UserTask userTask : userTaskList) {
             Integer taskIdOfPair = userTask.getTaskReference().getId();
 
-            if(taskIdOfPair.equals(task.getId())){
+            if (taskIdOfPair.equals(task.getId())) {
                 return userTask;
             }
         }
@@ -150,15 +180,16 @@ public class CommonDatabaseManager {
     public UserTaskRelationTypes getUserTaskRelationByTask(Task task) throws NoSuchUserInDB, NoSuchUserTaskRelation {
         List<UserTask> userTaskList = getUserTasksByUserReference(userInformation.getUser());
 
-        for(UserTask userTask: userTaskList){
+        for (UserTask userTask : userTaskList) {
             Integer taskIdOfPair = userTask.getTaskReference().getId();
 
-            if(taskIdOfPair.equals(task.getId())){
+            if (taskIdOfPair.equals(task.getId())) {
                 return userTask.getRelationType();
             }
         }
         return UserTaskRelationTypes.NONE;
     }
+
     // удаляет связь user-task текущего пользователя с переданным в параметре заданием
     public void deleteUserTaskRelationOfCurrentUserByTask(Task task) throws NoSuchUserTaskRelation
             , NoSuchUserInDB, ErrorDeletingUserTaskRecord {
@@ -169,12 +200,12 @@ public class CommonDatabaseManager {
         List<Task> tasks = taskRepository.getTasksByModule(module);
 
         int counter = 0;
-        for(Task task: tasks){
-            try{
-                if(getUserTaskRelationByTask(task).equals(UserTaskRelationTypes.DONE)){
-                    counter ++;
+        for (Task task : tasks) {
+            try {
+                if (getUserTaskRelationByTask(task).equals(UserTaskRelationTypes.DONE)) {
+                    counter++;
                 }
-            }catch (NoSuchUserTaskRelation ignored){
+            } catch (NoSuchUserTaskRelation ignored) {
             }
         }
         return counter;
@@ -183,13 +214,13 @@ public class CommonDatabaseManager {
     public HashMap<Integer, Integer> getDoneMap() throws NoSuchUserInDB {
         List<Module> listModules = moduleRepository.findAll();
         HashMap<Integer, Integer> doneMap = new HashMap<>();
-        for(Module module: listModules){
+        for (Module module : listModules) {
             doneMap.put(module.getId(), counterOfDoneCurrentUserTaskRelationsDone(module));
         }
         return doneMap;
     }
 
-    public HashMap<Integer, String> getModuleNameMap(){
+    public HashMap<Integer, String> getModuleNameMap() {
         HashMap<Integer, String> moduleNameMap = new HashMap<>();
         moduleRepository.findAll().forEach((module) -> {
             moduleNameMap.put(module.getId(), module.getName());
@@ -197,13 +228,13 @@ public class CommonDatabaseManager {
         return moduleNameMap;
     }
 
-    public List<Module> getAllModules(){
+    public List<Module> getAllModules() {
         return moduleRepository.findAll();
     }
 
-    public List<TaskForOptionsDTO> generateOption(){
+    public List<TaskForOptionsDTO> generateOption() {
         List<TaskForOptionsDTO> toReturn = new ArrayList<>();
-        for(Module module: moduleRepository.findAll()){
+        for (Module module : moduleRepository.findAll()) {
             List<Task> list = taskRepository.getTasksByModule(module);
             Random random = new Random();
             int randomIndex = random.nextInt(list.size());
@@ -219,17 +250,18 @@ public class CommonDatabaseManager {
         }
         return toReturn;
     }
-    public Option getOptionById(Integer id) throws NoSuchOptionException{
-        try{
+
+    public Option getOptionById(Integer id) throws NoSuchOptionException {
+        try {
             return optionRepository.getOptionById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NoSuchOptionException();
         }
     }
 
-    public List<TaskForOptionsDTO> getOption(Option option){
+    public List<TaskForOptionsDTO> getOption(Option option) {
         List<TaskForOptionsDTO> toReturn = new ArrayList<>();
-        for(OptionTask optionTask: optionTaskRepository.getOptionTaskByOption(option)){
+        for (OptionTask optionTask : optionTaskRepository.getOptionTaskByOption(option)) {
             Task task = optionTask.getTask();
             TaskForOptionsDTO taskDTO = TaskForOptionsDTO.builder().id(task.getId())
                     .module(ModuleDTO.builder().id(task.getModule().getId())
@@ -241,25 +273,26 @@ public class CommonDatabaseManager {
         return toReturn;
     }
 
-    public void addSection(Section section) throws ErrorCreatingSection{
-        try{
+    public void addSection(Section section) throws ErrorCreatingSection {
+        try {
             sectionRepository.save(section);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorCreatingSection();
         }
     }
-    public void deleteSection(Section section) throws ErrorDeletingSection{
-        try{
+
+    public void deleteSection(Section section) throws ErrorDeletingSection {
+        try {
             sectionRepository.delete(section);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorDeletingSection();
         }
     }
 
-    public Section getSectionById(Integer id) throws NoSuchSectionException{
-        try{
+    public Section getSectionById(Integer id) throws NoSuchSectionException {
+        try {
             return sectionRepository.getSectionsById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NoSuchSectionException();
         }
     }
@@ -268,43 +301,47 @@ public class CommonDatabaseManager {
         List<Section> toReturn = new ArrayList<>();
         List<UserSection> userSectionsRecords =
                 userSectionRepository.getUserSectionByUser(userInformation.getUser());
-        for(UserSection userSection: userSectionsRecords){
+        for (UserSection userSection : userSectionsRecords) {
             toReturn.add(userSection.getSection());
         }
         return toReturn;
     }
-    public void addUserSection(UserSection userSection) throws ErrorCreatingUserSectionRecord{
-        try{
+
+    public void addUserSection(UserSection userSection) throws ErrorCreatingUserSectionRecord {
+        try {
             userSectionRepository.save(userSection);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorCreatingUserSectionRecord();
         }
     }
-    public void deleteUserSection(UserSection userSection) throws ErrorDeletingUserSection{
-        try{
+
+    public void deleteUserSection(UserSection userSection) throws ErrorDeletingUserSection {
+        try {
             userSectionRepository.delete(userSection);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorDeletingUserSection();
         }
     }
 
-    public UserSection getUserSectionOfCurrentUserBySection(Section section) throws NoSuchUserSectionRecord{
-        try{
+    public UserSection getUserSectionOfCurrentUserBySection(Section section) throws NoSuchUserSectionRecord {
+        try {
             return userSectionRepository.getUserSectionBySectionAndUser(section, userInformation.getUser());
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new NoSuchUserSectionRecord();
         }
 
     }
+
     public void addOption(Option option) throws ErrorCreatingOption {
-        try{
+        try {
             optionRepository.save(option);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new ErrorCreatingOption();
         }
 
     }
-    public void addTaskToOption(Option option, Task task){
+
+    public void addTaskToOption(Option option, Task task) {
         optionTaskRepository.save(OptionTask.builder()
                 .option(option).task(task).build());
     }

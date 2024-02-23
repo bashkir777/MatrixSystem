@@ -50,7 +50,7 @@ public class CommonManagementController {
         Task.TaskBuilder builder = Task.builder();
         if (image != null) {
             String fileName = UUID.randomUUID() + "." + Objects.requireNonNull(image.getContentType()).split("/")[1];
-            String uploadDir = "db/images/math/";
+            String uploadDir = "db/images/";
             Path filePath = Paths.get(uploadDir, fileName);
             Files.write(filePath, image.getBytes());
             builder.img(filePath.toString());
@@ -176,5 +176,13 @@ public class CommonManagementController {
             , ErrorDeletingSection {
         manager.deleteSection(manager.getSectionById(id));
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Секция успешно удалена");
+    }
+    @DeleteMapping("/delete/task/{id}")
+    @RolesAllowed("GOD")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> deleteTaskById(@PathVariable Integer id) throws
+            NoSuchTaskInDB, ErrorDeletingTask {
+        manager.deleteTask(manager.getTaskById(id));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("задание успешно удалено");
     }
 }

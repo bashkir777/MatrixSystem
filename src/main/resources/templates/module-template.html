@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/particles-styles.css}"/>
     <link rel="stylesheet" href="/css/closed-source/module-styles.css">
     <script th:src="@{/javascript/closed-source/miro-integration.js}" defer></script>
-    <script th:if="${role == 'GOD'}" th:src="@{/javascript/closed-source/add_task_to_module_logic.js}" defer></script>
+    <script th:if="${role == 'GOD'}" th:src="@{/javascript/closed-source/edit_module_logic.js}" defer></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/closed-source/miro-integration-styles.css}"/>
     <link th:if="${role == 'GOD'}" rel="stylesheet" type="text/css" th:href="@{/css/closed-source/add-task-module-styles.css}"/>
 </head>
@@ -93,6 +93,12 @@
         </div>
 
         <div id="container" class="task-container">
+            <span th:if="${role == 'GOD'}" id="delete_task" class="cross">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" width="25"
+                                     height="25">
+                                    <path d="M 0 0 L 25 25 M 0 25 L 25 0" stroke="white" fill="none" stroke-width="3"/>
+                                </svg>
+                            </span>
             <div class="task">
                 <span class="label">Задание №<span id="task-num"></span>:</span>
                 <br>
@@ -153,6 +159,8 @@
     <p class="comment-text">Если ты посмотришь ответ, то задание навсегда пометится красненьким, оно тебе надо? Если да,
         то нажми еще раз</p>
 </div>
-
+<div th:if="${role == 'GOD'}" id="failed_to_delete_comment" class="comment-block display-none">
+    <p class="comment-text">Не удалось удалить задание</p>
+</div>
 </body>
 </html>

@@ -29,6 +29,7 @@ public class Task {
 
     @ManyToOne
     @JoinColumn(name = "module", referencedColumnName = "id")
+
     private Module module;
     @Column(name = "img", length = Integer.MAX_VALUE)
     private String img;

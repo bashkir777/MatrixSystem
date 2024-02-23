@@ -265,7 +265,14 @@ input[type='text']:focus{
     clip-path: polygon(0% 0%, 0% 100%, 100% 0%);
     transition: opacity 1s ease;
 }
-
+#delete_task {
+    top: 4%;
+    right: 4%;
+    padding: 5px;
+    padding-bottom: 2px;
+    padding-right: 6px;
+    border-radius: 7px;
+}
 .opacity-0{
     opacity: 0;
 }
