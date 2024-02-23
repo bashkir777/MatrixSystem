@@ -149,7 +149,7 @@ public class CustomManagementController {
         CustomTask task = manager.getCustomTaskById(id);
 
         manager.addUserCustomTaskRelation(task, UserTaskRelationTypes.FAILED);
-        return ResponseEntity.status(HttpStatus.OK).body(CustomTaskDTO.builder()
+        return ResponseEntity.status(HttpStatus.OK).body(CustomTaskDTO.builder().id(task.getId())
                 .answer(task.getAnswer()).solution(task.getSolution()).task(task.getTask())
                 .verifiable(task.getVerifiable()).img(task.getImg()).build());
     }
