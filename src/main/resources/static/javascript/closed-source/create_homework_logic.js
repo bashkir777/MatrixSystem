@@ -9,6 +9,7 @@ let createdLabel = document.getElementById("created-label");
 let failedToCreateLabel = document.getElementById("failed-to-create-label");
 let homeworkNum = document.getElementById("homework-num");
 let smoke = document.getElementById("smoke");
+let warningComment = document.getElementById("warning_comment");
 
 let tasksIDs = [];
 let homeworkList = [];
@@ -118,7 +119,20 @@ addTaskButton.addEventListener("click", ()=>{
             }
         });
 })
+let warningCommentIsShow = false;
 createHomework.addEventListener("click", ()=>{
+    if(tasksIDs.length === 0){
+        if(!warningCommentIsShow){
+            warningCommentIsShow = true;
+            warningComment.classList.remove("display-none");
+            setTimeout(()=>{
+                warningComment.classList.add("display-none");
+                warningCommentIsShow = false;
+            }, 3000)
+        }
+        return;
+    }
+
     fetch(`/api/v1/management/create/homework`, {
         method: 'POST',
         body: JSON.stringify(tasksIDs),

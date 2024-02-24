@@ -60,3 +60,9 @@
 .leave{
     padding: 1% 5%;
 }
+#warning_comment{
+    position: absolute;
+    top: 40%;
+    left: 60%;
+    z-index: 210;
+}
