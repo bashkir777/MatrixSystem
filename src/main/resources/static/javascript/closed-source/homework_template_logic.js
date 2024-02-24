@@ -156,7 +156,7 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
         }
         for (let i =0; i<navigationButtons.length; i++){
             let button = navigationButtons[i];
-            console.log(button)
+            console.log(button, data[i].status);
             markButtonBasedOnStatus(button, data[i].status);
         }
         navigationButtons[0].click();

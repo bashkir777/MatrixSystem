@@ -6,7 +6,7 @@ import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
 import com.example.matrixsystem.spring_data.entities.*;
-import com.example.matrixsystem.spring_data.entities.Module;
+
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import com.example.matrixsystem.spring_data.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,11 @@ import java.util.UUID;
 @RequestMapping("/api/v1/management")
 public class CustomManagementController {
     private final CustomDatabaseManager manager;
-    private final UserInformation userInformation;
+
 
     @Autowired
-    public CustomManagementController(CustomDatabaseManager manager, UserInformation userInformation) {
+    public CustomManagementController(CustomDatabaseManager manager) {
         this.manager = manager;
-        this.userInformation = userInformation;
     }
 
     @PostMapping("/add/task/custom-task")
@@ -63,14 +62,14 @@ public class CustomManagementController {
         customTaskList.forEach(t ->
                 {
                     CustomTaskDTO.CustomTaskDTOBuilder builder = CustomTaskDTO.builder().task(t.getTask())
-                            .solution(t.getSolution()).answer(t.getAnswer())
+                            .solution(t.getSolution()).answer(t.getAnswer()).status(manager
+                                    .getRelationBetweenCurrentUserAndCustomTask(t).name())
                             .img(t.getImg()).id(t.getId()).verifiable(t.getVerifiable());
                     customTaskDTOS.add(builder.build());
                 }
         );
         return customTaskDTOS;
     }
-
     @PostMapping("/submit/custom-task")
     @HandleDataActionExceptions
     public ResponseEntity<String> submitTask(@RequestBody SubmitCustomTaskDTO submitCustomTaskDTO)

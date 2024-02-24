@@ -99,4 +99,21 @@ public class CustomDatabaseManager {
             throw new ErrorCreatingHomework();
         }
     }
+    public UserTaskRelationTypes getRelationBetweenCurrentUserAndCustomTask(CustomTask customTask) {
+        List<UserCustomTask> list;
+        try{
+             list = userCustomTaskRepository
+                    .getUserCustomTaskByUserReference(userInformation.getUser());
+        }catch (NoSuchUserInDB e){
+            return UserTaskRelationTypes.NONE;
+        }
+
+        UserTaskRelationTypes answer = UserTaskRelationTypes.NONE;
+        for(UserCustomTask userCustomTask : list){
+            if(userCustomTask.getTaskReference().equals(customTask)){
+                answer = userCustomTask.getRelationType();
+            }
+        }
+        return answer;
+    }
 }
