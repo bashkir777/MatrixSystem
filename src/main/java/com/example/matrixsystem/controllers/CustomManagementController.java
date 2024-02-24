@@ -92,7 +92,7 @@ public class CustomManagementController {
 
         if (!customTask.getVerifiable()) {
             manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.DONE);
-            answer = UserTaskRelationTypes.DONE;
+            return ResponseEntity.status(HttpStatus.CREATED).body(UserTaskRelationTypes.DONE.name());
         }
 
         if (customTask.getAnswer().equals(submitCustomTaskDTO.getAnswer())) {
@@ -150,7 +150,6 @@ public class CustomManagementController {
             NoSuchUserInDB {
         CustomTask task = manager.getCustomTaskById(id);
 
-        manager.addUserCustomTaskRelation(task, UserTaskRelationTypes.FAILED);
         return ResponseEntity.status(HttpStatus.OK).body(CustomTaskDTO.builder().id(task.getId())
                 .answer(task.getAnswer()).solution(task.getSolution()).task(task.getTask())
                 .verifiable(task.getVerifiable()).img(task.getImg()).build());

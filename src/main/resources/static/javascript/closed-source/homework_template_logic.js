@@ -134,6 +134,7 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                 })
                     .then(response => response.text())
                     .then(status => {
+                        console.log(status)
                         clearContainer()
                         clearButton(navigationButtons[currentTaskOrder-1])
                         markButtonBasedOnStatus(navigationButtons[currentTaskOrder-1], status);
