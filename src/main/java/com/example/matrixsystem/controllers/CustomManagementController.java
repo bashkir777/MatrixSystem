@@ -5,10 +5,8 @@ import com.example.matrixsystem.dto.*;
 import com.example.matrixsystem.security.annotations.RolesAllowed;
 import com.example.matrixsystem.security.beans.UserInformation;
 import com.example.matrixsystem.spring_data.annotations.HandleDataActionExceptions;
-import com.example.matrixsystem.spring_data.entities.CustomTask;
+import com.example.matrixsystem.spring_data.entities.*;
 import com.example.matrixsystem.spring_data.entities.Module;
-import com.example.matrixsystem.spring_data.entities.Task;
-import com.example.matrixsystem.spring_data.entities.UserCustomTask;
 import com.example.matrixsystem.spring_data.entities.enums.UserTaskRelationTypes;
 import com.example.matrixsystem.spring_data.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +35,7 @@ public class CustomManagementController {
         this.manager = manager;
         this.userInformation = userInformation;
     }
+
     @PostMapping("/add/task/custom-task")
     @RolesAllowed({"GOD", "TEACHER"})
     public ResponseEntity<String> addNewCustomTask(@RequestBody TaskForAddingDTO taskForAddingDTO) {
@@ -47,11 +46,11 @@ public class CustomManagementController {
     }
 
     @GetMapping("/homework/info/{id}")
-    public HomeworkInfoDTO getHomeworkInfo(@PathVariable Integer id){
+    public HomeworkInfoDTO getHomeworkInfo(@PathVariable Integer id) {
         HomeworkInfoDTO.HomeworkInfoDTOBuilder builder = HomeworkInfoDTO.builder();
-        try{
+        try {
             builder.task_counter(manager.getHomeworkById(id).getHomeworkCustomTasks().size());
-        }catch (Exception e){
+        } catch (Exception e) {
             builder.task_counter(0);
         }
         return builder.build();
@@ -61,28 +60,29 @@ public class CustomManagementController {
     public List<CustomTaskDTO> getHomework(@PathVariable Integer id) throws NoSuchHomeworkException, NoSuchUserInDB {
         List<CustomTaskDTO> customTaskDTOS = new ArrayList<>();
         List<CustomTask> customTaskList = manager.getAllCustomTasksOfHomework(manager.getHomeworkById(id));
-        customTaskList.forEach(t->
-            {
-                CustomTaskDTO.CustomTaskDTOBuilder builder = CustomTaskDTO.builder().task(t.getTask())
-                        .solution(t.getSolution()).answer(t.getAnswer())
-                        .img(t.getImg()).id(t.getId()).verifiable(t.getVerifiable());
-                customTaskDTOS.add(builder.build());
-            }
+        customTaskList.forEach(t ->
+                {
+                    CustomTaskDTO.CustomTaskDTOBuilder builder = CustomTaskDTO.builder().task(t.getTask())
+                            .solution(t.getSolution()).answer(t.getAnswer())
+                            .img(t.getImg()).id(t.getId()).verifiable(t.getVerifiable());
+                    customTaskDTOS.add(builder.build());
+                }
         );
         return customTaskDTOS;
     }
+
     @PostMapping("/submit/custom-task")
     @HandleDataActionExceptions
     public ResponseEntity<String> submitTask(@RequestBody SubmitCustomTaskDTO submitCustomTaskDTO)
             throws NoSuchCustomTaskException, NoSuchUserInDB {
         UserTaskRelationTypes answer;
 
-        for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
-            if(userCustomTask.getTaskReference()
-                    .equals(manager.getCustomTaskById(submitCustomTaskDTO.getId()))){
-                if(userCustomTask.getRelationType().equals(UserTaskRelationTypes.DONE)){
+        for (UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()) {
+            if (userCustomTask.getTaskReference()
+                    .equals(manager.getCustomTaskById(submitCustomTaskDTO.getId()))) {
+                if (userCustomTask.getRelationType().equals(UserTaskRelationTypes.DONE)) {
                     return ResponseEntity.status(HttpStatus.OK).body("Вы уже сделали это задание");
-                }else{
+                } else {
                     manager.deleteUserCustomTask(userCustomTask);
                 }
             }
@@ -90,28 +90,29 @@ public class CustomManagementController {
 
         CustomTask customTask = manager.getCustomTaskById(submitCustomTaskDTO.getId());
 
-        if(!customTask.getVerifiable()){
+        if (!customTask.getVerifiable()) {
             manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.DONE);
             answer = UserTaskRelationTypes.DONE;
         }
 
-        if(customTask.getAnswer().equals(submitCustomTaskDTO.getAnswer())){
+        if (customTask.getAnswer().equals(submitCustomTaskDTO.getAnswer())) {
             manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.DONE);
             answer = UserTaskRelationTypes.DONE;
-        }else{
+        } else {
             manager.addUserCustomTaskRelation(customTask, UserTaskRelationTypes.TRIED);
             answer = UserTaskRelationTypes.TRIED;
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(answer.name());
     }
-    @GetMapping("custom-task/status/{id}")
+
+    @GetMapping("/custom-task/status/{id}")
     @HandleDataActionExceptions
     public ResponseEntity<String> getCustomTaskStatus(@PathVariable Integer id) throws NoSuchCustomTaskException
             , NoSuchUserInDB {
-        for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
-            if(userCustomTask.getTaskReference()
-                    .equals(manager.getCustomTaskById(id))){
+        for (UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()) {
+            if (userCustomTask.getTaskReference()
+                    .equals(manager.getCustomTaskById(id))) {
 
                 return ResponseEntity.status(HttpStatus.OK).body(userCustomTask.getRelationType().name());
 
@@ -120,19 +121,19 @@ public class CustomManagementController {
         return ResponseEntity.status(HttpStatus.OK).body(UserTaskRelationTypes.NONE.name());
     }
 
-    @GetMapping("custom-task/{id}/answer")
+    @GetMapping("/custom-task/{id}/answer")
     @HandleDataActionExceptions
     public ResponseEntity<TaskAnswerDTO> getCustomTaskAnswer(@PathVariable Integer id) throws NoSuchCustomTaskException,
             NoSuchUserInDB {
         CustomTask task = manager.getCustomTaskById(id);
 
-        for(UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()){
-            if(userCustomTask.getTaskReference()
-                    .equals(manager.getCustomTaskById(id))){
-                if(userCustomTask.getRelationType().equals(UserTaskRelationTypes.DONE)){
+        for (UserCustomTask userCustomTask : manager.getUserCustomTaskListOfCurrentUser()) {
+            if (userCustomTask.getTaskReference()
+                    .equals(manager.getCustomTaskById(id))) {
+                if (userCustomTask.getRelationType().equals(UserTaskRelationTypes.DONE)) {
                     return ResponseEntity.status(HttpStatus.OK).body(TaskAnswerDTO.builder()
                             .answer(task.getAnswer()).solution(task.getSolution()).build());
-                }else{
+                } else {
                     manager.deleteUserCustomTask(userCustomTask);
                 }
             }
@@ -142,7 +143,8 @@ public class CustomManagementController {
                 .answer(task.getAnswer()).solution(task.getSolution()).build());
 
     }
-    @GetMapping("custom-task/{id}")
+
+    @GetMapping("/custom-task/{id}")
     @HandleDataActionExceptions
     public ResponseEntity<CustomTaskDTO> getCustomTask(@PathVariable Integer id) throws NoSuchCustomTaskException,
             NoSuchUserInDB {
@@ -154,17 +156,32 @@ public class CustomManagementController {
                 .verifiable(task.getVerifiable()).img(task.getImg()).build());
     }
 
+    @PostMapping("/create/homework")
+    @RolesAllowed({"GOD", "TEACHER"})
+    @HandleDataActionExceptions
+    public ResponseEntity<Integer> getCustomTask(@RequestBody List<Integer> customTaskIds)
+            throws NoSuchCustomTaskException, ErrorCreatingHomeworkCustomTask, ErrorCreatingHomework {
+        Homework homework = new Homework();
+        manager.addHomework(homework);
+        for (Integer id : customTaskIds) {
+            CustomTask customTask = manager.getCustomTaskById(id);
+            manager.addHomeworkCustomTask(HomeworkCustomTask.builder()
+                    .homework(homework).customTask(customTask).build());
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(homework.getId());
+    }
+
     @PostMapping("/add/task/custom-pull")
     @RolesAllowed({"GOD", "TEACHER"})
     @HandleDataActionExceptions
     public ResponseEntity<Integer> addNewTaskToTheCustomPull(@RequestParam("task") String task,
-                                                            @RequestParam(value = "answer", required = false) String answer,
-                                                            @RequestParam("verifiable") Boolean verifiable,
-                                                            @RequestParam(value = "solution", required = false) String solution,
-                                                            @RequestPart(value = "image", required = false) MultipartFile image)
+                                                             @RequestParam(value = "answer", required = false) String answer,
+                                                             @RequestParam("verifiable") Boolean verifiable,
+                                                             @RequestParam(value = "solution", required = false) String solution,
+                                                             @RequestPart(value = "image", required = false) MultipartFile image)
             throws IOException, ErrorCreatingCustomTask {
         CustomTask.CustomTaskBuilder builder = CustomTask.builder();
-        if(verifiable != null){
+        if (verifiable != null) {
             builder.verifiable(verifiable);
         }
         if (image != null) {
@@ -174,7 +191,7 @@ public class CustomManagementController {
             Files.write(filePath, image.getBytes());
             builder.img(filePath.toString());
         }
-        if(solution != null){
+        if (solution != null) {
             builder.solution(solution);
         }
 

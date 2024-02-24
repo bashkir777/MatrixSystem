@@ -4,6 +4,7 @@ let fullAnswer = document.getElementById("task-full-answer-form");
 let shortAnswer = document.getElementById("task-answer-form");
 let imgForm = document.getElementById("task-img-form");
 let scrollPanel = document.getElementById("scroll-panel");
+let createHomework = document.getElementById("create-homework");
 
 let tasksIDs = [];
 let homeworkList = [];
@@ -113,3 +114,19 @@ addTaskButton.addEventListener("click", ()=>{
             }
         });
 })
+createHomework.addEventListener("click", ()=>{
+    fetch(`/api/v1/management/create/homework`, {
+        method: 'POST',
+        body: JSON.stringify(tasksIDs),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response =>{
+            if(response.status === 201){
+                console.log("ДЗ спешно создано");
+            }else{
+                console.log("не удалось создать ДЗ");
+            }
+        });
+});

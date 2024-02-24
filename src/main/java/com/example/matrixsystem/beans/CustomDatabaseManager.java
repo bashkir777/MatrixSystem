@@ -85,4 +85,18 @@ public class CustomDatabaseManager {
             throw new ErrorCreatingCustomTask();
         }
     }
+    public void addHomeworkCustomTask(HomeworkCustomTask homeworkCustomTask) throws ErrorCreatingHomeworkCustomTask {
+        try {
+            homeworkCustomTaskRepository.save(homeworkCustomTask);
+        } catch (Exception e) {
+            throw new ErrorCreatingHomeworkCustomTask();
+        }
+    }
+    public void addHomework(Homework homework) throws ErrorCreatingHomework{
+        try {
+            homeworkRepository.save(homework);
+        } catch (Exception e) {
+            throw new ErrorCreatingHomework();
+        }
+    }
 }
