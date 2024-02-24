@@ -5,6 +5,10 @@ let shortAnswer = document.getElementById("task-answer-form");
 let imgForm = document.getElementById("task-img-form");
 let scrollPanel = document.getElementById("scroll-panel");
 let createHomework = document.getElementById("create-homework");
+let createdLabel = document.getElementById("created-label");
+let failedToCreateLabel = document.getElementById("failed-to-create-label");
+let homeworkNum = document.getElementById("homework-num");
+let smoke = document.getElementById("smoke");
 
 let tasksIDs = [];
 let homeworkList = [];
@@ -85,7 +89,7 @@ addTaskButton.addEventListener("click", ()=>{
     if(fullAnswer.value === "" && shortAnswer.value === ""){
         console.log("У задания не может не быть ни краткого ответа ни полного решения одновременно");
         return;
-    }else verifiable = fullAnswer.value === "";
+    }else verifiable = !(shortAnswer.value === "");
 
     if(imgForm.files.length === 0){
         formData.append('image', null);
@@ -124,9 +128,14 @@ createHomework.addEventListener("click", ()=>{
     })
         .then(response =>{
             if(response.status === 201){
-                console.log("ДЗ спешно создано");
+                response.text().then(num => {
+                    createdLabel.classList.remove("display-none");
+                    smoke.classList.remove("display-none");
+                    homeworkNum.innerText = num;
+                })
             }else{
-                console.log("не удалось создать ДЗ");
+                failedToCreateLabel.classList.remove("display-none");
+                smoke.classList.remove("display-none");
             }
         });
 });
