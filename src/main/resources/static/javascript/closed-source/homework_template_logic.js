@@ -126,6 +126,7 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                     imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
                     imageContainer.classList.remove("display-none");
                 }
+
                 fetch(`/api/v1/management/custom-task/status/${data[i].id}`, {
                     method: 'GET',
                     headers: {
@@ -146,6 +147,13 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                         }else{
                             inputAnswer.classList.remove("display-none");
                             send.classList.remove("display-none");
+                        }
+                        if(!data[i].verifiable){
+                            inputAnswer.classList.add("display-none");
+                            send.innerText = "Пометить выполненным";
+                        }else{
+                            inputAnswer.classList.remove("display-none");
+                            send.innerText = "Отправить";
                         }
                     })
                     .catch((error) => {
