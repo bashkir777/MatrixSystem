@@ -11,6 +11,8 @@ let homeworkNum = document.getElementById("homework-num");
 let smoke = document.getElementById("smoke");
 let warningComment = document.getElementById("warning_comment");
 
+document.getElementById("create-homework-navigation-tab").classList.add("mark-header-tab-as-selected");
+
 let tasksIDs = [];
 let homeworkList = [];
 function addTaskToHomeworkList(id){

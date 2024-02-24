@@ -27,7 +27,7 @@ function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }
 
-
+document.getElementById("homework-navigation-tab").classList.add("mark-header-tab-as-selected");
 
 function clearButton(button) {
     button.classList.remove("green-border");

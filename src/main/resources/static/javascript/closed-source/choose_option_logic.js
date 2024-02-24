@@ -8,6 +8,9 @@ let commentWrapper = document.getElementById("comment-wrapper");
 
 let animationRunning = false;
 let inversion = false;
+
+document.getElementById("option-navigation-tab").classList.add("mark-header-tab-as-selected");
+
 if(localStorage.getItem("time_left") === null){
     panel.addEventListener("mouseover", () => {
         if (!animationRunning) {

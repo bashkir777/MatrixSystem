@@ -1,17 +1,16 @@
 <div class="header-cover" th:fragment="header">
-  <div class="_header">
-    <a class="navigation" href="/app/all-tasks">Все задания</a>
 
-    <a class="navigation" href="/app/options">Варинты ЕГЭ</a>
+  <a id="all-tasks-navigation-tab" class="navigation" href="/app/all-tasks">Все задания</a>
 
-    <a th:if="${role=='GOD' or role=='TEACHER'}" class="navigation" href="/app/create-option">Создать вариант</a>
+  <a id="option-navigation-tab" class="navigation" href="/app/options">Варинты ЕГЭ</a>
 
-    <a class="navigation" href="/app/choose-homework">Домашняя работа</a>
+  <a id="create-option-navigation-tab" th:if="${role=='GOD' or role=='TEACHER'}" class="navigation" href="/app/create-option">Создать вариант</a>
 
-    <a th:if="${role=='GOD' or role=='TEACHER'}" class="navigation" href="/app/create-homework">Создать домашнюю работу</a>
+  <a id="homework-navigation-tab" class="navigation" href="/app/choose-homework">Домашняя работа</a>
 
-    <a class="navigation" href="/app/theory">Теория</a>
+  <a id="create-homework-navigation-tab" th:if="${role=='GOD' or role=='TEACHER'}" class="navigation" href="/app/create-homework">Создать домашнюю
+    работу</a>
 
-  </div>
+  <a id="theory-navigation-tab" class="navigation" href="/app/theory">Теория</a>
 
 </div>

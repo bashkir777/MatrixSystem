@@ -33,6 +33,8 @@ let imageContainer = document.getElementById("image-container");
 
 let showAnswersForFirstPart = false;
 
+document.getElementById("option-navigation-tab").classList.add("mark-header-tab-as-selected");
+
 if (arrowLeft !== null){
     arrowLeft.addEventListener("mouseover", ()=>{
         container.classList.add("rotate-1-left");

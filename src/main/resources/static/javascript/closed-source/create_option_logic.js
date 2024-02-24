@@ -23,6 +23,9 @@ let currentModuleTaskList = [];
 let optionToCreate = [];
 let currentTaskOrder = null
 
+document.getElementById("create-option-navigation-tab").classList.add("mark-header-tab-as-selected");
+
+
 if (arrowLeft !== null){
     arrowLeft.addEventListener("mouseover", ()=>{
         container.classList.add("rotate-1-left");

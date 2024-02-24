@@ -25,6 +25,9 @@ let prevNavigationButton;
 let arrOfTaskIds;
 let currentTaskNum;
 
+
+document.getElementById("all-tasks-navigation-tab").classList.add("mark-header-tab-as-selected");
+
 function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }

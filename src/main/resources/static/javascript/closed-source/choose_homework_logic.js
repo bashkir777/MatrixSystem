@@ -4,6 +4,9 @@ let tdList = document.getElementsByTagName("td");
 let commentWrapper = document.getElementById("comment-wrapper");
 let tutor_panel = document.getElementById("tutor-option-panel");
 
+document.getElementById("homework-navigation-tab").classList.add("mark-header-tab-as-selected");
+
+
 for (let i = 0; i < 9; i++) {
     tdList[i].addEventListener("click", () => {
         input.value = input.value + (i + 1);

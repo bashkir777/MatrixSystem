@@ -14,7 +14,9 @@
 
 <script th:src="@{/javascript/open-source/particles-lib/particles.js}"></script>
 <script th:src="@{/javascript/open-source/particles-lib/design-settings/calm_dark_design.js}"></script>
-
+<script>
+    document.getElementById("all-tasks-navigation-tab").classList.add("mark-header-tab-as-selected");
+</script>
 <div class="wrapper">
 <div class="part">Первая часть - задания с коротким ответом</div>
     <span th:with="conditionMet=false">

@@ -2,6 +2,8 @@ let sections = document.getElementsByClassName("section");
 let navigationButtons = document.getElementsByClassName("navigation-button-wrapper");
 let links = document.getElementsByClassName("section");
 
+document.getElementById("theory-navigation-tab").classList.add("mark-header-tab-as-selected");
+
 document.querySelectorAll('.section:not(:has(td))').forEach(function (element) {
     element.remove();
 });
