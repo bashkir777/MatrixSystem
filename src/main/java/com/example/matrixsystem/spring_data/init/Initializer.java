@@ -40,26 +40,28 @@ public class Initializer {
         jdbcTemplate.execute("insert into users(login, password, role) values ('teacher','teacher','TEACHER');");
         jdbcTemplate.execute("insert into users(login, password, role) values ('student','student','STUDENT');");
         jdbcTemplate.execute("insert into users(login, password, role) values ('manager','manager','MANAGER');");
+        for(int i = 0; i < 20; i++){
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '1', 1);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '2', 2);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '3', 3);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '4', 4);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '5', 5);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '6', 6);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '7', 7);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '8', 8);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '8', 9);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '10', 10);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '11', 11);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '12', 12);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '13', 13);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '14', 14);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '15', 15);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '16', 16);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '17', 17);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '18', 18);");
+            jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '19', 19);");
+        }
 
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '1', 1);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '2', 2);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '3', 3);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '4', 4);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '5', 5);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '6', 6);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '7', 7);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '8', 8);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '8', 9);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '10', 10);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '11', 11);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '12', 12);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '13', 13);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '14', 14);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '15', 15);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '16', 16);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '17', 17);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '18', 18);");
-        jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '19', 19);");
 
         jdbcTemplate.execute("insert into section(module_id, name, link) values (1, 'Конспект теории', 'https://miro.com/app/board/uXjVNuEFRQU=/?share_link_id=347896643047');");
         jdbcTemplate.execute("insert into section(module_id, name, link) values (1, 'Решение практических задач', 'https://miro.com/app/board/uXjVNuEFRQU=/?share_link_id=347896643047');");
