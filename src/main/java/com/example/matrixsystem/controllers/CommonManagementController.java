@@ -72,13 +72,6 @@ public class CommonManagementController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Задание успешно добавлено");
     }
 
-    private ResponseEntity<String> addUserLogic(UserDTO userDTO, Roles role)
-            throws ErrorCreatingUserRecord{
-        Users user = Users.builder().login(userDTO.getLogin())
-                .role(role).password(userDTO.getPassword()).build();
-        manager.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(role + " успешно добавлен");
-    }
 
     @PostMapping("/toggle/user-section/{id}")
     @HandleDataActionExceptions
@@ -118,25 +111,37 @@ public class CommonManagementController {
         return ResponseEntity.status(HttpStatus.CREATED).body(OptionIdDTO.builder().optionId(option.getId()).build());
     }
 
-    @PostMapping("/add/user/student")
-    @RolesAllowed({"GOD", "TEACHER"})
-    @HandleDataActionExceptions
-    public ResponseEntity<String> addNewStudent(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
-        return addUserLogic(userDTO, Roles.STUDENT);
-    }
-
-    @PostMapping("/add/user/teacher")
-    @RolesAllowed({"GOD", "MANAGER"})
-    @HandleDataActionExceptions
-    public ResponseEntity<String> addNewTeacher(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
-        return addUserLogic(userDTO, Roles.TEACHER);
-    }
-
-    @PostMapping("/add/user/god")
+    @PostMapping("/add/user")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions
-    public ResponseEntity<String> addNewGod(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
-        return addUserLogic(userDTO, Roles.GOD);
+    public ResponseEntity<String> addNewStudent(@RequestParam("login") String login,
+                                                @RequestParam("password") String password,
+                                                @RequestParam(value = "phoneNumber", required = false) String phoneNumber,
+                                                @RequestParam(value = "telegram", required = false) String telegram,
+                                                @RequestPart("name") String name,
+                                                @RequestPart("surname") String surname,
+                                                @RequestPart("role") String role,
+                                                @RequestPart("miroBoard") String miroBoard) throws ErrorCreatingUserRecord {
+        Users.UsersBuilder builder = Users.builder();
+        builder.name(name).surname(surname).login(login).password(password).miroBoard(miroBoard);
+
+        if(role.toUpperCase().equals(Roles.STUDENT.name()) ||
+                role.toUpperCase().equals(Roles.GOD.name()) ||
+                role.toUpperCase().equals(Roles.TEACHER.name())){
+            builder.role(Roles.valueOf(role.toUpperCase()));
+        }else{
+            throw new ErrorCreatingUserRecord();
+        }
+        if(phoneNumber != null){
+            builder.phoneNumber(phoneNumber);
+        }
+        if(telegram != null){
+            builder.telegram(telegram);
+        }
+
+        manager.addUser(builder.build());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Пользователь успешно создан");
     }
 
     @PostMapping("/add/section")

@@ -30,7 +30,7 @@ public class Users {
     private String surname;
 
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'NONE'")
-    private String tg;
+    private String telegram;
 
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'NONE'")
     private String phoneNumber;

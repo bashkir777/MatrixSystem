@@ -19,7 +19,7 @@
     <input placeholder="Номер телефона" id="user-phone-create" type="text">
     <input placeholder="Телеграм пользователя" id="user-tg-create" type="text">
     <input placeholder="Ссылка на личную доску miro" id="user-miro-board-create" type="text">
-    <select name="choose-one">
+    <select id="user-role-create" name="choose-one">
       <option value="" disabled selected hidden>Выберете роль пользователя</option>
       <option value="student">STUDENT</option>
       <option value="teacher">TEACHER</option>
@@ -36,6 +36,11 @@
   <div id="or" class="label">Или</div>
   <input placeholder="Логин пользователя" id="user-login-delete" type="text">
   <div id="delete-user-button">Удалить пользователя</div>
+</div>
+
+
+<div id="wrong_create_form_comment" class="comment-block display-none">
+  <p class="comment-text">Все поля в форме создания пользователя, кроме номера телефона и телеграма, обязательные</p>
 </div>
 </body>
 </html>
