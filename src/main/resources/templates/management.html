@@ -2,103 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Онлайн школа - MATRIX</title>
 
 </head>
 <body>
-
-<h2>Task Form</h2>
-
-<label for="task">Task:</label><br>
-<input type="text" id="task" name="task" required><br>
-
-<label for="answer">Answer:</label><br>
-<input type="text" id="answer" name="answer" required><br>
-
-<label for="img">Image URL:</label><br>
-<input type="text" id="img" name="img"><br>
-
-<label for="module">Module:</label><br>
-<input type="number" id="module" name="module" required><br><br>
-
-<button id="submit">Submit</button>
-
-<hr>
-<div>Add person:</div>
-<label for="login">Login:</label><br>
-<input type="text" id="login" name="login" required><br>
-
-<label for="password">Password:</label><br>
-<input type="text" id="password" name="password" required><br>
-
-<label for="role">Role:</label><br>
-<input type="text" id="role" name="role" required><br>
-
-<button id="submit2">Submit</button>
-
-<script>
-
-
-  document.getElementById('submit2').addEventListener('click', function(event) {
-    event.preventDefault();
-
-    // Собираем данные из формы
-    let taskData = {
-      login: document.getElementById('login').value,
-      password: document.getElementById('password').value,
-      role: document.getElementById('role').value,
-    };
-
-    // Преобразуем данные в JSON формат
-    let jsonData = JSON.stringify(taskData);
-
-    // Отправляем данные методом POST на сервер
-    fetch(`/api/v1/management/add/user/${taskData.role}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: jsonData
-    }).then(function(response) {
-
-      console.log('Response:', response);
-    }).catch(function(error) {
-
-      console.error('Error:', error);
-    });
-  });
-
-
-  document.getElementById('submit').addEventListener('click', function(event) {
-    event.preventDefault();
-
-    // Собираем данные из формы
-    let taskData = {
-      task: document.getElementById('task').value,
-      answer: document.getElementById('answer').value,
-      img: document.getElementById('img').value,
-      module: parseInt(document.getElementById('module').value)
-    };
-
-    // Преобразуем данные в JSON формат
-    let jsonData = JSON.stringify(taskData);
-
-    // Отправляем данные методом POST на сервер
-    fetch('/api/v1/management/add/task/common-pull', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: jsonData
-    }).then(function(response) {
-
-      console.log('Response:', response);
-    }).catch(function(error) {
-
-      console.error('Error:', error);
-    });
-  });
-</script>
 
 
 </body>

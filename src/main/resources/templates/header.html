@@ -11,6 +11,8 @@
   <a id="create-homework-navigation-tab" th:if="${role=='GOD' or role=='TEACHER'}" class="navigation" href="/app/create-homework">Создать домашнюю
     работу</a>
 
+  <a id="management-navigation-tab" th:if="${role=='GOD'}" class="navigation" href="/app/create-homework">Менеджмент</a>
+
   <a id="theory-navigation-tab" class="navigation" href="/app/theory">Теория</a>
 
 </div>
