@@ -15,7 +15,10 @@ let wrongCreateFormComment = document.getElementById("wrong_create_form_comment"
 let createdLabel = document.getElementById("created-label");
 let loginOfNewUser = document.getElementById("login-of-new-user");
 let passwordOfNewUser = document.getElementById("password-of-new-user");
+let failedToCreateUser = document.getElementById("failed_to_create_user");
+
 let wrongCreateFormCommentShowing = false;
+let failedToCreateUserShowing = false;
 createButton.addEventListener("click", ()=>{
     const formData = new FormData();
     if(userLoginCreate.value === "" || userPasswordCreate.value === ""
@@ -53,7 +56,14 @@ createButton.addEventListener("click", ()=>{
                 loginOfNewUser.innerText = userLoginCreate.value;
                 passwordOfNewUser.innerText = userPasswordCreate.value;
             }else{
-                console.log("не удалось создать пользователя");
+                if(!failedToCreateUserShowing) {
+                    failedToCreateUserShowing = true;
+                    failedToCreateUser.classList.remove("display-none");
+                    setTimeout(() => {
+                        failedToCreateUser.classList.add("display-none");
+                        failedToCreateUserShowing = false;
+                    }, 4000)
+                }
             }
         }
     )
