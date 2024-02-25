@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Войдите в аккаунт</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/login-page-styles.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/particles-styles.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/open-source/login-page-styles.css}" />
 </head>
 <body>
 <div id="particles-js"></div>
@@ -33,34 +33,5 @@
     </div>
 </div>
 
-
-<script>
-    let enter = document.getElementById("enter");
-    let interval;
-
-    function animationFrame() {
-        if (enter.classList.contains("extended")) {
-            enter.classList.remove("extended");
-        } else {
-            enter.classList.add("extended");
-        }
-    }
-
-    function startAnimation() {
-        interval = setInterval(() => {
-            animationFrame();
-        }, 800);
-    }
-
-    enter.addEventListener("mouseover", () => {
-        clearInterval(interval);
-    })
-    enter.addEventListener("mouseout", () => {
-        animationFrame();
-        startAnimation();
-    });
-    startAnimation();
-
-</script>
 </body>
 </html>

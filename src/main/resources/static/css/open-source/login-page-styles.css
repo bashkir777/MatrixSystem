@@ -45,20 +45,25 @@ input {
 .enter {
     pointer-events: all;
     border: 2px solid #0f0f0f;
-    color: #e7e6e6;
+    color: #000;
     font-size: 25px;
-    padding: 11px 70px;
-    background-color: #cc0b0b;
+    /*padding: 11px 70px;*/
+    width: 100%;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    background-color: rgba(255,255,255, 0.8);
     border-radius: 25px;
     margin-top: 25px;
-    transition: padding-left 1s ease, padding-right 1s ease;
+    transition: opacity 0.3s ease, padding-left 1s ease, padding-right 1s ease;
 }
 
 .enter:hover {
     cursor: pointer;
-    opacity: 0.9;
+    opacity: 0.8;
 }
-
+.enter:active {
+    opacity: 0.6;
+}
 .extended {
     padding: 11px 90px;
 }
@@ -96,4 +101,7 @@ input {
 
 .comment-text {
     margin-bottom: 10px;
+}
+#particles-js{
+    background-color: #e9e9e9;
 }
