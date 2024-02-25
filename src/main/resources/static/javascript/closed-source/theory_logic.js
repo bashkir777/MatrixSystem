@@ -1,9 +1,14 @@
 let sections = document.getElementsByClassName("section");
 let navigationButtons = document.getElementsByClassName("navigation-button-wrapper");
 let links = document.getElementsByClassName("section");
+let clarification = document.getElementById("clarification");
 
 document.getElementById("theory-navigation-tab").classList.add("mark-header-tab-as-selected");
 
+clarification.classList.remove("display-none");
+setTimeout(()=>{
+    clarification.classList.add("display-none");
+}, 5000);
 document.querySelectorAll('.section:not(:has(td))').forEach(function (element) {
     element.remove();
 });
