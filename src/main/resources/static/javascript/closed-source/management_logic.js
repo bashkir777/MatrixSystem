@@ -12,7 +12,9 @@ let userPhoneCreate = document.getElementById("user-phone-create");
 let userRoleCreate = document.getElementById("user-role-create");
 let userMiroCreate = document.getElementById("user-miro-board-create");
 let wrongCreateFormComment = document.getElementById("wrong_create_form_comment");
-
+let createdLabel = document.getElementById("created-label");
+let loginOfNewUser = document.getElementById("login-of-new-user");
+let passwordOfNewUser = document.getElementById("password-of-new-user");
 let wrongCreateFormCommentShowing = false;
 createButton.addEventListener("click", ()=>{
     const formData = new FormData();
@@ -46,7 +48,10 @@ createButton.addEventListener("click", ()=>{
     })
         .then(response => {
             if(response.status === 201) {
-                console.log("пользователь успешно создан");
+                smoke.classList.remove("display-none");
+                createdLabel.classList.remove("display-none");
+                loginOfNewUser.innerText = userLoginCreate.value;
+                passwordOfNewUser.innerText = userPasswordCreate.value;
             }else{
                 console.log("не удалось создать пользователя");
             }
