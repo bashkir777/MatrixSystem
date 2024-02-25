@@ -47,12 +47,26 @@
   <p class="comment-text">Не удалось создать пользователя, повторите попытку позже.</p>
 </div>
 
+<div id="wrong_delete_form_comment" class="comment-block display-none">
+  <p class="comment-text">Форма удаления пользователя заполнена не корректно</p>
+</div>
 
 <div id="smoke" class="smoke display-none"></div>
 <div id="created-label" class="display-none">
   <div>Пользователь успешно создан. Логин: <span id="login-of-new-user"></span> Пароль: <span id="password-of-new-user"></span></div>
-  <a class="leave" href="/app/management">Выйти</a>
+  <a class="leave" href="/app/management">Окей</a>
 </div>
+
+<div id="deleted-label" class="display-none">
+  <div>Пользователь успешно удален.</div>
+  <a class="leave" href="/app/management">Окей</a>
+</div>
+<div id="failed-to-delete-label" class="display-none">
+  <div>Не удалось удалить пользователя.</div>
+  <a class="leave" href="/app/management">Окей</a>
+</div>
+
+
 
 </body>
 </html>

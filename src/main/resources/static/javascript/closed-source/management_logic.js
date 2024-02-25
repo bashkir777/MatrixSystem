@@ -21,9 +21,14 @@ let deleteUserButton = document.getElementById("delete-user-button");
 let userLoginDelete = document.getElementById("user-login-delete");
 let userNameDelete = document.getElementById("user-name-delete");
 let userSurnameDelete = document.getElementById("user-surname-delete");
+let deletedLabel = document.getElementById("deleted-label");
+let failedToDeleteLabel = document.getElementById("failed-to-delete-label");
+let wrongDeleteFormComment = document.getElementById("wrong_delete_form_comment");
 
 let wrongCreateFormCommentShowing = false;
 let failedToCreateUserShowing = false;
+let wrongDeleteFormCommentShowing = false;
+
 createButton.addEventListener("click", ()=>{
     const formData = new FormData();
     if(userLoginCreate.value === "" || userPasswordCreate.value === ""
@@ -85,9 +90,11 @@ deleteUserButton.addEventListener("click", ()=>{
         })
             .then(response => {
                     if(response.status === 204) {
-                        console.log("пользователь успешно удален");
+                        smoke.classList.remove("display-none");
+                        deletedLabel.classList.remove("display-none");
                     }else{
-                        console.log("Не удалось удалить пользователя");
+                        smoke.classList.remove("display-none");
+                        failedToDeleteLabel.classList.remove("display-none");
                     }
                 }
             )
@@ -100,13 +107,24 @@ deleteUserButton.addEventListener("click", ()=>{
         })
             .then(response => {
                     if(response.status === 204) {
-                        console.log("пользователь успешно удален");
+                        smoke.classList.remove("display-none");
+                        deletedLabel.classList.remove("display-none");
                     }else{
-                        console.log("Не удалось удалить пользователя");
+                        smoke.classList.remove("display-none");
+                        failedToDeleteLabel.classList.remove("display-none");
                     }
                 }
             )
     }else{
-        console.log("форма заполнена некорректно");
+        if(!wrongDeleteFormCommentShowing) {
+            wrongDeleteFormCommentShowing = true;
+            deleteUser.classList.add("red-border");
+            wrongDeleteFormComment.classList.remove("display-none");
+            setTimeout(() => {
+                wrongDeleteFormComment.classList.add("display-none");
+                deleteUser.classList.remove("red-border");
+                wrongDeleteFormCommentShowing = false;
+            }, 4000)
+        }
     }
 })
