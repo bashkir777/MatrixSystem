@@ -11,12 +11,21 @@
 <div th:insert="~{header :: header}"></div>
 <div id="create-user">
   <div class="wrapper">
+    <div class="label">Создать пользователя</div>
     <input placeholder="Имя пользователя" id="user-name-create" type="text">
     <input placeholder="Фамилия пользователя" id="user-surname-create" type="text">
+    <input placeholder="Логин пользователя" id="user-login-create" type="text">
+    <input placeholder="Пароль пользователя" id="user-password-create" type="text">
     <input placeholder="Номер телефона" id="user-phone-create" type="text">
-    <input placeholder="Email пользователя" id="user-email-create" type="text">
     <input placeholder="Телеграм пользователя" id="user-tg-create" type="text">
     <input placeholder="Ссылка на личную доску miro" id="user-miro-board-create" type="text">
+    <select name="choose-one">
+      <option value="" disabled selected hidden>Выберете роль пользователя</option>
+      <option value="student">STUDENT</option>
+      <option value="teacher">TEACHER</option>
+      <option value="god">GOD</option>
+    </select>
+    <div id="create-user-button">Создать пользователя</div>
   </div>
 </div>
 

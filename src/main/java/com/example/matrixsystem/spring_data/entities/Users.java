@@ -30,9 +30,6 @@ public class Users {
     private String surname;
 
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'NONE'")
-    private String email;
-
-    @Column(columnDefinition = "VARCHAR(255) DEFAULT 'NONE'")
     private String tg;
 
     @Column(columnDefinition = "VARCHAR(255) DEFAULT 'NONE'")
