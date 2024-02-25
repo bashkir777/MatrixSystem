@@ -16,6 +16,11 @@ let createdLabel = document.getElementById("created-label");
 let loginOfNewUser = document.getElementById("login-of-new-user");
 let passwordOfNewUser = document.getElementById("password-of-new-user");
 let failedToCreateUser = document.getElementById("failed_to_create_user");
+let deleteUser = document.getElementById("delete-user");
+let deleteUserButton = document.getElementById("delete-user-button");
+let userLoginDelete = document.getElementById("user-login-delete");
+let userNameDelete = document.getElementById("user-name-delete");
+let userSurnameDelete = document.getElementById("user-surname-delete");
 
 let wrongCreateFormCommentShowing = false;
 let failedToCreateUserShowing = false;
@@ -67,5 +72,41 @@ createButton.addEventListener("click", ()=>{
             }
         }
     )
-
 });
+
+deleteUserButton.addEventListener("click", ()=>{
+    if(userNameDelete.value !== "" && userSurnameDelete.value !== ""){
+        const formData = new FormData();
+        formData.append('name', userNameDelete.value);
+        formData.append('surname', userSurnameDelete.value);
+        fetch(`/api/v1/management/delete/user/by-info`, {
+            method: 'DELETE',
+            body: formData
+        })
+            .then(response => {
+                    if(response.status === 204) {
+                        console.log("пользователь успешно удален");
+                    }else{
+                        console.log("Не удалось удалить пользователя");
+                    }
+                }
+            )
+    }else if(userLoginDelete.value !== ""){
+        const formData = new FormData();
+        formData.append('login', userLoginDelete.value);
+        fetch(`/api/v1/management/delete/user/by-login`, {
+            method: 'DELETE',
+            body: formData
+        })
+            .then(response => {
+                    if(response.status === 204) {
+                        console.log("пользователь успешно удален");
+                    }else{
+                        console.log("Не удалось удалить пользователя");
+                    }
+                }
+            )
+    }else{
+        console.log("форма заполнена некорректно");
+    }
+})

@@ -28,13 +28,14 @@ public class CommonDatabaseManager {
     private final UserSectionRepository userSectionRepository;
     private final OptionTaskRepository optionTaskRepository;
     private final OptionRepository optionRepository;
+    private final UserCustomTaskRepository userCustomTaskRepository;
 
     @Autowired
     public CommonDatabaseManager(TaskRepository taskRepository, ModuleRepository moduleRepository
             , UserRepository userRepository, UserTaskRepository userTaskRepository
             , UserInformation userInformation, SectionRepository sectionRepository
             , UserSectionRepository userSectionRepository, OptionTaskRepository optionTaskRepository
-            , OptionRepository optionRepository) {
+            , OptionRepository optionRepository, UserCustomTaskRepository userCustomTaskRepository) {
         this.taskRepository = taskRepository;
         this.moduleRepository = moduleRepository;
         this.userRepository = userRepository;
@@ -44,6 +45,7 @@ public class CommonDatabaseManager {
         this.userSectionRepository = userSectionRepository;
         this.optionTaskRepository = optionTaskRepository;
         this.optionRepository = optionRepository;
+        this.userCustomTaskRepository = userCustomTaskRepository;
     }
 
     public List<Integer> getAllModuleTasksIds(Module module) {
@@ -72,6 +74,10 @@ public class CommonDatabaseManager {
 
     public Integer getModuleCapacity(Module module) {
         return taskRepository.getTasksByModule(module).size();
+    }
+
+    public Users getUserByNameAndSurname(String name, String surname){
+        return userRepository.findUsersByNameAndSurname(name, surname);
     }
 
     public void addTask(Task task) throws ErrorCreatingTaskRecord {
@@ -105,6 +111,17 @@ public class CommonDatabaseManager {
             userRepository.save(user);
         } catch (Exception e) {
             throw new ErrorCreatingUserRecord();
+        }
+    }
+    @Transactional
+    public void deleteUser(Users user) {
+        try{
+            userTaskRepository.deleteAllByUserReference(user);
+            userCustomTaskRepository.deleteAllByUserReference(user);
+            userSectionRepository.deleteAllByUser(user);
+            userRepository.delete(user);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 

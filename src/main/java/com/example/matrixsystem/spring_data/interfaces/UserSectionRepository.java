@@ -10,4 +10,6 @@ import java.util.List;
 public interface UserSectionRepository extends JpaRepository<UserSection, Integer> {
     List<UserSection> getUserSectionByUser(Users user);
     UserSection getUserSectionBySectionAndUser(Section section, Users user);
+
+    void deleteAllByUser(Users user);
 }

@@ -110,7 +110,22 @@ public class CommonManagementController {
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(OptionIdDTO.builder().optionId(option.getId()).build());
     }
-
+    @DeleteMapping("/delete/user/by-info")
+    @RolesAllowed("GOD")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> deleteUserByLogin(@RequestParam("name") String name,
+                                                    @RequestParam("surname") String surname){
+        manager.deleteUser(manager.getUserByNameAndSurname(name, surname));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Пользователь успешно удален");
+    }
+    @DeleteMapping("/delete/user/by-login")
+    @RolesAllowed("GOD")
+    @HandleDataActionExceptions
+    public ResponseEntity<String> deleteUserByLogin(@RequestParam("login") String login)
+            throws NoSuchUserInDB {
+        manager.deleteUser(manager.getUserByLogin(login));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Пользователь успешно удален");
+    }
     @PostMapping("/add/user")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions

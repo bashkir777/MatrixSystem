@@ -7,4 +7,5 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 @RepositoryRestResource
 public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByLogin(String login);
+    Users findUsersByNameAndSurname(String name, String surname);
 }

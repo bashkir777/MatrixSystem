@@ -10,4 +10,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface UserCustomTaskRepository extends JpaRepository<UserCustomTask, Integer> {
     List<UserCustomTask> getUserCustomTaskByUserReference(Users users);
+    void deleteAllByUserReference(Users user);
 }

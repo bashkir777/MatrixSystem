@@ -10,4 +10,5 @@ import java.util.List;
 public interface UserTaskRepository extends JpaRepository<UserTask, Integer> {
     List<UserTask> getUserTasksByUserReference(Users user);
     void deleteAllByTaskReference(Task task);
+    void deleteAllByUserReference(Users user);
 }

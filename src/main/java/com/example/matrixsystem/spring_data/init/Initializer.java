@@ -37,6 +37,7 @@ public class Initializer {
         jdbcTemplate.execute("insert into module(name, part, max_points, verifiable) values ('Числа и их свойства', 'SECOND', 3, false);");
 
         jdbcTemplate.execute("insert into users(login, password, role, miro_board) values ('god','god','GOD', 'uXjVNuEFRQU=');");
+        jdbcTemplate.execute("insert into users(login, password, role, miro_board) values ('teacher','teacher','TEACHER', 'uXjVNuEFRQU=');");
 
         for(int i = 0; i < 20; i++){
             jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '1', 1);");
