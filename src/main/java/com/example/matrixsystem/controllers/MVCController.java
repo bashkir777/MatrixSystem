@@ -73,8 +73,10 @@ public class MVCController {
     }
 
     @GetMapping("/management")
-    @RolesAllowed({"GOD", "TEACHER", "MANAGER"})
     public String addInformation(Model model) {
+        if(!userInformation.getUserRole().equals(Roles.GOD)){
+            return "redirect:all-tasks";
+        }
         model.addAttribute("role", userInformation.getUserRole().name());
         return "management";
     }

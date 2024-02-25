@@ -39,7 +39,6 @@ public class Initializer {
         jdbcTemplate.execute("insert into users(login, password, role) values ('god','god','GOD');");
         jdbcTemplate.execute("insert into users(login, password, role) values ('teacher','teacher','TEACHER');");
         jdbcTemplate.execute("insert into users(login, password, role) values ('student','student','STUDENT');");
-        jdbcTemplate.execute("insert into users(login, password, role) values ('manager','manager','MANAGER');");
         for(int i = 0; i < 20; i++){
             jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABC', '1', 1);");
             jdbcTemplate.execute("insert into task(task, answer, module) values ('В треугольнике ABD Три стороны какая из них больше', '2', 2);");

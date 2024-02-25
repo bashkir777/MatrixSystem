@@ -132,13 +132,6 @@ public class CommonManagementController {
         return addUserLogic(userDTO, Roles.TEACHER);
     }
 
-    @PostMapping("/add/user/manager")
-    @RolesAllowed("GOD")
-    @HandleDataActionExceptions
-    public ResponseEntity<String> addNewManager(@RequestBody UserDTO userDTO) throws ErrorCreatingUserRecord{
-        return addUserLogic(userDTO, Roles.MANAGER);
-    }
-
     @PostMapping("/add/user/god")
     @RolesAllowed("GOD")
     @HandleDataActionExceptions

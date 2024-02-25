@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" >
   <title>Онлайн школа - MATRIX</title>
-
+  <link rel="stylesheet" href="/css/closed-source/header-styles.css">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/closed-source/management-styles.css}" />
+  <script th:src="@{/javascript/closed-source/management_logic.js}" defer></script>
 </head>
 <body>
-
-
+<div th:insert="~{header :: header}"></div>
 </body>
 </html>
