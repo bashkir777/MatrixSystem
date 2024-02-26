@@ -134,7 +134,7 @@ function selectTask(id) {
             currentTaskId = id;
             taskText.innerText = data.task;
             imageContainer.classList.add("display-none");
-            console.log(data.img)
+
             if (data.img !== null) {
                 let imgSrc = data.img.replace(/\\/g, '/');
                 imageContainer.src = location.protocol + "//" + location.host + "/" + imgSrc;
@@ -215,7 +215,6 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}/info`, {
 })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
         taskVerifiable = data.verifiable;
         if (!data.verifiable) {
             send.innerText = "Пометить решенным"
@@ -381,6 +380,7 @@ send.addEventListener("click", () => {
                     wrongAnswerComment.classList.add("opacity-0");
                 }, 5000);
             }
+            displayInputAndSubmitElementsBasedOnStatus(data);
         })
         .catch((error) => {
             console.error('Ошибка:', error);
