@@ -170,8 +170,37 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
         currentTaskId = arrOfTaskIds[0];
         currentTaskNum = 1;
         taskNum.innerText = currentTaskNum;
-        selectTask(currentTaskId);
         prevNavigationButton = navigationButtons[0];
+        for (let i = 0; i < navigationButtons.length; i++) {
+            navigationButtons[i].addEventListener("click",
+                () => {
+                    currentTaskId = arrOfTaskIds[i];
+                    currentTaskNum = i + 1;
+                    taskNum.innerText = currentTaskNum;
+                    // если это первое по порядку задание то гасим левую стрелку
+                    // иначе включаем
+                    if (currentTaskId === arrOfTaskIds[0]) {
+                        arrowLeft.classList.add("display-none");
+                    } else {
+                        arrowLeft.classList.remove("display-none");
+                    }
+                    // если это последнее по порядку задание то гасим правую стрелку
+                    // иначе включаем
+                    if (currentTaskId === arrOfTaskIds[navigationButtons.length - 1]) {
+                        arrowRight.classList.add("display-none");
+                    } else {
+                        arrowRight.classList.remove("display-none");
+                    }
+                    if (prevNavigationButton !== undefined) {
+                        prevNavigationButton.classList.remove("navigation-tab-selected");
+                    }
+                    navigationButtons[i].classList.add("navigation-tab-selected");
+                    selectTask(arrOfTaskIds[i]);
+                    prevNavigationButton = navigationButtons[i];
+                })
+        }
+        navigationButtons[0].click();
+        markTasks();
     })
     .catch((error) => {
         console.error('Ошибка:', error);
@@ -365,34 +394,6 @@ scrollRight.addEventListener("click", function () {
     navigationButtonsWrapper.scrollLeft += 200;
 });
 
-for (let i = 0; i < navigationButtons.length; i++) {
-    navigationButtons[i].addEventListener("click",
-        () => {
-            currentTaskId = arrOfTaskIds[i];
-            currentTaskNum = i + 1;
-            taskNum.innerText = currentTaskNum;
-            // если это первое по порядку задание то гасим левую стрелку
-            // иначе включаем
-            if (currentTaskId === arrOfTaskIds[0]) {
-                arrowLeft.classList.add("display-none");
-            } else {
-                arrowLeft.classList.remove("display-none");
-            }
-            // если это последнее по порядку задание то гасим правую стрелку
-            // иначе включаем
-            if (currentTaskId === arrOfTaskIds[navigationButtons.length - 1]) {
-                arrowRight.classList.add("display-none");
-            } else {
-                arrowRight.classList.remove("display-none");
-            }
-            if (prevNavigationButton !== undefined) {
-                prevNavigationButton.classList.remove("navigation-tab-selected");
-            }
-            navigationButtons[i].classList.add("navigation-tab-selected");
-            selectTask(arrOfTaskIds[i]);
-            prevNavigationButton = navigationButtons[i];
-        })
-}
 
 
 function wheelHandler(event) {
@@ -406,10 +407,7 @@ function wheelHandler(event) {
 
 navigationButtonsWrapper.addEventListener("wheel", wheelHandler);
 
-setTimeout(() => {
-    navigationButtons[0].click();
-    markTasks();
-}, 500);
+
 moduleNum.addEventListener("mouseover", () => {
     document.getElementById("name").innerText = moduleName;
 })
