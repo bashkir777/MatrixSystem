@@ -141,19 +141,19 @@ fetch(`/api/v1/management/homework/${getModuleNumFromUrl()}`, {
                         markButtonBasedOnStatus(navigationButtons[currentTaskOrder-1], status);
                         navigationButtons[currentTaskOrder-1].classList.add("navigation-tab-selected")
                         markContainerBasedOnStatus(status);
-                        if(status === "DONE" || status === "FAILED" ){
-                            inputAnswer.classList.add("display-none");
-                            send.classList.add("display-none");
-                        }else{
-                            inputAnswer.classList.remove("display-none");
-                            send.classList.remove("display-none");
-                        }
                         if(!data[i].verifiable){
                             inputAnswer.classList.add("display-none");
                             send.innerText = "Пометить выполненным";
                         }else{
                             inputAnswer.classList.remove("display-none");
                             send.innerText = "Отправить";
+                        }
+                        if(status === "DONE" || status === "FAILED" ){
+                            inputAnswer.classList.add("display-none");
+                            send.classList.add("display-none");
+                        }else{
+                            inputAnswer.classList.remove("display-none");
+                            send.classList.remove("display-none");
                         }
                     })
                     .catch((error) => {
