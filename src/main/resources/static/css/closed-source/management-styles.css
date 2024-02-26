@@ -165,3 +165,6 @@ select{
 #wrong_delete_form_comment{
     left:40%;
 }
+#create-user-button{
+    margin-top: 2%;
+}
