@@ -68,7 +68,14 @@ public class ClientInterfaceController {
     @GetMapping("/task/{taskId}")
     @HandleDataActionExceptions
     public ResponseEntity<Object> getTaskById(@PathVariable Integer taskId) throws NoSuchTaskInDB{
-        return ResponseEntity.status(HttpStatus.OK).body(manager.getTaskById(taskId));
+
+        Task task = manager.getTaskById(taskId);
+        Module module = task.getModule();
+        ModuleDTO moduleDTO = ModuleDTO.builder()
+                .id(module.getId()).maxPoints(module.getMaxPoints()).verifiable(module.getVerifiable()).build();
+        
+        return ResponseEntity.status(HttpStatus.OK).body(TaskForOptionsDTO.builder().module(moduleDTO).task(task.getTask()).solution(task.getSolution())
+                .id(task.getId()).answer(task.getAnswer()).img(task.getImg()).build());
     }
     @GetMapping("/module/{id}/tasks/statuses")
     @HandleDataActionExceptions

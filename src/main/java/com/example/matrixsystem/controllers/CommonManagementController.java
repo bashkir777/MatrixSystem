@@ -48,13 +48,19 @@ public class CommonManagementController {
                                                             @RequestPart(value = "image", required = false) MultipartFile image)
             throws NoSuchModuleInDB, ErrorCreatingTaskRecord, IOException {
         Task.TaskBuilder builder = Task.builder();
-        if (image != null) {
-            String fileName = UUID.randomUUID() + "." + Objects.requireNonNull(image.getContentType()).split("/")[1];
-            String uploadDir = "db/images/";
-            Path filePath = Paths.get(uploadDir, fileName);
-            Files.write(filePath, image.getBytes());
-            builder.img(filePath.toString());
+        try{
+            if (image != null) {
+                String fileName = UUID.randomUUID() + "." + Objects.requireNonNull(image.getContentType()).split("\\/")[1];
+                String uploadDir = "db/images/";
+                Path filePath = Paths.get(uploadDir, fileName);
+                Files.write(filePath, image.getBytes());
+                builder.img(filePath.toString());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("не удалось добавить задание");
         }
+
         if(solution != null){
             builder.solution(solution);
         }
