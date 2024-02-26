@@ -13,6 +13,10 @@ let failedToCreateLabel = document.getElementById("failed-to-create-label");
 let deleteTask = document.getElementById("delete_task");
 let failedToDeleteLabel = document.getElementById("failed_to_delete_comment");
 
+let noCondition = document.getElementById("no_condition");
+let noShortAnswer = document.getElementById("no_short_answer");
+let noSolution = document.getElementById("no_solution");
+
 addTask.addEventListener("click", ()=>{
     smoke.classList.remove("display-none");
     taskForm.classList.remove("display-none");
@@ -30,21 +34,38 @@ function getModuleNumFromUrl() {
     return location.href.split("/").pop().split("?")[0];
 }
 
-addTaskButton.addEventListener("click", ()=>{
-
-
+function postTask(verifiable){
     const formData = new FormData();
     if(imgForm.files.length === 0){
         formData.append('image', null);
     }else{
         formData.append('image', imgForm.files[0]);
     }
-
+    if(condition.value === ""){
+        noCondition.classList.remove("display-none");
+        setTimeout(()=>{
+            noCondition.classList.add("display-none");
+        }, 3000);
+        return;
+    }
+    if(verifiable && shortAnswer.value === ""){
+        noShortAnswer.classList.remove("display-none");
+        setTimeout(()=>{
+            noShortAnswer.classList.add("display-none");
+        }, 3000);
+        return;
+    }
+    if(!verifiable && ( shortAnswer.value === "" && fullAnswer.value === "")){
+        noSolution.classList.remove("display-none");
+        setTimeout(()=>{
+            noSolution.classList.add("display-none");
+        }, 3000);
+        return;
+    }
     formData.append('task', condition.value);
     formData.append('answer', shortAnswer.value);
     formData.append('solution', fullAnswer.value);
     formData.append('module', getModuleNumFromUrl());
-
     fetch(`/api/v1/management/add/task/common-pull`, {
         method: 'POST',
         body: formData,
@@ -61,6 +82,14 @@ addTaskButton.addEventListener("click", ()=>{
             }else{
                 failedToCreateLabel.classList.remove("display-none");
             }
+        });
+}
+addTaskButton.addEventListener("click", ()=>{
+    fetch(`/api/v1/client/module/${getModuleNumFromUrl()}/info`, {
+        method: 'GET'
+    }).then(response => response.json())
+        .then(data =>{
+            postTask(data.verifiable);
         });
 });
 let failedToDeleteLabelShowing = false;
