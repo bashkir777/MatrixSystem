@@ -199,7 +199,6 @@ fetch(`/api/v1/client/module/${getModuleNumFromUrl()}`, {
                     prevNavigationButton = navigationButtons[i];
                 })
         }
-        navigationButtons[0].click();
         markTasks();
     })
     .catch((error) => {
@@ -245,8 +244,8 @@ function markTasks() {
             for (let i = 0; i < arrOfTaskIds.length; i++) {
                 let status = data[arrOfTaskIds[i]];
                 markButtonBasedOnStatus(navigationButtons[i], status);
-
             }
+            navigationButtons[0].click();
         })
         .catch((error) => {
             console.error('Ошибка:', error);
