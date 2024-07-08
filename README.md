@@ -6,15 +6,15 @@ MatrixSystem is a platform for online schools that helps tutors manage homework 
 
 ## Screenshots
 
-###User interface example 1
+### User interface example 1
 ![App Screenshot](img/interface_example_1.png)
-###User interface example 2
+### User interface example 2
 ![App Screenshot](img/interface_example_2.png)
-###User interface example 3
+### User interface example 3
 ![App Screenshot](img/interface_example_3.png)
-###User interface example 4
+### User interface example 4
 ![App Screenshot](img/interface_example_4.png)
-###User interface example 5
+### User interface example 5
 ![App Screenshot](img/interface_example_5.png)
 
 
