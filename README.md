@@ -1,7 +1,20 @@
 
+
 # MatrixSystem
 
 MatrixSystem is a platform for online schools that helps tutors manage homework and tasks for their students and allows students solve tasks, homework and options of exam created by tutors.
+
+## Screenshots
+
+![App Screenshot](img/interface_example_1.png)
+
+![App Screenshot](img/interface_example_2.png)
+
+![App Screenshot](img/interface_example_3.png)
+
+![App Screenshot](img/interface_example_4.png)
+
+![App Screenshot](img/interface_example_5.png)
 
 
 ## Deployment
@@ -35,7 +48,8 @@ http://localhost:8080/app/all-tasks
 login: god
 password: god
 ```
+
+
 ## Appendix
 
 Note that the Miro board embedded here is for demonstration purposes only. To use it as intended, the administrator must have a premium Miro account
-
